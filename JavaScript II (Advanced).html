@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Προχωρημένα Θέματα JavaScript</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+	<a href="Index.html" class="back-to-index">← Επιστροφή στο Ευρετήριο</a>
+        <h1>Προχωρημένα Θέματα JavaScript</h1>
+        
+        <section id="dom-manipulation">
+            <h2>1. Χειρισμός του DOM (DOM Manipulation)</h2>
+            <p>Το DOM (Document Object Model) είναι μια προγραμματιστική διεπαφή (API) για έγγραφα HTML και XML. Επιτρέπει σε προγράμματα να αλλάζουν τη δομή, το στυλ και το περιεχόμενο ενός εγγράφου.</p>
+            
+            <div class="callout">
+                <p><strong>Βασικές Έννοιες:</strong></p>
+                <ul>
+                    <li><strong>DOM:</strong> Η αναπαράσταση του HTML ως δέντρο αντικειμένων</li>
+                    <li><strong>DOM Nodes:</strong> Τα στοιχεία του δέντρου (elements, attributes, text, κλπ.)</li>
+                    <li><strong>DOM Methods:</strong> Συναρτήσεις για επιλογή, δημιουργία, και τροποποίηση των στοιχείων</li>
+                    <li><strong>Events:</strong> Αλληλεπιδράσεις χρήστη που μπορούν να ενεργοποιήσουν κώδικα JavaScript</li>
+                </ul>
+            </div>
+            
+            <h3>Επιλογή Στοιχείων DOM</h3>
+            <p>Υπάρχουν διάφοροι τρόποι για να επιλέξετε στοιχεία από το DOM:</p>
+            
+            <pre><code>// Επιλογή με βάση το ID
+const element = document.getElementById('myId');
+
+// Επιλογή με βάση το όνομα της κλάσης (επιστρέφει HTMLCollection)
+const elements = document.getElementsByClassName('myClass');
+
+// Επιλογή με βάση το όνομα του tag (επιστρέφει HTMLCollection)
+const divs = document.getElementsByTagName('div');
+
+// Επιλογή με βάση CSS selector (επιστρέφει το πρώτο που ταιριάζει)
+const firstElement = document.querySelector('.container p');
+
+// Επιλογή με βάση CSS selector (επιστρέφει όλα τα στοιχεία που ταιριάζουν)
+const allElements = document.querySelectorAll('ul li.item');
+
+// Πλοήγηση στο DOM
+const parent = element.parentElement;
+const children = element.children;
+const nextSibling = element.nextElementSibling;
+const prevSibling = element.previousElementSibling;</code></pre>
+            
+            <h3>Τροποποίηση Περιεχομένου</h3>
+            <pre><code>// Αλλαγή του κειμένου ενός στοιχείου
+element.textContent = 'Νέο κείμενο';
+
+// Αλλαγή του HTML περιεχομένου
+element.innerHTML = '&lt;strong&gt;Έντονο κείμενο&lt;/strong&gt;';
+
+// Αλλαγή ιδιοτήτων
+element.setAttribute('href', 'https://example.com');
+element.id = 'newId';
+element.className = 'newClass';
+
+// Χειρισμός κλάσεων CSS
+element.classList.add('active');
+element.classList.remove('hidden');
+element.classList.toggle('highlight');
+element.classList.contains('selected'); // επιστρέφει true ή false
+
+// Χειρισμός στυλ
+element.style.color = 'red';
+element.style.backgroundColor = '#f0f0f0';
+element.style.display = 'none'; // απόκρυψη στοιχείου
+element.style.display = 'block'; // εμφάνιση στοιχείου</code></pre>
+            
+            <h3>Δημιουργία και Διαγραφή Στοιχείων</h3>
+            <pre><code>// Δημιουργία νέου στοιχείου
+const newElement = document.createElement('div');
+newElement.textContent = 'Νέο div στοιχείο';
+newElement.className = 'new-class';
+
+// Προσθήκη του νέου στοιχείου στο DOM
+document.body.appendChild(newElement); // προσθήκη στο τέλος του body
+parent.insertBefore(newElement, referenceElement); // προσθήκη πριν από άλλο στοιχείο
+
+// Νεότερες μέθοδοι εισαγωγής
+parent.append(newElement); // προσθέτει στο τέλος (υποστηρίζει πολλαπλά στοιχεία και κείμενο)
+parent.prepend(newElement); // προσθέτει στην αρχή
+element.before(newElement); // προσθέτει πριν το element
+element.after(newElement); // προσθέτει μετά το element
+
+// Αντικατάσταση στοιχείου
+oldElement.replaceWith(newElement);
+
+// Αφαίρεση στοιχείου
+element.remove(); // νεότερη μέθοδος
+parent.removeChild(element); // παλαιότερη μέθοδος
+
+// Κλωνοποίηση στοιχείου
+const clone = element.cloneNode(true); // το true κλωνοποιεί και τα παιδιά</code></pre>
+            
+            <h3>Χειρισμός Συμβάντων (Events)</h3>
+            <pre><code>// Προσθήκη event listener
+element.addEventListener('click', function(event) {
+  console.log('Το στοιχείο πατήθηκε!');
+  console.log(event); // το αντικείμενο του συμβάντος
+});
+
+// Αφαίρεση event listener
+function handleClick(event) {
+  console.log('Κλικ!');
+}
+element.addEventListener('click', handleClick);
+element.removeEventListener('click', handleClick);
+
+// Απλός τρόπος (λιγότερο προτεινόμενος)
+element.onclick = function() {
+  console.log('Κλικ!');
+};
+
+// Αποφυγή της προεπιλεγμένης συμπεριφοράς
+document.querySelector('a').addEventListener('click', function(event) {
+  event.preventDefault(); // αποτρέπει την πλοήγηση
+  console.log('Ο σύνδεσμος πατήθηκε αλλά η πλοήγηση εμποδίστηκε');
+});
+
+// Σταμάτημα της διάδοσης του συμβάντος (bubbling)
+childElement.addEventListener('click', function(event) {
+  event.stopPropagation();
+  console.log('Αυτό το συμβάν δεν θα φτάσει στα στοιχεία γονείς');
+});</code></pre>
+            
+            <div class="callout warning">
+                <p><strong>Σημαντικές Σημειώσεις:</strong></p>
+                <ul>
+                    <li>Οι μέθοδοι <code>getElementsByClassName</code> και <code>getElementsByTagName</code> επιστρέφουν ζωντανές συλλογές που ενημερώνονται αυτόματα όταν το DOM αλλάζει, ενώ το <code>querySelectorAll</code> επιστρέφει μια στατική NodeList.</li>
+                    <li>Για καλύτερη απόδοση, ελαχιστοποιήστε τις άμεσες τροποποιήσεις του DOM - συγκεντρώστε τις αλλαγές πριν τις εφαρμόσετε στο DOM.</li>
+                    <li>Η ιδιότητα <code>innerHTML</code> μπορεί να θέσει θέματα ασφαλείας αν χρησιμοποιηθεί με δεδομένα χρήστη (κίνδυνος XSS) - προτιμήστε τις μεθόδους <code>textContent</code> ή <code>createElement</code> για μεγαλύτερη ασφάλεια.</li>
+                </ul>
+            </div>
+            
+            <h3>Παράδειγμα: Δημιουργία Δυναμικής Λίστας</h3>
+            <pre><code>// HTML
+// &lt;div id="app"&gt;
+//   &lt;h2&gt;Λίστα Εργασιών&lt;/h2&gt;
+//   &lt;form id="task-form"&gt;
+//     &lt;input type="text" id="task-input" placeholder="Προσθήκη εργασίας"&gt;
+//     &lt;button type="submit"&gt;Προσθήκη&lt;/button&gt;
+//   &lt;/form&gt;
+//   &lt;ul id="task-list"&gt;&lt;/ul&gt;
+// &lt;/div&gt;
+
+// JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('task-form');
+  const input = document.getElementById('task-input');
+  const list = document.getElementById('task-list');
+  
+  // Χειρισμός της υποβολής της φόρμας
+  form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Αποτροπή επαναφόρτωσης της σελίδας
+    
+    const taskText = input.value.trim();
+    
+    if (taskText !== '') {
+      // Δημιουργία νέου στοιχείου λίστας
+      const li = document.createElement('li');
+      li.textContent = taskText;
+      
+      // Προσθήκη κουμπιού διαγραφής
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Διαγραφή';
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.addEventListener('click', function() {
+        li.remove();
+      });
+      
+      // Προσθήκη του κουμπιού στο li
+      li.appendChild(deleteBtn);
+      
+      // Προσθήκη του li στη λίστα
+      list.appendChild(li);
+      
+      // Καθαρισμός του πεδίου εισαγωγής
+      input.value = '';
+    }
+  });
+});</code></pre>
+        </section>
+
+        <section id="local-storage">
+            <h2>2. Local Storage και Session Storage</h2>
+            <p>Οι Web Storage APIs (localStorage και sessionStorage) επιτρέπουν την αποθήκευση δεδομένων στον φυλλομετρητή του χρήστη με πιο βολικό τρόπο από τα cookies.</p>
+            
+            <div class="callout">
+                <p><strong>Βασικά Χαρακτηριστικά:</strong></p>
+                <ul>
+                    <li><strong>localStorage:</strong> Τα δεδομένα παραμένουν ακόμα και μετά το κλείσιμο του φυλλομετρητή</li>
+                    <li><strong>sessionStorage:</strong> Τα δεδομένα διατηρούνται μόνο για την τρέχουσα συνεδρία (session)</li>
+                    <li>Και τα δύο αποθηκεύουν δεδομένα με τη μορφή ζευγών κλειδί-τιμή (string-string)</li>
+                    <li>Τα δεδομένα είναι διαθέσιμα μόνο για το συγκεκριμένο origin (domain)</li>
+                </ul>
+            </div>
+            
+            <h3>LocalStorage API</h3>
+            <pre><code>// Αποθήκευση δεδομένων
+localStorage.setItem('username', 'john_doe');
+
+// Ανάκτηση δεδομένων
+const username = localStorage.getItem('username'); // 'john_doe'
+
+// Έλεγχος αν υπάρχει κλειδί
+if (localStorage.getItem('username')) {
+  console.log('Το username είναι αποθηκευμένο');
+}
+
+// Διαγραφή συγκεκριμένου στοιχείου
+localStorage.removeItem('username');
+
+// Διαγραφή όλων των δεδομένων
+localStorage.clear();
+
+// Πρόσβαση με dot notation (εναλλακτικός τρόπος)
+localStorage.theme = 'dark';
+console.log(localStorage.theme); // 'dark'
+
+// Πρόσβαση με bracket notation (εναλλακτικός τρόπος)
+localStorage['language'] = 'el';
+console.log(localStorage['language']); // 'el'
+
+// Αριθμός αποθηκευμένων ζευγών κλειδί-τιμή
+console.log(localStorage.length);</code></pre>
+            
+            <h3>SessionStorage API</h3>
+            <p>Λειτουργεί ακριβώς όπως το localStorage, αλλά τα δεδομένα χάνονται όταν κλείσει η καρτέλα ή ο φυλλομετρητής:</p>
+            
+            <pre><code>// Αποθήκευση δεδομένων προσωρινά
+sessionStorage.setItem('searchQuery', 'JavaScript tutorial');
+
+// Ανάκτηση της αναζήτησης
+const query = sessionStorage.getItem('searchQuery');
+
+// Διαγραφή δεδομένων
+sessionStorage.removeItem('searchQuery');
+sessionStorage.clear(); // διαγραφή όλων</code></pre>
+            
+            <h3>Αποθήκευση Σύνθετων Δεδομένων</h3>
+            <p>Οι Web Storage APIs αποθηκεύουν μόνο strings, αλλά μπορείτε να χρησιμοποιήσετε JSON για σύνθετα δεδομένα:</p>
+            
+            <pre><code>// Αποθήκευση αντικειμένου
+const user = {
+  id: 123,
+  name: 'Γιάννης',
+  email: 'giannis@example.com',
+  preferences: {
+    theme: 'dark',
+    notifications: true
+  }
+};
+
+// Μετατροπή σε string και αποθήκευση
+localStorage.setItem('user', JSON.stringify(user));
+
+// Ανάκτηση και μετατροπή πίσω σε αντικείμενο
+const storedUser = JSON.parse(localStorage.getItem('user'));
+console.log(storedUser.name); // 'Γιάννης'
+console.log(storedUser.preferences.theme); // 'dark'
+
+// Αποθήκευση πίνακα
+const todos = [
+  { id: 1, text: 'Μάθε JavaScript', completed: true },
+  { id: 2, text: 'Ολοκλήρωσε το project', completed: false }
+];
+
+localStorage.setItem('todos', JSON.stringify(todos));
+
+// Ανάκτηση και μετατροπή πίσω σε πίνακα
+const storedTodos = JSON.parse(localStorage.getItem('todos'));
+storedTodos.forEach(todo => {
+  console.log(`${todo.text}: ${todo.completed ? 'Ολοκληρώθηκε' : 'Εκκρεμεί'}`);
+});</code></pre>
+            
+            <h3>Παρακολούθηση Αλλαγών στο Storage</h3>
+            <pre><code>// Παρακολούθηση αλλαγών στο localStorage ή sessionStorage
+window.addEventListener('storage', function(event) {
+  console.log('Το storage άλλαξε!');
+  console.log('Κλειδί:', event.key);
+  console.log('Παλιά τιμή:', event.oldValue);
+  console.log('Νέα τιμή:', event.newValue);
+  console.log('URL της σελίδας που έκανε την αλλαγή:', event.url);
+  console.log('storage area:', event.storageArea === localStorage ? 'localStorage' : 'sessionStorage');
+});</code></pre>
+            
+            <div class="callout warning">
+                <p><strong>Περιορισμοί του Web Storage:</strong></p>
+                <ul>
+                    <li>Περιορισμένος χώρος (συνήθως 5-10MB ανά domain)</li>
+                    <li>Μόνο strings - απαιτείται μετατροπή για σύνθετα δεδομένα</li>
+                    <li>Συγχρονισμός - μπορεί να επηρεάσει την απόδοση για μεγάλα datasets</li>
+                    <li>Δεν είναι κατάλληλο για ευαίσθητα δεδομένα (αποθηκεύονται χωρίς κρυπτογράφηση)</li>
+                    <li>Το storage event πυροδοτείται μόνο σε άλλες καρτέλες/παράθυρα, όχι στην ίδια καρτέλα που έκανε την αλλαγή</li>
+                </ul>
+            </div>
+            
+            <h3>Πρακτικό Παράδειγμα: Dark Mode Toggle</h3>
+            <pre><code>// HTML
+// &lt;button id="theme-toggle"&gt;Εναλλαγή Dark Mode&lt;/button&gt;
+
+// JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  const themeToggle = document.getElementById('theme-toggle');
+  
+  // Έλεγχος αν υπάρχει αποθηκευμένο θέμα
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-theme');
+    themeToggle.textContent = 'Εναλλαγή Light Mode';
+  }
+  
+  // Προσθήκη event listener για το κουμπί
+  themeToggle.addEventListener('click', function() {
+    // Έλεγχος του τρέχοντος θέματος
+    if (document.body.classList.contains('dark-theme')) {
+      // Αλλαγή σε light theme
+      document.body.classList.remove('dark-theme');
+      localStorage.setItem('theme', 'light');
+      themeToggle.textContent = 'Εναλλαγή Dark Mode';
+    } else {
+      // Αλλαγή σε dark theme
+      document.body.classList.add('dark-theme');
+      localStorage.setItem('theme', 'dark');
+      themeToggle.textContent = 'Εναλλαγή Light Mode';
+    }
+  });
+});</code></pre>
+            
+            <h3>Πρακτικό Παράδειγμα: Αποθήκευση Φόρμας</h3>
+            <pre><code>// HTML
+// &lt;form id="contact-form"&gt;
+//   &lt;input type="text" id="name" placeholder="Όνομα"&gt;
+//   &lt;input type="email" id="email" placeholder="Email"&gt;
+//   &lt;textarea id="message" placeholder="Μήνυμα"&gt;&lt;/textarea&gt;
+//   &lt;button type="submit"&gt;Αποστολή&lt;/button&gt;
+// &lt;/form&gt;
+
+// JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('contact-form');
+  const nameInput = document.getElementById('name');
+  const emailInput = document.getElementById('email');
+  const messageInput = document.getElementById('message');
+  
+  // Ανάκτηση αποθηκευμένων δεδομένων
+  if (sessionStorage.getItem('formData')) {
+    const formData = JSON.parse(sessionStorage.getItem('formData'));
+    nameInput.value = formData.name || '';
+    emailInput.value = formData.email || '';
+    messageInput.value = formData.message || '';
+  }
+  
+  // Αποθήκευση δεδομένων κατά την πληκτρολόγηση
+  const saveFormData = function() {
+    const formData = {
+      name: nameInput.value,
+      email: emailInput.value,
+      message: messageInput.value
+    };
+    sessionStorage.setItem('formData', JSON.stringify(formData));
+  };
+  
+  // Προσθήκη event listeners
+  nameInput.addEventListener('input', saveFormData);
+  emailInput.addEventListener('input', saveFormData);
+  messageInput.addEventListener('input', saveFormData);
+  
+  // Καθαρισμός της φόρμας μετά την υποβολή
+  form.addEventListener('submit', function(event) {
+    // event.preventDefault(); // Αφαιρέστε το σχόλιο αν θέλετε να αποτρέψετε την υποβολή της φόρμας
+    
+    // Καθαρισμός του session storage
+    sessionStorage.removeItem('formData');
+    
+    console.log('Η φόρμα υποβλήθηκε και τα προσωρινά δεδομένα διαγράφτηκαν');
+  });
+});</code></pre>
+        </section>
+
+        <section id="regular-expressions">
+            <h2>3. Κανονικές Εκφράσεις (Regular Expressions)</h2>
+            <p>Οι κανονικές εκφράσεις (Regex) είναι μοτίβα που χρησιμοποιούνται για την αντιστοίχιση συνδυασμών χαρακτήρων σε strings. Στη JavaScript, οι κανονικές εκφράσεις είναι αντικείμενα της κλάσης RegExp.</p>
+            
+            <div class="callout">
+                <p><strong>Βασικές Χρήσεις των Regex:</strong></p>
+                <ul>
+                    <li>Επικύρωση δεδομένων (π.χ. email, αριθμοί τηλεφώνου)</li>
+                    <li>Αναζήτηση και αντικατάσταση κειμένου</li>
+                    <li>Εξαγωγή τμημάτων από strings</li>
+                    <li>Ανάλυση και χειρισμός κειμένου</li>
+                </ul>
+            </div>
+            
+            <h3>Δημιουργία Κανονικών Εκφράσεων</h3>
+            <pre><code>// Δύο τρόποι για τη δημιουργία regex:
+
+// 1. Χρησιμοποιώντας κυριολεκτική σύνταξη (literal syntax)
+const regex1 = /pattern/flags;
+
+// 2. Χρησιμοποιώντας τον κατασκευαστή RegExp
+const regex2 = new RegExp('pattern', 'flags');
+
+// Παραδείγματα:
+const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+const numberRegex = /\d+/g;
+const dateRegex = new RegExp('\\d{2}/\\d{2}/\\d{4}', 'g');</code></pre>
+            
+            <h3>Βασικές Μέθοδοι RegExp</h3>
+            <pre><code>// Έλεγχος αν το μοτίβο υπάρχει σε ένα string
+const regex = /hello/i; // το 'i' σημαίνει case-insensitive
+const result1 = regex.test('Hello World'); // true
+
+// Εύρεση της πρώτης αντιστοίχισης
+const match = regex.exec('Hello World and hello again');
+console.log(match[0]); // 'Hello'
+console.log(match.index); // 0 (θέση της αντιστοίχισης)
+
+// Επαναλαμβανόμενη εύρεση αντιστοιχιών με τη σημαία 'g' (global)
+const globalRegex = /hello/gi;
+let match2;
+while ((match2 = globalRegex.exec('Hello World and hello again')) !== null) {
+  console.log(`Βρέθηκε ${match2[0]} στη θέση ${match2.index}`);
+}</code></pre>
+            
+            <h3>Μέθοδοι String με Regex</h3>
+            <pre><code>const text = 'Hello World and hello again!';
+
+// match: Βρίσκει όλες τις αντιστοιχίες
+const matches = text.match(/hello/gi);
+console.log(matches); // ['Hello', 'hello']
+
+// search: Βρίσκει τη θέση της πρώτης αντιστοίχισης
+const position = text.search(/hello/i);
+console.log(position); // 0
+
+// replace: Αντικαθιστά αντιστοιχίες
+const newText = text.replace(/hello/gi, 'hi');
+console.log(newText); // 'hi World and hi again!'
+
+// split: Διαιρεί το string βάσει regex
+const parts = 'apple, orange; banana | grape'.split(/[,;|]/);
+console.log(parts); // ['apple', ' orange', ' banana', ' grape']</code></pre>
+            
+            <h3>Βασικοί Χαρακτήρες και Μεταχαρακτήρες</h3>
+            <table>
+                <tr>
+                    <th>Χαρακτήρας</th>
+                    <th>Περιγραφή</th>
+                    <th>Παράδειγμα</th>
+                </tr>
+                <tr>
+                    <td><code>.</code></td>
+                    <td>Οποιοσδήποτε χαρακτήρας εκτός από νέα γραμμή</td>
+                    <td><code>/h.t/</code> ταιριάζει με "hat", "hot", "hit"</td>
+                </tr>
+                <tr>
+                    <td><code>\d</code></td>
+                    <td>Οποιοσδήποτε ψηφίο (0-9)</td>
+                    <td><code>/\d{3}/</code> ταιριάζει με "123", "456"</td>
+                </tr>
+                <tr>
+                    <td><code>\D</code></td>
+                    <td>Οποιοσδήποτε χαρακτήρας εκτός από ψηφίο</td>
+                    <td><code>/\D+/</code> ταιριάζει με "abc", "!@#"</td>
+                </tr>
+                <tr>
+                    <td><code>\w</code></td>
+                    <td>Οποιοσδήποτε αλφαριθμητικός χαρακτήρας (a-z, A-Z, 0-9, _)</td>
+                    <td><code>/\w+/</code> ταιριάζει με "abc123"</td>
+                </tr>
+                <tr>
+                    <td><code>\W</code></td>
+                    <td>Οποιοσδήποτε μη-αλφαριθμητικός χαρακτήρας</td>
+                    <td><code>/\W+/</code> ταιριάζει με "!@#$%"</td>
+                </tr>
+                <tr>
+                    <td><code>\s</code></td>
+                    <td>Οποιοσδήποτε λευκός χαρακτήρας (κενό, tab, νέα γραμμή)</td>
+                    <td><code>/\s+/</code> ταιριάζει με κενά, tabs</td>
+                </tr>
+                <tr>
+                    <td><code>\S</code></td>
+                    <td>Οποιοσδήποτε μη-λευκός χαρακτήρας</td>
+                    <td><code>/\S+/</code> ταιριάζει με οποιαδήποτε λέξη</td>
+                </tr>
+                <tr>
+                    <td><code>^</code></td>
+                    <td>Αρχή της γραμμής</td>
+                    <td><code>/^Hello/</code> ταιριάζει με "Hello World" αλλά όχι "World Hello"</td>
+                </tr>
+                <tr>
+                    <td><code>$</code></td>
+                    <td>Τέλος της γραμμής</td>
+                    <td><code>/World$/</code> ταιριάζει με "Hello World" αλλά όχι "World Hello"</td>
+                </tr>
+            </table>
+            
+            <h3>Ποσοδείκτες (Quantifiers)</h3>
+            <pre><code>// * - 0 ή περισσότερες φορές
+/go*gle/.test('ggle'); // true (0 'o')
+/go*gle/.test('google'); // true (2 'o')
+
+// + - 1 ή περισσότερες φορές
+/go+gle/.test('ggle'); // false (0 'o')
+/go+gle/.test('google'); // true (2 'o')
+
+// ? - 0 ή 1 φορά (προαιρετικός)
+/colou?r/.test('color'); // true
+/colou?r/.test('colour'); // true
+
+// {n} - ακριβώς n φορές
+/\d{3}/.test('123'); // true
+/\d{3}/.test('12'); // false
+
+// {n,} - τουλάχιστον n φορές
+/\d{2,}/.test('12'); // true
+/\d{2,}/.test('123456'); // true
+
+// {n,m} - τουλάχιστον n, το πολύ m φορές
+/\d{2,4}/.test('12'); // true
+/\d{2,4}/.test('1234'); // true
+/\d{2,4}/.test('12345'); // ταιριάζει μόνο τα πρώτα 4 ψηφία</code></pre>
+            
+            <h3>Σύνολα Χαρακτήρων και Εναλλακτικές</h3>
+            <pre><code>// [] - Σύνολο χαρακτήρων (οποιοσδήποτε χαρακτήρας μέσα στις αγκύλες)
+/[aeiou]/.test('apple'); // true (έχει το 'a')
+/[a-z]/.test('Apple'); // true (έχει τα 'p', 'p', 'l', 'e')
+/[0-9a-f]/.test('9f'); // true
+
+// [^] - Άρνηση συνόλου (οποιοσδήποτε χαρακτήρας ΕΚΤΟΣ από αυτούς στις αγκύλες)
+/[^0-9]/.test('abc'); // true
+/[^0-9]/.test('123'); // false
+
+// | - Εναλλακτικές
+/(cat|dog)/.test('I have a cat'); // true
+/(cat|dog)/.test('I have a dog'); // true
+/(cat|dog)/.test('I have a bird'); // false</code></pre>
+            
+            <h3>Ομάδες Συλλογής (Capturing Groups)</h3>
+            <pre><code>// () - Ομάδα συλλογής
+const regex = /(\d{4})-(\d{2})-(\d{2})/;
+const match = regex.exec('Today is 2023-12-25');
+
+console.log(match[0]); // '2023-12-25' (πλήρες ταίριασμα)
+console.log(match[1]); // '2023' (πρώτη ομάδα)
+console.log(match[2]); // '12' (δεύτερη ομάδα)
+console.log(match[3]); // '25' (τρίτη ομάδα)
+
+// Χρήση ομάδων στην αντικατάσταση
+const date = '2023-12-25';
+const formattedDate = date.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1');
+console.log(formattedDate); // '25/12/2023'
+
+// (?:) - Ομάδα χωρίς συλλογή (non-capturing group)
+const regexNoCapture = /(?:\d{4})-(\d{2})-(\d{2})/;
+const match2 = regexNoCapture.exec('2023-12-25');
+console.log(match2[0]); // '2023-12-25'
+console.log(match2[1]); // '12' (πρώτη ομάδα είναι ο μήνας)
+console.log(match2[2]); // '25' (δεύτερη ομάδα είναι η μέρα)</code></pre>
+            
+            <div class="callout warning">
+                <p><strong>Προσοχή:</strong> Οι κανονικές εκφράσεις μπορεί να γίνουν περίπλοκες και δυσανάγνωστες. Είναι καλή πρακτική να:</p>
+                <ul>
+                    <li>Χρησιμοποιείτε σχόλια για να εξηγείτε περίπλοκες εκφράσεις</li>
+                    <li>Διαιρείτε πολύπλοκες εκφράσεις σε μικρότερα τμήματα</li>
+                    <li>Χρησιμοποιείτε τη σημαία <code>x</code> (extended) σε υποστηριζόμενα περιβάλλοντα για πιο ευανάγνωστες εκφράσεις με κενά και σχόλια</li>
+                    <li>Δοκιμάζετε τις εκφράσεις σας σε εργαλεία όπως το <a href="https://regex101.com">regex101.com</a> για να επιβεβαιώσετε τη συμπεριφορά τους</li>
+                </ul>
+            </div>
+            
+            <h3>Πρακτικά Παραδείγματα</h3>
+            <pre><code>// Επικύρωση email
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+console.log(emailRegex.test('user@example.com')); // true
+console.log(emailRegex.test('invalid-email')); // false
+
+// Επικύρωση ελληνικού αριθμού τηλεφώνου
+const greekPhoneRegex = /^(?:\+30|0030)?[2-9]\d{9}$/;
+console.log(greekPhoneRegex.test('+306912345678')); // true
+console.log(greekPhoneRegex.test('2101234567')); // true
+console.log(greekPhoneRegex.test('00302101234567')); // true
+
+// Εξαγωγή hashtags από κείμενο
+const text = 'Μάθετε #JavaScript, #Regex και #Προγραμματισμό σήμερα!';
+const hashtagRegex = /#(\w+)/g;
+const hashtags = [];
+let match;
+while ((match = hashtagRegex.exec(text)) !== null) {
+  hashtags.push(match[1]);
+}
+console.log(hashtags); // ['JavaScript', 'Regex', 'Προγραμματισμό']
+
+// Αφαίρεση διπλών κενών
+const messy = 'Αυτό  το   κείμενο    έχει  πολλά    κενά!';
+const clean = messy.replace(/\s+/g, ' ');
+console.log(clean); // 'Αυτό το κείμενο έχει πολλά κενά!'
+
+// Επικύρωση ισχυρού κωδικού πρόσβασης
+const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+// Εξηγήσεις των lookaheads:
+// (?=.*[a-z]) - Τουλάχιστον ένα πεζό γράμμα
+// (?=.*[A-Z]) - Τουλάχιστον ένα κεφαλαίο γράμμα
+// (?=.*\d) - Τουλάχιστον ένα ψηφίο
+// (?=.*[!@#$%^&*]) - Τουλάχιστον ένας ειδικός χαρακτήρας
+// .{8,} - Τουλάχιστον 8 χαρακτήρες συνολικά
+
+console.log(strongPasswordRegex.test('Abc12345')); // false (δεν έχει ειδικό χαρακτήρα)
+console.log(strongPasswordRegex.test('Abc123!@')); // true</code></pre>
+        </section>
+
+        <section id="debugging">
+            <h2>4. Debugging στη JavaScript</h2>
+            <p>Το debugging είναι η διαδικασία εντοπισμού και διόρθωσης σφαλμάτων στον κώδικα. Η JavaScript παρέχει διάφορα εργαλεία και τεχνικές για αποτελεσματικό debugging.</p>
+            
+            <div class="callout">
+                <p><strong>Βασικά Εργαλεία Debugging:</strong></p>
+                <ul>
+                    <li><strong>Console API:</strong> console.log(), console.error(), console.warn(), κλπ.</li>
+                    <li><strong>Debugger Statement:</strong> Σημεία διακοπής στον κώδικα</li>
+                    <li><strong>Developer Tools:</strong> Ενσωματωμένα εργαλεία των φυλλομετρητών (Chrome DevTools, Firefox Developer Tools, κλπ.)</li>
+                    <li><strong>Exception Handling:</strong> try/catch blocks</li>
+                </ul>
+            </div>
+            
+            <h3>Console API</h3>
+            <pre><code>// Βασικές μέθοδοι εμφάνισης πληροφοριών
+console.log('Απλό μήνυμα'); // Γενική έξοδος
+console.info('Πληροφοριακό μήνυμα'); // Παρόμοιο με console.log αλλά για πληροφορίες
+console.warn('Προειδοποίηση'); // Μήνυμα με κίτρινο χρώμα και εικονίδιο προειδοποίησης
+console.error('Σφάλμα'); // Μήνυμα με κόκκινο χρώμα και εικονίδιο σφάλματος
+
+// Εμφάνιση δομημένων δεδομένων
+const user = { 
+  name: 'Γιάννης', 
+  email: 'giannis@example.com',
+  roles: ['admin', 'editor']
+};
+console.log('Χρήστης:', user);
+console.table(user); // Εμφανίζει τα δεδομένα σε μορφή πίνακα
+console.table([user, { name: 'Μαρία', email: 'maria@example.com', roles: ['user'] }]);
+
+// Ομαδοποίηση μηνυμάτων
+console.group('Δεδομένα Χρήστη');
+console.log('Όνομα:', user.name);
+console.log('Email:', user.email);
+console.group('Ρόλοι'); // Ένθετη ομάδα
+user.roles.forEach(role => console.log(`- ${role}`));
+console.groupEnd(); // Κλείσιμο της ομάδας "Ρόλοι"
+console.groupEnd(); // Κλείσιμο της ομάδας "Δεδομένα Χρήστη"
+
+// Μέτρηση χρόνου εκτέλεσης
+console.time('dataProcess');
+// ... κώδικας που θέλουμε να μετρήσουμε
+console.timeEnd('dataProcess'); // Θα εμφανίσει: dataProcess: Xms
+
+// Καταμέτρηση κλήσεων
+console.count('buttonClick'); // buttonClick: 1
+console.count('buttonClick'); // buttonClick: 2
+console.count('buttonClick'); // buttonClick: 3
+console.countReset('buttonClick'); // Επαναφορά του μετρητή
+
+// Συνθήκες διαγνωστικών
+console.assert(1 === 2, 'Αυτό θα εμφανιστεί επειδή 1 !== 2'); // Εμφανίζει μήνυμα μόνο αν η συνθήκη είναι false
+
+// Καταγραφή stack trace
+console.trace('Παρακολούθηση κλήσεων'); // Εμφανίζει το trace της στοίβας κλήσεων</code></pre>
+            
+            <h3>Χρήση του Δήλωσης debugger</h3>
+            <pre><code>function findError() {
+  let x = 5;
+  let y = 0;
+  
+  debugger; // Ο browser θα σταματήσει την εκτέλεση εδώ αν τα developer tools είναι ανοιχτά
+  
+  let z = x / y; // Διαίρεση με μηδέν
+  
+  return z;
+}</code></pre>
+            
+            <h3>Χρήση των Developer Tools</h3>
+            <div class="callout">
+                <p><strong>Βασικές Λειτουργίες των Developer Tools:</strong></p>
+                <ul>
+                    <li><strong>Sources/Debugger Panel:</strong> Για προβολή και εντοπισμό σφαλμάτων στον κώδικα</li>
+                    <li><strong>Console Panel:</strong> Για εμφάνιση μηνυμάτων, δοκιμή κώδικα και αλληλεπίδραση με την εφαρμογή</li>
+                    <li><strong>Network Panel:</strong> Για παρακολούθηση αιτημάτων δικτύου</li>
+                    <li><strong>Elements/Inspector Panel:</strong> Για επιθεώρηση και τροποποίηση του DOM</li>
+                    <li><strong>Performance Panel:</strong> Για ανάλυση της απόδοσης της εφαρμογής</li>
+                </ul>
+            </div>
+            
+            <h4>Σημεία Διακοπής (Breakpoints)</h4>
+            <p>Μέσω των Developer Tools, μπορείτε να ορίσετε σημεία διακοπής σε συγκεκριμένες γραμμές κώδικα. Όταν η εκτέλεση φτάσει σε ένα σημείο διακοπής, παγώνει, επιτρέποντάς σας να εξετάσετε το περιβάλλον εκτέλεσης:</p>
+            <ul>
+                <li><strong>Line Breakpoints:</strong> Κλικ στον αριθμό γραμμής στο Sources panel</li>
+                <li><strong>Conditional Breakpoints:</strong> Δεξί κλικ στον αριθμό γραμμής και ορισμός συνθήκης</li>
+                <li><strong>DOM Breakpoints:</strong> Σταματά την εκτέλεση όταν τροποποιείται το DOM</li>
+                <li><strong>XHR/Fetch Breakpoints:</strong> Σταματά όταν γίνεται συγκεκριμένο αίτημα δικτύου</li>
+                <li><strong>Event Listener Breakpoints:</strong> Σταματά όταν ενεργοποιείται ένα συγκεκριμένο συμβάν</li>
+            </ul>
+            
+            <h4>Εξέταση Δεδομένων κατά το Debugging</h4>
+            <ul>
+                <li><strong>Scope Panel:</strong> Εμφανίζει τις διαθέσιμες μεταβλητές στο τρέχον πλαίσιο</li>
+                <li><strong>Watch Expressions:</strong> Για παρακολούθηση συγκεκριμένων εκφράσεων</li>
+                <li><strong>Call Stack:</strong> Εμφανίζει τη στοίβα κλήσεων</li>
+                <li><strong>Console στο σημείο διακοπής:</strong> Μπορείτε να χρησιμοποιήσετε τη κονσόλα για να εξετάσετε και να τροποποιήσετε μεταβλητές στο τρέχον πλαίσιο</li>
+            </ul>
+            
+            <h4>Ελέγχοντας την Εκτέλεση</h4>
+            <ul>
+                <li><strong>Continue (F8):</strong> Συνεχίζει την εκτέλεση μέχρι το επόμενο σημείο διακοπής</li>
+                <li><strong>Step Over (F10):</strong> Εκτελεί την τρέχουσα γραμμή και σταματά στην επόμενη</li>
+                <li><strong>Step Into (F11):</strong> Μπαίνει μέσα στη συνάρτηση που καλείται στην τρέχουσα γραμμή</li>
+                <li><strong>Step Out (Shift+F11):</strong> Βγαίνει από την τρέχουσα συνάρτηση</li>
+            </ul>
+            
+            <h3>Χειρισμός Εξαιρέσεων με try-catch</h3>
+            <pre><code>function divideNumbers(a, b) {
+  try {
+    if (typeof a !== 'number' || typeof b !== 'number') {
+      throw new TypeError('Και οι δύο παράμετροι πρέπει να είναι αριθμοί');
+    }
+    
+    if (b === 0) {
+      throw new Error('Διαίρεση με το μηδέν δεν επιτρέπεται');
+    }
+    
+    return a / b;
+  } catch (error) {
+    console.error('Σφάλμα στη συνάρτηση divideNumbers:', error.message);
+    // Μπορείτε να χειριστείτε διαφορετικά είδη σφαλμάτων
+    if (error instanceof TypeError) {
+      return 'Σφάλμα τύπου: Παρακαλώ δώστε έγκυρους αριθμούς';
+    } else {
+      return 'Παρουσιάστηκε σφάλμα: ' + error.message;
+    }
+  } finally {
+    console.log('Η συνάρτηση divideNumbers ολοκληρώθηκε');
+    // Κώδικας εδώ θα εκτελεστεί πάντα, είτε υπήρξε σφάλμα είτε όχι
+  }
+}
+
+console.log(divideNumbers(10, 2)); // 5
+console.log(divideNumbers(10, 0)); // 'Παρουσιάστηκε σφάλμα: Διαίρεση με το μηδέν δεν επιτρέπεται'
+console.log(divideNumbers('10', 2)); // 'Σφάλμα τύπου: Παρακαλώ δώστε έγκυρους αριθμούς'</code></pre>
+            
+            <h3>Προσαρμοσμένα Σφάλματα</h3>
+            <pre><code>// Δημιουργία προσαρμοσμένης κλάσης σφάλματος
+class ValidationError extends Error {
+  constructor(message) {
+    super(message); // Κλήση του constructor της γονικής κλάσης Error
+    this.name = 'ValidationError'; // Προσαρμογή του ονόματος σφάλματος
+    this.code = 'E_VALIDATION'; // Προσθήκη ιδιότητας κωδικού
+  }
+}
+
+function validateUser(user) {
+  if (!user) {
+    throw new ValidationError('Το αντικείμενο χρήστη είναι απαραίτητο');
+  }
+  
+  if (!user.name) {
+    throw new ValidationError('Το όνομα χρήστη είναι υποχρεωτικό');
+  }
+  
+  if (user.age !== undefined && (typeof user.age !== 'number' || user.age < 0)) {
+    throw new ValidationError('Η ηλικία πρέπει να είναι θετικός αριθμός');
+  }
+  
+  return true;
+}
+
+try {
+  validateUser({ name: 'Γιάννης', age: -5 });
+} catch (error) {
+  console.error(`${error.name} (${error.code}): ${error.message}`);
+  // ValidationError (E_VALIDATION): Η ηλικία πρέπει να είναι θετικός αριθμός
+}</code></pre>
+            
+            <h3>Συμβουλές Debugging</h3>
+            <div class="callout success">
+                <p><strong>Βέλτιστες Πρακτικές:</strong></p>
+                <ol>
+                    <li><strong>Χρησιμοποιήστε αναλυτικά ονόματα μεταβλητών και συναρτήσεων</strong> - Διευκολύνει την κατανόηση του κώδικα</li>
+                    <li><strong>Αρχίστε από τα βασικά</strong> - Ελέγξτε απλά πράγματα πρώτα (τυπογραφικά λάθη, σύνταξη, κλπ.)</li>
+                    <li><strong>Χρησιμοποιήστε console.log στρατηγικά</strong> - Εμφανίστε σημαντικές τιμές σε κρίσιμα σημεία</li>
+                    <li><strong>Απομονώστε το πρόβλημα</strong> - Δημιουργήστε ένα απλό αναπαραγωγικό παράδειγμα</li>
+                    <li><strong>Διαιρέστε και κατακτήστε</strong> - Σπάστε το πρόβλημα σε μικρότερα κομμάτια</li>
+                    <li><strong>Χρησιμοποιήστε σημεία διακοπής</strong> αντί να προσθέτετε/αφαιρείτε console.log</li>
+                    <li><strong>Ελέγξτε τους τύπους δεδομένων</strong> - Πολλά σφάλματα προκύπτουν από ασυμφωνία τύπων</li>
+                    <li><strong>Αναζητήστε παρόμοια προβλήματα</strong> σε Stack Overflow ή GitHub Issues</li>
+                    <li><strong>Κάντε ένα διάλειμμα</strong> - Μερικές φορές η λύση έρχεται όταν αποστασιοποιήστε από το πρόβλημα</li>
+                </ol>
+            </div>
+            
+            <h3>Εργαλεία και Τεχνικές για Πολύπλοκο Debugging</h3>
+            <pre><code>// Performance monitoring
+console.time('functionX');
+// ... κώδικας που θέλετε να μετρήσετε
+console.timeEnd('functionX');
+
+// Δοκιμή επιδόσεων με πολλαπλές επαναλήψεις
+function benchmark(fn, iterations = 1000) {
+  console.time('benchmark');
+  
+  for (let i = 0; i < iterations; i++) {
+    fn();
+  }
+  
+  console.timeEnd('benchmark');
+}
+
+// Αποσφαλμάτωση ασύγχρονου κώδικα
+async function fetchData() {
+  try {
+    console.log('Έναρξη αιτήματος');
+    const response = await fetch('https://api.example.com/data');
+    console.log('Απάντηση ελήφθη:', response.status);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('Δεδομένα που ελήφθησαν:', data);
+    return data;
+  } catch (error) {
+    console.error('Σφάλμα κατά τη λήψη δεδομένων:', error);
+    throw error;
+  }
+}
+
+// Debug με σήμανση αντικειμένων 
+const deepObject = { /* πολύπλοκο αντικείμενο */ };
+console.log('Debug deepObject:', deepObject);
+
+// Παρακολούθηση αλλαγών DOM
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    console.log('DOM άλλαξε:', mutation.type);
+    console.log('Στοιχείο που άλλαξε:', mutation.target);
+  });
+});
+
+// Έναρξη παρακολούθησης ενός στοιχείου
+observer.observe(document.body, {
+  childList: true,    // Παρακολούθηση προσθήκης/αφαίρεσης παιδιών
+  attributes: true,   // Παρακολούθηση αλλαγών ιδιοτήτων
+  subtree: true       // Παρακολούθηση όλων των απογόνων
+});</code></pre>
+        </section>
+
+        <section id="advanced-data-structures">
+            <h2>5. Προχωρημένες Δομές Δεδομένων (Map, Set, WeakMap, WeakSet)</h2>
+            <p>Η JavaScript εισήγαγε νέες δομές δεδομένων με την ES6 που προσφέρουν περισσότερες δυνατότητες σε σχέση με τους παραδοσιακούς πίνακες και αντικείμενα.</p>
+            
+            <div class="callout">
+                <p><strong>Βασικές Νέες Δομές Δεδομένων:</strong></p>
+                <ul>
+                    <li><strong>Map:</strong> Συλλογή ζευγών κλειδιού-τιμής όπου τα κλειδιά μπορούν να είναι οποιουδήποτε τύπου</li>
+                    <li><strong>Set:</strong> Συλλογή μοναδικών τιμών οποιουδήποτε τύπου</li>
+                    <li><strong>WeakMap:</strong> Παρόμοιο με Map αλλά με "αδύναμες" αναφορές για αποδοτική διαχείριση μνήμης</li>
+                    <li><strong>WeakSet:</strong> Παρόμοιο με Set αλλά με "αδύναμες" αναφορές</li>
+                </ul>
+            </div>
+            
+            <h3>Map</h3>
+            <p>Ο Map είναι μια συλλογή ζευγών κλειδιού-τιμής, όπου τα κλειδιά μπορούν να είναι οποιουδήποτε τύπου (όχι μόνο strings όπως στα αντικείμενα).</p>
+            
+            <pre><code>// Δημιουργία Map
+const userMap = new Map();
+
+// Προσθήκη στοιχείων
+userMap.set('name', 'Γιάννης');
+userMap.set('age', 30);
+userMap.set(42, 'ένας αριθμός ως κλειδί'); // Το κλειδί μπορεί να είναι αριθμός
+userMap.set(true, 'boolean κλειδί');        // Το κλειδί μπορεί να είναι boolean
+
+// Πρόσβαση σε στοιχεία
+console.log(userMap.get('name')); // 'Γιάννης'
+console.log(userMap.get(42));     // 'ένας αριθμός ως κλειδί'
+
+// Έλεγχος ύπαρξης κλειδιού
+console.log(userMap.has('email')); // false
+console.log(userMap.has('name'));  // true
+
+// Διαγραφή στοιχείου
+userMap.delete('age');
+console.log(userMap.has('age'));   // false
+
+// Μέγεθος του Map
+console.log(userMap.size);         // 3
+
+// Καθαρισμός του Map
+userMap.clear();
+console.log(userMap.size);         // 0
+
+// Αρχικοποίηση με πολλαπλά στοιχεία
+const userProfile = new Map([
+  ['name', 'Μαρία'],
+  ['age', 28],
+  ['profession', 'Μηχανικός']
+]);
+
+// Επανάληψη στα κλειδιά και τις τιμές
+for (const [key, value] of userProfile) {
+  console.log(`${key}: ${value}`);
+}
+
+// Λήψη μόνο των κλειδιών
+for (const key of userProfile.keys()) {
+  console.log(key);
+}
+
+// Λήψη μόνο των τιμών
+for (const value of userProfile.values()) {
+  console.log(value);
+}
+
+// Χρήση forEach
+userProfile.forEach((value, key) => {
+  console.log(`${key}: ${value}`);
+});</code></pre>
+            
+            <h4>Πλεονεκτήματα του Map σε σχέση με το Αντικείμενο</h4>
+            <ul>
+                <li><strong>Κλειδιά οποιουδήποτε τύπου:</strong> Τα κλειδιά μπορούν να είναι αντικείμενα, συναρτήσεις, κλπ.</li>
+                <li><strong>Μέγεθος:</strong> Το μέγεθος είναι εύκολα προσβάσιμο με την ιδιότητα size</li>
+                <li><strong>Σειρά εισαγωγής:</strong> Τα στοιχεία διατηρούν τη σειρά εισαγωγής τους κατά την επανάληψη</li>
+                <li><strong>Καλύτερη απόδοση:</strong> Για συχνές προσθήκες/αφαιρέσεις στοιχείων</li>
+                <li><strong>Χωρίς κληρονομημένα κλειδιά:</strong> Δεν έχει τα προεπιλεγμένα κλειδιά από το Object.prototype</li>
+            </ul>
+            
+            <h3>Set</h3>
+            <p>Το Set είναι μια συλλογή μοναδικών τιμών οποιουδήποτε τύπου.</p>
+            
+            <pre><code>// Δημιουργία Set
+const uniqueNumbers = new Set();
+
+// Προσθήκη στοιχείων
+uniqueNumbers.add(1);
+uniqueNumbers.add(2);
+uniqueNumbers.add(3);
+uniqueNumbers.add(2); // Αγνοείται επειδή το 2 υπάρχει ήδη
+
+console.log(uniqueNumbers.size); // 3
+
+// Έλεγχος ύπαρξης τιμής
+console.log(uniqueNumbers.has(1)); // true
+console.log(uniqueNumbers.has(4)); // false
+
+// Διαγραφή στοιχείου
+uniqueNumbers.delete(3);
+console.log(uniqueNumbers.has(3)); // false
+
+// Καθαρισμός του Set
+uniqueNumbers.clear();
+
+// Αρχικοποίηση με πολλαπλά στοιχεία
+const uniqueColors = new Set(['κόκκινο', 'πράσινο', 'μπλε', 'κόκκινο']); // Το διπλό 'κόκκινο' αγνοείται
+console.log(uniqueColors.size); // 3
+
+// Επανάληψη στα στοιχεία
+for (const color of uniqueColors) {
+  console.log(color);
+}
+
+// Χρήση forEach
+uniqueColors.forEach(color => {
+  console.log(color);
+});
+
+// Μετατροπή Set σε πίνακα
+const colorsArray = [...uniqueColors];
+console.log(colorsArray); // ['κόκκινο', 'πράσινο', 'μπλε']
+
+// Μετατροπή πίνακα σε Set (για αφαίρεση διπλότυπων)
+const numbers = [1, 2, 3, 3, 4, 4, 5];
+const uniqueNumbersSet = new Set(numbers);
+const uniqueNumbersArray = [...uniqueNumbersSet];
+console.log(uniqueNumbersArray); // [1, 2, 3, 4, 5]</code></pre>
+            
+            <h4>Χρήσιμες λειτουργίες με Sets</h4>
+            <pre><code>// Ένωση Sets
+function union(setA, setB) {
+  return new Set([...setA, ...setB]);
+}
+
+// Τομή Sets
+function intersection(setA, setB) {
+  return new Set([...setA].filter(x => setB.has(x)));
+}
+
+// Διαφορά Sets
+function difference(setA, setB) {
+  return new Set([...setA].filter(x => !setB.has(x)));
+}
+
+// Παράδειγμα
+const setA = new Set([1, 2, 3, 4]);
+const setB = new Set([3, 4, 5, 6]);
+
+console.log([...union(setA, setB)]);        // [1, 2, 3, 4, 5, 6]
+console.log([...intersection(setA, setB)]); // [3, 4]
+console.log([...difference(setA, setB)]);   // [1, 2]</code></pre>
+            
+            <h3>WeakMap</h3>
+            <p>Το WeakMap είναι παρόμοιο με το Map, αλλά με δύο βασικές διαφορές:</p>
+            <ol>
+                <li>Τα κλειδιά πρέπει να είναι αντικείμενα</li>
+                <li>Οι αναφορές στα κλειδιά είναι "αδύναμες", επιτρέποντας στο garbage collector να αφαιρέσει τα αντικείμενα αν δεν υπάρχει άλλη αναφορά σε αυτά</li>
+            </ol>
+            
+            <pre><code>// Δημιουργία WeakMap
+const weakMap = new WeakMap();
+
+// Τα κλειδιά πρέπει να είναι αντικείμενα
+let obj1 = { name: 'Αντικείμενο 1' };
+let obj2 = { name: 'Αντικείμενο 2' };
+
+weakMap.set(obj1, 'Πληροφορίες για το αντικείμενο 1');
+weakMap.set(obj2, 'Πληροφορίες για το αντικείμενο 2');
+
+console.log(weakMap.get(obj1)); // 'Πληροφορίες για το αντικείμενο 1'
+
+// Τώρα το obj1 δεν έχει άλλες αναφορές
+obj1 = null;
+
+// Το αντικείμενο που ήταν το obj1 θα είναι διαθέσιμο για garbage collection
+// και θα αφαιρεθεί από το weakMap μετά από λίγο
+
+// Δεν μπορούμε να επαναλάβουμε ένα WeakMap ή να βρούμε το μέγεθός του
+// weakMap.size; // Δεν υπάρχει ιδιότητα size
+// για (let [key, value] of weakMap) {} // Σφάλμα: Το WeakMap δεν είναι iterable</code></pre>
+            
+            <h4>Χρήσεις του WeakMap</h4>
+            <ul>
+                <li><strong>Αποθήκευση ιδιωτικών δεδομένων:</strong> Σύνδεση δεδομένων σε αντικείμενα χωρίς τροποποίηση των αντικειμένων</li>
+                <li><strong>Caching/Memoization:</strong> Αποθήκευση αποτελεσμάτων από ακριβές υπολογισμούς</li>
+                <li><strong>Σύνδεση μεταδεδομένων:</strong> Αποθήκευση επιπλέον πληροφοριών για αντικείμενα DOM</li>
+            </ul>
+            
+            <h3>WeakSet</h3>
+            <p>Το WeakSet είναι παρόμοιο με το Set, αλλά:</p>
+            <ol>
+                <li>Μπορεί να περιέχει μόνο αντικείμενα</li>
+                <li>Οι αναφορές στα αντικείμενα είναι "αδύναμες"</li>
+                <li>Δεν είναι iterable και δεν έχει μέγεθος</li>
+            </ol>
+            
+            <pre><code>// Δημιουργία WeakSet
+const visitedObjects = new WeakSet();
+
+// Τα στοιχεία πρέπει να είναι αντικείμενα
+let user1 = { id: 1, name: 'Χρήστης 1' };
+let user2 = { id: 2, name: 'Χρήστης 2' };
+
+// Προσθήκη αντικειμένων
+visitedObjects.add(user1);
+visitedObjects.add(user2);
+
+// Έλεγχος ύπαρξης
+console.log(visitedObjects.has(user1)); // true
+
+// Διαγραφή αντικειμένου
+visitedObjects.delete(user1);
+console.log(visitedObjects.has(user1)); // false
+
+// Όταν δεν υπάρχουν άλλες αναφορές στο user2
+user2 = null;
+// Το αντικείμενο θα γίνει διαθέσιμο για garbage collection</code></pre>
+            
+            <h4>Χρήσεις του WeakSet</h4>
+            <ul>
+                <li><strong>Σήμανση αντικειμένων:</strong> Επισήμανση αντικειμένων που έχουν επεξεργαστεί ή επισκεφτεί</li>
+                <li><strong>Αποφυγή κυκλικών αναφορών:</strong> Αποθήκευση αναφορών χωρίς να εμποδίζει το garbage collection</li>
+                <li><strong>Έλεγχος τύπου κατά το χρόνο εκτέλεσης:</strong> Επιβεβαίωση ότι ένα αντικείμενο ανήκει σε μια συγκεκριμένη ομάδα</li>
+            </ul>
+            
+            <div class="callout warning">
+                <p><strong>Περιορισμοί των WeakMap και WeakSet:</strong></p>
+                <ul>
+                    <li>Τα κλειδιά/στοιχεία πρέπει να είναι αντικείμενα (όχι primitive τιμές)</li>
+                    <li>Δεν είναι iterable (δεν υπάρχει forEach, keys(), values())</li>
+                    <li>Δεν παρέχουν μέγεθος (καμία ιδιότητα size)</li>
+                    <li>Δεν μπορείτε να τα καθαρίσετε απευθείας (δεν υπάρχει μέθοδος clear())</li>
+                </ul>
+            </div>
+            
+            <h3>Παραδείγματα Πρακτικών Εφαρμογών</h3>
+            
+            <h4>Caching με WeakMap</h4>
+            <pre><code>// Συνάρτηση με caching αποτελεσμάτων
+function memoize(fn) {
+  const cache = new WeakMap();
+  
+  return function(obj) {
+    if (!cache.has(obj)) {
+      // Υπολογισμός και αποθήκευση του αποτελέσματος
+      const result = fn(obj);
+      cache.set(obj, result);
+    }
+    return cache.get(obj);
+  };
+}
+
+// Παράδειγμα συνάρτησης που θα κάνουμε memoize
+const calculateArea = memoize(rectangle => {
+  console.log('Υπολογισμός εμβαδού...'); // Θα εμφανιστεί μόνο την πρώτη φορά για κάθε αντικείμενο
+  return rectangle.width * rectangle.height;
+});
+
+const rect = { width: 5, height: 4 };
+
+console.log(calculateArea(rect)); // Εκτέλεση υπολογισμού και λογισμό
+console.log(calculateArea(rect)); // Επιστροφή του cached αποτελέσματος χωρίς επανυπολογισμό
+console.log(calculateArea({ width: 6, height: 3 })); // Νέος υπολογισμός για νέο αντικείμενο</code></pre>
+            
+            <h4>Παρακολούθηση επισκέψεων DOM με WeakSet</h4>
+            <pre><code>// Χρήση WeakSet για παρακολούθηση στοιχείων DOM που έχουμε επισκεφτεί
+const visitedElements = new WeakSet();
+
+function markVisited(element) {
+  visitedElements.add(element);
+  // Προσθέτουμε ένα visual στυλ
+  element.classList.add('visited');
+}
+
+function hasVisited(element) {
+  return visitedElements.has(element);
+}
+
+// Χρήση:
+document.querySelectorAll('.item').forEach(item => {
+  item.addEventListener('click', function() {
+    if (!hasVisited(this)) {
+      console.log('Πρώτη επίσκεψη!');
+      markVisited(this);
+    } else {
+      console.log('Ήδη έχετε επισκεφτεί αυτό το στοιχείο.');
+    }
+  });
+});</code></pre>
+            
+            <h4>Διατήρηση ενός σύνολου μοναδικών αντικειμένων με Set</h4>
+            <pre><code>// Βιβλιοθήκη με μοναδικά βιβλία βάσει ISBN
+class Book {
+  constructor(title, author, isbn) {
+    this.title = title;
+    this.author = author;
+    this.isbn = isbn;
+  }
+}
+
+class Library {
+  constructor() {
+    this.books = new Set();
+  }
+  
+  addBook(book) {
+    // Ελέγχουμε αν υπάρχει ήδη βιβλίο με το ίδιο ISBN
+    for (const existingBook of this.books) {
+      if (existingBook.isbn === book.isbn) {
+        console.log(`Το βιβλίο με ISBN ${book.isbn} υπάρχει ήδη!`);
+        return false;
+      }
+    }
+    
+    this.books.add(book);
+    console.log(`Προστέθηκε: ${book.title} (${book.isbn})`);
+    return true;
+  }
+  
+  hasBook(isbn) {
+    for (const book of this.books) {
+      if (book.isbn === isbn) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  removeBook(isbn) {
+    for (const book of this.books) {
+      if (book.isbn === isbn) {
+        this.books.delete(book);
+        console.log(`Αφαιρέθηκε: ${book.title}`);
+        return true;
+      }
+    }
+    console.log(`Δεν βρέθηκε βιβλίο με ISBN ${isbn}`);
+    return false;
+  }
+  
+  listBooks() {
+    if (this.books.size === 0) {
+      console.log('Η βιβλιοθήκη είναι άδεια.');
+      return;
+    }
+    
+    console.log(`Βιβλία (${this.books.size}):`);
+    for (const book of this.books) {
+      console.log(`- "${book.title}" από ${book.author} (${book.isbn})`);
+    }
+  }
+}
+
+// Χρήση:
+const myLibrary = new Library();
+
+myLibrary.addBook(new Book('1984', 'George Orwell', '9780451524935'));
+myLibrary.addBook(new Book('Το Όνομα του Ρόδου', 'Umberto Eco', '9780156001311'));
+myLibrary.addBook(new Book('1984', 'George Orwell', '9780451524935')); // Διπλό ISBN
+myLibrary.listBooks();</code></pre>
+        </section>
+
+        <section id="design-patterns">
+            <h2>6. Σχεδιαστικά Πρότυπα JavaScript (Design Patterns)</h2>
+            <p>Τα σχεδιαστικά πρότυπα είναι επαναχρησιμοποιήσιμες λύσεις σε συχνά εμφανιζόμενα προβλήματα στον προγραμματισμό. Στη JavaScript, αυτά τα πρότυπα βοηθούν στην οργάνωση του κώδικα με προβλέψιμο και αποδοτικό τρόπο.</p>
+            
+            <div class="callout">
+                <p><strong>Κατηγορίες Σχεδιαστικών Προτύπων:</strong></p>
+                <ul>
+                    <li><strong>Creational Patterns:</strong> Πρότυπα για τη δημιουργία αντικειμένων (Factory, Singleton, κλπ.)</li>
+                    <li><strong>Structural Patterns:</strong> Πρότυπα για τη δομή και σύνθεση αντικειμένων (Adapter, Decorator, κλπ.)</li>
+                    <li><strong>Behavioral Patterns:</strong> Πρότυπα για την επικοινωνία αντικειμένων (Observer, Strategy, κλπ.)</li>
+                </ul>
+            </div>
+            
+            <h3>Creational Patterns</h3>
+            
+            <h4>Factory Pattern</h4>
+            <p>Το Factory Pattern παρέχει μια διεπαφή για τη δημιουργία αντικειμένων σε μια υπερκλάση, επιτρέποντας στις υποκλάσεις να τροποποιούν τον τύπο των αντικειμένων που θα δημιουργηθούν.</p>
+            
+            <pre><code>// Συνάρτηση δημιουργίας χρηστών διαφορετικών τύπων
+function createUser(type, userData) {
+  // Ορισμός βασικών ιδιοτήτων
+  const user = {
+    id: userData.id,
+    name: userData.name,
+    email: userData.email,
+    createdAt: new Date()
+  };
+  
+  // Προσθήκη ιδιοτήτων και μεθόδων ανάλογα με τον τύπο χρήστη
+  switch (type) {
+    case 'admin':
+      return {
+        ...user,
+        role: 'admin',
+        permissions: ['create', 'read', 'update', 'delete'],
+        adminCode: userData.adminCode || generateAdminCode(),
+        resetUserPassword: function(userId) {
+          console.log(`Admin ${this.name} επαναφέρει τον κωδικό του χρήστη ${userId}`);
+        }
+      };
+    
+    case 'moderator':
+      return {
+        ...user,
+        role: 'moderator',
+        permissions: ['read', 'update'],
+        approveContent: function(contentId) {
+          console.log(`Moderator ${this.name} ενέκρινε το περιεχόμενο ${contentId}`);
+        }
+      };
+    
+    case 'customer':
+    default:
+      return {
+        ...user,
+        role: 'customer',
+        permissions: ['read'],
+        cart: [],
+        addToCart: function(productId) {
+          this.cart.push(productId);
+          console.log(`Προϊόν ${productId} προστέθηκε στο καλάθι του ${this.name}`);
+        }
+      };
+  }
+}
+
+// Βοηθητική συνάρτηση
+function generateAdminCode() {
+  return 'ADM-' + Math.floor(Math.random() * 10000);
+}
+
+// Χρήση:
+const admin = createUser('admin', { id: 1, name: 'Γιάννης', email: 'giannis@example.com' });
+const moderator = createUser('moderator', { id: 2, name: 'Μαρία', email: 'maria@example.com' });
+const customer = createUser('customer', { id: 3, name: 'Νίκος', email: 'nikos@example.com' });
+
+console.log(admin.role);       // 'admin'
+console.log(admin.permissions); // ['create', 'read', 'update', 'delete']
+admin.resetUserPassword(3);     // Admin Γιάννης επαναφέρει τον κωδικό του χρήστη 3
+
+moderator.approveContent('article-123'); // Moderator Μαρία ενέκρινε το περιεχόμενο article-123
+
+customer.addToCart('product-456'); // Προϊόν product-456 προστέθηκε στο καλάθι του Νίκος</code></pre>
+            
+            <h4>Singleton Pattern</h4>
+            <p>Το Singleton Pattern διασφαλίζει ότι μια κλάση έχει μόνο ένα στιγμιότυπο και παρέχει ένα καθολικό σημείο πρόσβασης σε αυτό.</p>
+            
+            <pre><code>// Υλοποίηση Singleton με IIFE (Immediately Invoked Function Expression)
+const Database = (function() {
+  let instance;
+  
+  // Ιδιωτικός constructor
+  function createInstance() {
+    const connections = [];
+    
+    return {
+      connect: function(connectionString) {
+        console.log(`Σύνδεση στη βάση δεδομένων: ${connectionString}`);
+        connections.push(connectionString);
+        return this;
+      },
+      disconnect: function(connectionString) {
+        console.log(`Αποσύνδεση από τη βάση δεδομένων: ${connectionString}`);
+        const index = connections.indexOf(connectionString);
+        if (index !== -1) {
+          connections.splice(index, 1);
+        }
+        return this;
+      },
+      getConnections: function() {
+        return [...connections];
+      }
+    };
+  }
+  
+  return {
+    // Μέθοδος για λήψη του instance
+    getInstance: function() {
+      if (!instance) {
+        instance = createInstance();
+      }
+      return instance;
+    }
+  };
+})();
+
+// Χρήση:
+const db1 = Database.getInstance();
+const db2 = Database.getInstance();
+
+console.log(db1 === db2); // true, είναι το ίδιο instance
+
+db1.connect('postgres://main-db');
+db2.connect('mysql://logging-db');
+
+console.log(db1.getConnections()); // ['postgres://main-db', 'mysql://logging-db']
+console.log(db2.getConnections()); // ['postgres://main-db', 'mysql://logging-db']</code></pre>
+            
+            <h4>Module Pattern</h4>
+            <p>Το Module Pattern χρησιμοποιεί τα closures για να δημιουργήσει ιδιωτικές μεταβλητές και μεθόδους, εκθέτοντας μόνο μια δημόσια διεπαφή.</p>
+            
+            <pre><code>// Παράδειγμα Module Pattern με δημόσιο και ιδιωτικό API
+const ShoppingCart = (function() {
+  // Ιδιωτικές μεταβλητές και μέθοδοι
+  const items = [];
+  let total = 0;
+  
+  function calculateTotal() {
+    return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  }
+  
+  function findItemIndex(productId) {
+    return items.findIndex(item => item.productId === productId);
+  }
+ // Δημόσιο API
+  return {
+    addItem: function(productId, name, price, quantity = 1) {
+      const index = findItemIndex(productId);
+      
+      if (index !== -1) {
+        // Το προϊόν υπάρχει ήδη, αύξηση ποσότητας
+        items[index].quantity += quantity;
+      } else {
+        // Νέο προϊόν
+        items.push({ productId, name, price, quantity });
+      }
+      
+      total = calculateTotal();
+      return this;
+    },
+    
+    removeItem: function(productId) {
+      const index = findItemIndex(productId);
+      
+      if (index !== -1) {
+        items.splice(index, 1);
+        total = calculateTotal();
+      }
+      
+      return this;
+    },
+    
+    getItems: function() {
+      return [...items]; // Επιστροφή αντιγράφου για αποφυγή άμεσης τροποποίησης
+    },
+    
+    getTotal: function() {
+      return total;
+    },
+    
+    clearCart: function() {
+      items.length = 0;
+      total = 0;
+      return this;
+    }
+  };
+})();
+
+// Χρήση:
+ShoppingCart.addItem(1, 'Laptop', 1200);
+ShoppingCart.addItem(2, 'Ποντίκι', 25, 2);
+
+console.log(ShoppingCart.getItems()); // Λίστα προϊόντων
+console.log(`Σύνολο: ${ShoppingCart.getTotal()}€`); // Σύνολο: 1250€
+
+ShoppingCart.removeItem(2);
+console.log(`Νέο σύνολο: ${ShoppingCart.getTotal()}€`); // Νέο σύνολο: 1200€</code></pre>
+        </section>
+
+    </div>
+  </body>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-jsx.min.js"></script>
+  <button id="back-to-top" title="Back to top">↑</button>
+  <script src="course-interactions.js"></script>
+  <script>
+    const backToTopButton = document.getElementById('back-to-top');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.style.display = 'block';
+      } else {
+        backToTopButton.style.display = 'none';
+      }
+    });
+    
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
+</html>

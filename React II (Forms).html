@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Χειρισμός και Επικύρωση Φορμών στο React</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+	<a href="Index.html" class="back-to-index">← Επιστροφή στο Ευρετήριο</a>
+        <h1>Χειρισμός και Επικύρωση Φορμών στο React</h1>
+        
+        <section id="form-handling">
+            <h2>1. Εισαγωγή στις Φόρμες στο React</h2>
+            <p>Οι φόρμες αποτελούν ένα κρίσιμο μέρος των διαδικτυακών εφαρμογών, επιτρέποντας στους χρήστες να εισάγουν δεδομένα. Στο React, οι φόρμες απαιτούν ειδικό χειρισμό επειδή τα στοιχεία των φορμών διατηρούν εκ φύσεως κάποια εσωτερική κατάσταση (state).</p>
+            
+            <div class="callout">
+                <p><strong>Βασικές Έννοιες:</strong></p>
+                <ul>
+                    <li><strong>Ελεγχόμενα Συστατικά (Controlled Components):</strong> Στοιχεία φόρμας των οποίων οι τιμές ελέγχονται από την κατάσταση (state) του React</li>
+                    <li><strong>Μη Ελεγχόμενα Συστατικά (Uncontrolled Components):</strong> Στοιχεία φόρμας που διατηρούν τη δική τους εσωτερική κατάσταση</li>
+                    <li><strong>Επικύρωση Φόρμας (Form Validation):</strong> Διασφάλιση ότι τα δεδομένα που εισάγει ο χρήστης πληρούν τα απαιτούμενα κριτήρια</li>
+                    <li><strong>Υποβολή Φόρμας (Form Submission):</strong> Χειρισμός της υποβολής των δεδομένων της φόρμας</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="controlled-components">
+            <h2>2. Ελεγχόμενα Συστατικά (Controlled Components)</h2>
+            
+            <p>Στην HTML, τα στοιχεία φόρμας όπως <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>, και <code>&lt;select&gt;</code> διατηρούν τη δική τους κατάσταση. Στο React, συνήθως θέλουμε να διατηρούμε όλη την κατάσταση των συστατικών στο state του React, καθιστώντας το React την "μοναδική πηγή αλήθειας".</p>
+            
+            <h3>Βασικό Ελεγχόμενο Πεδίο Εισαγωγής</h3>
+            <pre><code>import React, { useState } from 'react';
+
+function SimpleForm() {
+  const [name, setName] = useState('');
+  
+  const handleChange = (event) => {
+    setName(event.target.value);
+  };
+  
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevent page refresh
+    alert('A name was submitted: ' + name);
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;label&gt;
+        Name:
+        &lt;input 
+          type="text" 
+          value={name} 
+          onChange={handleChange} 
+        /&gt;
+      &lt;/label&gt;
+      &lt;button type="submit"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+
+            <div class="code-explanation">
+                <h4>Επεξήγηση Κώδικα:</h4>
+                <ul>
+                    <li><code>import React, { useState } from 'react';</code> - Εισάγουμε το React και το hook useState. Το useState είναι ένα ειδικό hook που μας επιτρέπει να προσθέσουμε state σε λειτουργικά συστατικά.</li>
+                    <li><code>const [name, setName] = useState('');</code> - Δημιουργούμε μια μεταβλητή state με όνομα "name" και αρχική τιμή ένα κενό string (''), και μια συνάρτηση "setName" που θα χρησιμοποιήσουμε για να ενημερώνουμε αυτήν την τιμή.</li>
+                    <li><code>const handleChange = (event) => {...}</code> - Δημιουργούμε μια συνάρτηση που θα καλείται κάθε φορά που ο χρήστης πληκτρολογεί στο πεδίο εισαγωγής. Το αντικείμενο "event" περιέχει πληροφορίες για το συμβάν.</li>
+                    <li><code>setName(event.target.value);</code> - Ενημερώνουμε το state "name" με την τρέχουσα τιμή του πεδίου εισαγωγής.</li>
+                    <li><code>const handleSubmit = (event) => {...}</code> - Δημιουργούμε μια συνάρτηση που θα καλείται όταν υποβάλλεται η φόρμα.</li>
+                    <li><code>event.preventDefault();</code> - Αποτρέπουμε την προεπιλεγμένη συμπεριφορά της φόρμας, που είναι η επαναφόρτωση της σελίδας.</li>
+                    <li><code>value={name}</code> - Καθορίζουμε την τιμή του πεδίου εισαγωγής από το state του React.</li>
+                    <li><code>onChange={handleChange}</code> - Καθορίζουμε τη συνάρτηση που θα καλείται κάθε φορά που αλλάζει η τιμή του πεδίου.</li>
+                </ul>
+            </div>
+            
+            <div class="callout">
+                <p><strong>Βασικά Σημεία:</strong></p>
+                <ul>
+                    <li>Το χαρακτηριστικό <code>value</code> ορίζει την τιμή του πεδίου εισαγωγής από το state του React</li>
+                    <li>Ο χειριστής <code>onChange</code> ενημερώνει το state όταν ο χρήστης πληκτρολογεί</li>
+                    <li>Αυτό δημιουργεί μια αμφίδρομη σύνδεση (two-way binding) μεταξύ του πεδίου εισαγωγής και του state του React</li>
+                </ul>
+            </div>
+            
+            <h3>Πολλαπλά Πεδία Εισαγωγής</h3>
+            <pre><code>import React, { useState } from 'react';
+
+function ContactForm() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    
+    setFormData({
+      ...formData, // Keep all existing form data
+      [name]: value // Update only the changed field
+    });
+  };
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Form submitted:', formData);
+    // You would typically send this data to an API here
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="name"&gt;Name:&lt;/label&gt;
+        &lt;input
+          id="name"
+          name="name"
+          type="text"
+          value={formData.name}
+          onChange={handleChange}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="email"&gt;Email:&lt;/label&gt;
+        &lt;input
+          id="email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="message"&gt;Message:&lt;/label&gt;
+        &lt;textarea
+          id="message"
+          name="message"
+          value={formData.message}
+          onChange={handleChange}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;button type="submit"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+
+            <div class="code-explanation">
+                <h4>Επεξήγηση Κώδικα:</h4>
+                <ul>
+                    <li><code>const [formData, setFormData] = useState({...});</code> - Δημιουργούμε ένα state αντικείμενο που περιέχει όλα τα δεδομένα της φόρμας, με αρχικές τιμές κενά strings.</li>
+                    <li><code>const { name, value } = event.target;</code> - Χρησιμοποιούμε την αποδόμηση (destructuring) για να εξάγουμε τις ιδιότητες name και value από το event.target. Το name αντιστοιχεί στο χαρακτηριστικό "name" του πεδίου εισαγωγής και το value είναι η τρέχουσα τιμή του.</li>
+                    <li><code>...formData</code> - Αυτή είναι η σύνταξη του τελεστή spread. Αντιγράφει όλες τις υπάρχουσες ιδιότητες από το αντικείμενο formData στο νέο αντικείμενο.</li>
+                    <li><code>[name]: value</code> - Αυτή είναι η σύνταξη των υπολογιζόμενων ιδιοτήτων (computed properties). Χρησιμοποιεί την τιμή της μεταβλητής name ως το όνομα της ιδιότητας και της αναθέτει την τιμή value.</li>
+                    <li><code>htmlFor="name"</code> - Στο React, χρησιμοποιούμε "htmlFor" αντί για "for" στις ετικέτες, καθώς το "for" είναι δεσμευμένη λέξη στη JavaScript.</li>
+                    <li><code>value={formData.name}</code> - Η τιμή του πεδίου εισαγωγής προέρχεται από το αντίστοιχο πεδίο του state αντικειμένου.</li>
+                </ul>
+            </div>
+            
+            <h3>Διαφορετικοί Τύποι Πεδίων Εισαγωγής</h3>
+            <pre><code>import React, { useState } from 'react';
+
+function SurveyForm() {
+  const [formData, setFormData] = useState({
+    name: '',
+    age: '',
+    gender: '',
+    interests: [],
+    subscription: false
+  });
+  
+  const handleChange = (event) => {
+    const { name, value, type, checked } = event.target;
+    
+    if (type === 'checkbox' && name === 'interests') {
+      // Handle checkbox groups (multiple selection)
+      const interestValue = event.target.value;
+      const updatedInterests = [...formData.interests];
+      
+      if (checked) {
+        // Add the value to the array if it's checked
+        updatedInterests.push(interestValue);
+      } else {
+        // Remove the value from the array if it's unchecked
+        const index = updatedInterests.indexOf(interestValue);
+        if (index > -1) {
+          updatedInterests.splice(index, 1);
+        }
+      }
+      
+      setFormData({
+        ...formData,
+        interests: updatedInterests
+      });
+    } else if (type === 'checkbox') {
+      // Handle single checkboxes
+      setFormData({
+        ...formData,
+        [name]: checked
+      });
+    } else {
+      // Handle all other input types
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
+  };
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Form data:', formData);
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="name"&gt;Name:&lt;/label&gt;
+        &lt;input
+          id="name"
+          name="name"
+          type="text"
+          value={formData.name}
+          onChange={handleChange}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="age"&gt;Age:&lt;/label&gt;
+        &lt;input
+          id="age"
+          name="age"
+          type="number"
+          value={formData.age}
+          onChange={handleChange}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="gender"&gt;Gender:&lt;/label&gt;
+        &lt;select
+          id="gender"
+          name="gender"
+          value={formData.gender}
+          onChange={handleChange}
+        &gt;
+          &lt;option value=""&gt;Select gender&lt;/option&gt;
+          &lt;option value="male"&gt;Male&lt;/option&gt;
+          &lt;option value="female"&gt;Female&lt;/option&gt;
+          &lt;option value="other"&gt;Other&lt;/option&gt;
+          &lt;option value="prefer-not-to-say"&gt;Prefer not to say&lt;/option&gt;
+        &lt;/select&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;p&gt;Interests:&lt;/p&gt;
+        &lt;label&gt;
+          &lt;input
+            type="checkbox"
+            name="interests"
+            value="technology"
+            checked={formData.interests.includes('technology')}
+            onChange={handleChange}
+          /&gt;
+          Technology
+        &lt;/label&gt;
+        
+        &lt;label&gt;
+          &lt;input
+            type="checkbox"
+            name="interests"
+            value="sports"
+            checked={formData.interests.includes('sports')}
+            onChange={handleChange}
+          /&gt;
+          Sports
+        &lt;/label&gt;
+        
+        &lt;label&gt;
+          &lt;input
+            type="checkbox"
+            name="interests"
+            value="reading"
+            checked={formData.interests.includes('reading')}
+            onChange={handleChange}
+          /&gt;
+          Reading
+        &lt;/label&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label&gt;
+          &lt;input
+            type="checkbox"
+            name="subscription"
+            checked={formData.subscription}
+            onChange={handleChange}
+          /&gt;
+          Subscribe to newsletter
+        &lt;/label&gt;
+      &lt;/div&gt;
+      
+      &lt;button type="submit"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+
+            <div class="code-explanation">
+                <h4>Επεξήγηση Κώδικα:</h4>
+                <ul>
+                    <li><code>const [formData, setFormData] = useState({...});</code> - Αρχικοποιούμε ένα πιο σύνθετο state αντικείμενο που περιλαμβάνει διαφορετικούς τύπους δεδομένων:
+                        <ul>
+                            <li>Κείμενο (string) για name</li>
+                            <li>Αριθμός (αποθηκευμένος ως string) για age</li>
+                            <li>Επιλογή (string) για gender</li>
+                            <li>Πίνακας (array) για interests, που επιτρέπει πολλαπλές επιλογές</li>
+                            <li>Boolean για subscription</li>
+                        </ul>
+                    </li>
+                    <li><code>const { name, value, type, checked } = event.target;</code> - Εξάγουμε επιπλέον ιδιότητες από το event.target:
+                        <ul>
+                            <li>type: ο τύπος του πεδίου εισαγωγής (π.χ. 'text', 'checkbox')</li>
+                            <li>checked: για τα πεδία τύπου checkbox, δείχνει αν είναι επιλεγμένα ή όχι</li>
+                        </ul>
+                    </li>
+                    <li><code>if (type === 'checkbox' && name === 'interests') {...}</code> - Ειδικός χειρισμός για την ομάδα checkboxes των ενδιαφερόντων.</li>
+                    <li><code>const updatedInterests = [...formData.interests];</code> - Δημιουργούμε ένα νέο αντίγραφο του πίνακα interests, χρησιμοποιώντας τον τελεστή spread.</li>
+                    <li><code>updatedInterests.push(interestValue);</code> - Προσθέτουμε μια νέα τιμή στον πίνακα όταν επιλέγεται ένα checkbox.</li>
+                    <li><code>updatedInterests.splice(index, 1);</code> - Αφαιρούμε μια τιμή από τον πίνακα όταν αποεπιλέγεται ένα checkbox.</li>
+                    <li><code>checked={formData.interests.includes('technology')}</code> - Ελέγχουμε αν μια συγκεκριμένη τιμή υπάρχει στον πίνακα interests, για να καθορίσουμε αν το checkbox πρέπει να εμφανίζεται ως επιλεγμένο.</li>
+                    <li><code>checked={formData.subscription}</code> - Για το μεμονωμένο checkbox subscription, χρησιμοποιούμε απευθείας την boolean τιμή από το state.</li>
+                </ul>
+            </div>
+
+            <div class="callout success">
+                <p><strong>Συμβουλή για Αρχάριους:</strong></p>
+                <p>Όταν δουλεύετε με φόρμες στο React, θυμηθείτε τα εξής βασικά βήματα:</p>
+                <ol>
+                    <li>Δημιουργήστε state για να αποθηκεύσετε τα δεδομένα της φόρμας</li>
+                    <li>Συνδέστε κάθε πεδίο με το αντίστοιχο state μέσω του χαρακτηριστικού value</li>
+                    <li>Προσθέστε έναν χειριστή onChange για να ενημερώνετε το state όταν αλλάζουν οι τιμές</li>
+                    <li>Προσθέστε έναν χειριστή onSubmit στη φόρμα για να χειριστείτε την υποβολή των δεδομένων</li>
+                </ol>
+                <p>Αυτή η προσέγγιση σας δίνει πλήρη έλεγχο πάνω στα δεδομένα της φόρμας και σας επιτρέπει να εφαρμόσετε εύκολα επικύρωση και άλλη λογική.</p>
+            </div>
+        </section>
+
+        <section id="form-validation">
+            <h2>3. Βασική Επικύρωση Φορμών</h2>
+            
+            <p>Η επικύρωση φορμών βοηθάει στο να διασφαλιστεί ότι τα δεδομένα που εισάγει ο χρήστης πληρούν τα απαιτούμενα κριτήρια και έχουν την κατάλληλη μορφή πριν από την υποβολή.</p>
+            
+            <h3>Απλή Επικύρωση με το useState</h3>
+            <pre><code>import React, { useState } from 'react';
+
+function SignupForm() {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  
+  const [errors, setErrors] = useState({});
+  
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+    
+    // Καθαρισμός σφάλματος όταν ο χρήστης αρχίζει να πληκτρολογεί
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: null
+      });
+    }
+  };
+  
+  const validateForm = () => {
+    const newErrors = {};
+    
+    // Επικύρωση ονόματος χρήστη
+    if (!formData.username.trim()) {
+      newErrors.username = 'Το όνομα χρήστη είναι υποχρεωτικό';
+    } else if (formData.username.length < 3) {
+      newErrors.username = 'Το όνομα χρήστη πρέπει να έχει τουλάχιστον 3 χαρακτήρες';
+    }
+    
+    // Επικύρωση email
+    if (!formData.email.trim()) {
+      newErrors.email = 'Το email είναι υποχρεωτικό';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Το email δεν είναι έγκυρο';
+    }
+    
+    // Επικύρωση κωδικού
+    if (!formData.password) {
+      newErrors.password = 'Ο κωδικός είναι υποχρεωτικός';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες';
+    }
+    
+    // Επικύρωση επιβεβαίωσης κωδικού
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Οι κωδικοί δεν ταιριάζουν';
+    }
+    
+    setErrors(newErrors);
+    
+    // Η φόρμα είναι έγκυρη αν το αντικείμενο errors δεν έχει ιδιότητες
+    return Object.keys(newErrors).length === 0;
+  };
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
+    const isValid = validateForm();
+    
+    if (isValid) {
+      // Η φόρμα είναι έγκυρη, προχωράμε με την υποβολή
+      console.log('Η φόρμα υποβλήθηκε με επιτυχία:', formData);
+      // Επαναφορά της φόρμας μετά την υποβολή αν χρειάζεται
+      setFormData({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      });
+    } else {
+      console.log('Η φόρμα έχει σφάλματα, παρακαλώ διορθώστε τα');
+    }
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit} noValidate&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="username"&gt;Όνομα Χρήστη:&lt;/label&gt;
+        &lt;input
+          id="username"
+          name="username"
+          type="text"
+          value={formData.username}
+          onChange={handleChange}
+          className={errors.username ? 'error' : ''}
+        /&gt;
+        {errors.username && (
+          &lt;div className="error-message"&gt;{errors.username}&lt;/div&gt;
+        )}
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="email"&gt;Email:&lt;/label&gt;
+        &lt;input
+          id="email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          className={errors.email ? 'error' : ''}
+        /&gt;
+        {errors.email && (
+          &lt;div className="error-message"&gt;{errors.email}&lt;/div&gt;
+        )}
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="password"&gt;Κωδικός:&lt;/label&gt;
+        &lt;input
+          id="password"
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+          className={errors.password ? 'error' : ''}
+        /&gt;
+        {errors.password && (
+          &lt;div className="error-message"&gt;{errors.password}&lt;/div&gt;
+        )}
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="confirmPassword"&gt;Επιβεβαίωση Κωδικού:&lt;/label&gt;
+        &lt;input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          className={errors.confirmPassword ? 'error' : ''}
+        /&gt;
+        {errors.confirmPassword && (
+          &lt;div className="error-message"&gt;{errors.confirmPassword}&lt;/div&gt;
+        )}
+      &lt;/div&gt;
+      
+      &lt;button type="submit"&gt;Εγγραφή&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+
+            <div class="code-explanation">
+                <h4>Επεξήγηση Κώδικα:</h4>
+                <ul>
+                    <li><code>const [errors, setErrors] = useState({});</code> - Δημιουργούμε ένα state για την αποθήκευση των σφαλμάτων επικύρωσης.</li>
+                    <li><code>if (errors[name]) { setErrors({ ...errors, [name]: null }); }</code> - Καθαρίζουμε το σφάλμα για ένα συγκεκριμένο πεδίο όταν ο χρήστης αρχίζει να πληκτρολογεί σε αυτό, παρέχοντας άμεση ανατροφοδότηση.</li>
+                    <li><code>!/\S+@\S+\.\S+/.test(formData.email)</code> - Μια απλή κανονική έκφραση για τον έλεγχο της εγκυρότητας του email. Το \S+ ταιριάζει με έναν ή περισσότερους χαρακτήρες που δεν είναι κενά.</li>
+                    <li><code>formData.password !== formData.confirmPassword</code> - Ελέγχουμε αν ο κωδικός και η επιβεβαίωση κωδικού ταιριάζουν.</li>
+                    <li><code>noValidate</code> - Προσθέτουμε αυτό το χαρακτηριστικό στη φόρμα για να απενεργοποιήσουμε την προεπιλεγμένη επικύρωση του browser, ώστε να μπορούμε να χρησιμοποιήσουμε τη δική μας επικύρωση.</li>
+                    <li><code>className={errors.username ? 'error' : ''}</code> - Προσθέτουμε την κλάση CSS 'error' στα πεδία που έχουν σφάλματα, για να τα επισημάνουμε οπτικά.</li>
+                </ul>
+            </div>
+            
+            <div class="callout">
+                <p><strong>CSS για την Επικύρωση Φορμών:</strong></p>
+                <pre><code>/* Προσθέστε αυτό στο CSS σας */
+input.error {
+  border: 2px solid #ea4335;
+  background-color: #ffebee;
+}
+
+.error-message {
+  color: #ea4335;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}</code></pre>
+            </div>
+            
+            <h3>Επικύρωση σε Πραγματικό Χρόνο</h3>
+            <pre><code>import React, { useState, useEffect } from 'react';
+
+function RegistrationForm() {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+  
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  
+  // Επικύρωση κάθε φορά που αλλάζουν τα δεδομένα της φόρμας 
+  // και το πεδίο έχει "αγγιχτεί"
+  useEffect(() => {
+    if (Object.keys(touched).length > 0) {
+      validateForm();
+    }
+  }, [formData, touched]);
+  
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+  
+  const handleBlur = (event) => {
+    const { name } = event.target;
+    
+    setTouched({
+      ...touched,
+      [name]: true
+    });
+  };
+  
+  const validateForm = () => {
+    const newErrors = {};
+    
+    // Επικύρωση μόνο των πεδίων που έχουν "αγγιχτεί"
+    if (touched.username) {
+      if (!formData.username.trim()) {
+        newErrors.username = 'Το όνομα χρήστη είναι υποχρεωτικό';
+      } else if (formData.username.length < 3) {
+        newErrors.username = 'Το όνομα χρήστη πρέπει να έχει τουλάχιστον 3 χαρακτήρες';
+      }
+    }
+    
+    if (touched.email) {
+      if (!formData.email.trim()) {
+        newErrors.email = 'Το email είναι υποχρεωτικό';
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = 'Το email δεν είναι έγκυρο';
+      }
+    }
+    
+    if (touched.password) {
+      if (!formData.password) {
+        newErrors.password = 'Ο κωδικός είναι υποχρεωτικός';
+      } else if (formData.password.length < 6) {
+        newErrors.password = 'Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες';
+      } else if (!/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/.test(formData.password)) {
+        newErrors.password = 'Ο κωδικός πρέπει να περιέχει τουλάχιστον έναν αριθμό, ένα πεζό και ένα κεφαλαίο γράμμα';
+      }
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
+    // Σημειώνουμε όλα τα πεδία ως "αγγιγμένα" για να ενεργοποιήσουμε την επικύρωση
+    const allTouched = Object.keys(formData).reduce((acc, key) => {
+      acc[key] = true;
+      return acc;
+    }, {});
+    
+    setTouched(allTouched);
+    
+    const isValid = validateForm();
+    
+    if (isValid) {
+      console.log('Η φόρμα υποβλήθηκε:', formData);
+      // Επαναφορά της φόρμας μετά την υποβολή
+      setFormData({
+        username: '',
+        email: '',
+        password: ''
+      });
+      setTouched({});
+    }
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit} noValidate&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="username"&gt;Όνομα Χρήστη:&lt;/label&gt;
+        &lt;input
+          id="username"
+          name="username"
+          type="text"
+          value={formData.username}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={touched.username && errors.username ? 'error' : ''}
+        /&gt;
+        {touched.username && errors.username && (
+          &lt;div className="error-message"&gt;{errors.username}&lt;/div&gt;
+        )}
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="email"&gt;Email:&lt;/label&gt;
+        &lt;input
+          id="email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={touched.email && errors.email ? 'error' : ''}
+        /&gt;
+        {touched.email && errors.email && (
+          &lt;div className="error-message"&gt;{errors.email}&lt;/div&gt;
+        )}
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="password"&gt;Κωδικός:&lt;/label&gt;
+        &lt;input
+          id="password"
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          className={touched.password && errors.password ? 'error' : ''}
+        /&gt;
+        {touched.password && errors.password && (
+          &lt;div className="error-message"&gt;{errors.password}&lt;/div&gt;
+        )}
+      &lt;/div&gt;
+      
+      &lt;button type="submit"&gt;Εγγραφή&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+
+            <div class="code-explanation">
+                <h4>Επεξήγηση Κώδικα:</h4>
+                <ul>
+                    <li><code>const [touched, setTouched] = useState({});</code> - Δημιουργούμε ένα state που παρακολουθεί ποια πεδία έχει "αγγίξει" ο χρήστης (έχει αλληλεπιδράσει μαζί τους).</li>
+                    <li><code>useEffect(() => {...}, [formData, touched]);</code> - Χρησιμοποιούμε το hook useEffect για να καλούμε τη συνάρτηση επικύρωσης κάθε φορά που αλλάζουν τα δεδομένα ή η κατάσταση "αγγίγματος" των πεδίων.</li>
+                    <li><code>handleBlur</code> - Αυτή η συνάρτηση καλείται όταν ο χρήστης αφήνει ένα πεδίο (blur event) και σημειώνει το πεδίο ως "αγγιγμένο".</li>
+                    <li><code>!/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/.test(formData.password)</code> - Μια πιο σύνθετη κανονική έκφραση που ελέγχει αν ο κωδικός περιέχει τουλάχιστον έναν αριθμό, ένα πεζό και ένα κεφαλαίο γράμμα.</li>
+                    <li><code>Object.keys(formData).reduce((acc, key) => {...}, {});</code> - Δημιουργούμε ένα νέο αντικείμενο που σημειώνει όλα τα πεδία ως "αγγιγμένα", χρησιμοποιώντας τη μέθοδο reduce.</li>
+                    <li><code>onBlur={handleBlur}</code> - Προσθέτουμε τον χειριστή onBlur σε κάθε πεδίο για να ανιχνεύουμε πότε ο χρήστης αφήνει ένα πεδίο.</li>
+                    <li><code>className={touched.username && errors.username ? 'error' : ''}</code> - Εφαρμόζουμε την κλάση error μόνο αν το πεδίο έχει "αγγιχτεί" και περιέχει κάποιο σφάλμα.</li>
+                    <li><code>{touched.username && errors.username && (...)}</code> - Εμφανίζουμε τα μηνύματα σφαλμάτων μόνο για τα πεδία που έχουν "αγγιχτεί" και περιέχουν σφάλματα.</li>
+                </ul>
+            </div>
+            
+            <div class="callout success">
+                <p><strong>Βέλτιστες Πρακτικές για την Επικύρωση Φορμών:</strong></p>
+                <ul>
+                    <li>Επικυρώνετε κατά την υποβολή για να διασφαλίσετε ότι όλα τα δεδομένα είναι έγκυρα πριν από την επεξεργασία</li>
+                    <li>Επικυρώνετε κατά την απώλεια εστίασης (onBlur) για άμεση ανατροφοδότηση</li>
+                    <li>Εμφανίζετε τα σφάλματα επικύρωσης με σαφήνεια δίπλα στα σχετικά πεδία</li>
+                    <li>Χρησιμοποιείτε περιγραφικά μηνύματα σφαλμάτων που εξηγούν πώς να διορθωθεί το πρόβλημα</li>
+                    <li>Επισημαίνετε οπτικά τα έγκυρα και μη έγκυρα πεδία</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="advanced-form-techniques">
+            <h2>4. Προηγμένη Επικύρωση Φορμών με το Formik</h2>
+            
+            <p>Το <a href="https://formik.org/" target="_blank">Formik</a> είναι μια δημοφιλής βιβλιοθήκη που βοηθάει στον χειρισμό και την επικύρωση φορμών στο React. Απλοποιεί εργασίες όπως:</p>
+            <ul>
+                <li>Τη διαχείριση των τιμών μέσα και έξω από την κατάσταση της φόρμας</li>
+                <li>Την επικύρωση και τα μηνύματα σφαλμάτων</li>
+                <li>Τον χειρισμό της υποβολής της φόρμας</li>
+            </ul>
+            
+            <h3>Βασική Ρύθμιση του Formik</h3>
+            <pre><code>// Πρώτα, εγκαταστήστε το Formik:
+// npm install formik
+
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+
+function ContactForm() {
+  const initialValues = {
+    name: '',
+    email: '',
+    message: ''
+  };
+  
+  const validate = (values) => {
+    const errors = {};
+    
+    if (!values.name) {
+      errors.name = 'Υποχρεωτικό';
+    }
+    
+    if (!values.email) {
+      errors.email = 'Υποχρεωτικό';
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      errors.email = 'Μη έγκυρη διεύθυνση email';
+    }
+    
+    if (!values.message) {
+      errors.message = 'Υποχρεωτικό';
+    } else if (values.message.length < 10) {
+      errors.message = 'Το μήνυμα πρέπει να έχει τουλάχιστον 10 χαρακτήρες';
+    }
+    
+    return errors;
+  };
+  
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+    // Προσομοίωση κλήσης API
+    setTimeout(() => {
+      console.log('Τιμές φόρμας:', values);
+      
+      // Επαναφορά φόρμας μετά την υποβολή
+      resetForm();
+      setSubmitting(false);
+    }, 500);
+  };
+  
+  return (
+    &lt;Formik
+      initialValues={initialValues}
+      validate={validate}
+      onSubmit={handleSubmit}
+    &gt;
+      {({ isSubmitting }) => (
+        &lt;Form&gt;
+          &lt;div&gt;
+            &lt;label htmlFor="name"&gt;Όνομα&lt;/label&gt;
+            &lt;Field type="text" name="name" /&gt;
+            &lt;ErrorMessage name="name" component="div" className="error-message" /&gt;
+          &lt;/div&gt;
+          
+          &lt;div&gt;
+            &lt;label htmlFor="email"&gt;Email&lt;/label&gt;
+            &lt;Field type="email" name="email" /&gt;
+            &lt;ErrorMessage name="email" component="div" className="error-message" /&gt;
+          &lt;/div&gt;
+          
+          &lt;div&gt;
+            &lt;label htmlFor="message"&gt;Μήνυμα&lt;/label&gt;
+            &lt;Field as="textarea" name="message" rows="4" /&gt;
+            &lt;ErrorMessage name="message" component="div" className="error-message" /&gt;
+          &lt;/div&gt;
+          
+          &lt;button type="submit" disabled={isSubmitting}&gt;
+            {isSubmitting ? 'Υποβολή...' : 'Υποβολή'}
+          &lt;/button&gt;
+        &lt;/Form&gt;
+      )}
+    &lt;/Formik&gt;
+  );
+}</code></pre>
+
+            <div class="code-explanation">
+                <h4>Επεξήγηση Κώδικα:</h4>
+                <ul>
+                    <li><code>import * as Yup from 'yup';</code> - Εισάγουμε το Yup, μια βιβλιοθήκη που παρέχει μια απλή API για την επικύρωση σχήματος.</li>
+                    <li><code>const validationSchema = Yup.object({...});</code> - Αντί να γράψουμε τη δική μας συνάρτηση επικύρωσης, δημιουργούμε ένα σχήμα επικύρωσης με το Yup. Αυτό καθιστά τον κώδικα πιο δηλωτικό και ευανάγνωστο.</li>
+                    <li><code>.max(15, '...')</code> - Ορίζουμε το μέγιστο μήκος του πεδίου και το μήνυμα σφάλματος που θα εμφανιστεί αν παραβιαστεί αυτός ο κανόνας.</li>
+                    <li><code>.matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, '...')</code> - Χρησιμοποιούμε μια κανονική έκφραση για να επικυρώσουμε τη μορφή του κωδικού.</li>
+                    <li><code>.oneOf([Yup.ref('password'), null], '...')</code> - Ελέγχουμε αν το πεδίο confirmPassword έχει την ίδια τιμή με το πεδίο password.</li>
+                    <li><code>validationSchema={validationSchema}</code> - Περνάμε το σχήμα επικύρωσης στο Formik αντί για μια συνάρτηση επικύρωσης.</li>
+                    <li><code>{({ isSubmitting, touched, errors }) => (...)}</code> - Αποκτούμε πρόσβαση σε περισσότερες πληροφορίες κατάστασης από το Formik, συμπεριλαμβανομένων των πεδίων που έχουν "αγγιχτεί" και των τρεχόντων σφαλμάτων.</li>
+                    <li><code>className={touched.firstName && errors.firstName ? 'error' : ''}</code> - Εφαρμόζουμε την κλάση CSS 'error' μόνο αν το πεδίο έχει "αγγιχτεί" και περιέχει σφάλμα.</li>
+                    <li><code>&lt;Field type="checkbox" name="acceptTerms" /&gt;</code> - Το Formik χειρίζεται διαφορετικούς τύπους πεδίων, συμπεριλαμβανομένων των checkboxes.</li>
+                </ul>
+            </div>
+
+            <div class="callout success">
+                <p><strong>Πλεονεκτήματα του Formik:</strong></p>
+                <ul>
+                    <li><strong>Απλοποιημένη Διαχείριση Κατάστασης:</strong> Το Formik χειρίζεται όλη την κατάσταση της φόρμας για εσάς.</li>
+                    <li><strong>Ενσωματωμένη Επικύρωση:</strong> Εύκολη διαχείριση επικύρωσης και σφαλμάτων.</li>
+                    <li><strong>Λιγότερος Επαναλαμβανόμενος Κώδικας:</strong> Δεν χρειάζεται να γράψετε πολλούς χειριστές γεγονότων.</li>
+                    <li><strong>Ευέλικτο API:</strong> Προσφέρει πολλούς τρόπους για την προσαρμογή της συμπεριφοράς της φόρμας.</li>
+                    <li><strong>Καλή Ενσωμάτωση με το Yup:</strong> Επιτρέπει την επικύρωση σχήματος με δηλωτικό τρόπο.</li>
+                </ul>
+            </div>
+
+            <h3>Προσαρμοσμένο Πεδίο με Formik</h3>
+            <pre><code>import React from 'react';
+import { useField } from 'formik';
+
+// Δημιουργία προσαρμοσμένου συστατικού TextField
+function TextField({ label, ...props }) {
+  // useField() επιστρέφει [field, meta] (τιμές και μεταδεδομένα πεδίου)
+  const [field, meta] = useField(props);
+  
+  return (
+    &lt;div className="form-control"&gt;
+      &lt;label htmlFor={props.id || props.name}&gt;{label}&lt;/label&gt;
+      &lt;input 
+        {...field} 
+        {...props} 
+        className={meta.touched && meta.error ? 'input-error' : ''}
+      /&gt;
+      {meta.touched && meta.error ? (
+        &lt;div className="error-message"&gt;{meta.error}&lt;/div&gt;
+      ) : null}
+    &lt;/div&gt;
+  );
+}
+
+// Χρήση του προσαρμοσμένου συστατικού σε μια φόρμα
+function CustomFormikForm() {
+  return (
+    &lt;Formik
+      initialValues={{
+        email: '',
+        username: '',
+        password: ''
+      }}
+      validationSchema={Yup.object({
+        email: Yup.string()
+          .email('Μη έγκυρη διεύθυνση email')
+          .required('Υποχρεωτικό'),
+        username: Yup.string()
+          .min(3, 'Πρέπει να είναι τουλάχιστον 3 χαρακτήρες')
+          .required('Υποχρεωτικό'),
+        password: Yup.string()
+          .min(6, 'Πρέπει να είναι τουλάχιστον 6 χαρακτήρες')
+          .required('Υποχρεωτικό')
+      })}
+      onSubmit={(values) => {
+        console.log(values);
+      }}
+    &gt;
+      &lt;Form&gt;
+        &lt;TextField
+          label="Διεύθυνση Email"
+          name="email"
+          type="email"
+          placeholder="email@example.com"
+        /&gt;
+        
+        &lt;TextField
+          label="Όνομα Χρήστη"
+          name="username"
+          type="text"
+        /&gt;
+        
+        &lt;TextField
+          label="Κωδικός"
+          name="password"
+          type="password"
+        /&gt;
+        
+        &lt;button type="submit"&gt;Υποβολή&lt;/button&gt;
+      &lt;/Form&gt;
+    &lt;/Formik&gt;
+  );
+}</code></pre>
+
+            <div class="code-explanation">
+                <h4>Επεξήγηση Κώδικα:</h4>
+                <ul>
+                    <li><code>import { useField } from 'formik';</code> - Εισάγουμε το hook useField από το Formik.</li>
+                    <li><code>const [field, meta] = useField(props);</code> - Το useField επιστρέφει ένα πίνακα με δύο στοιχεία:
+                        <ul>
+                            <li><strong>field</strong>: Περιέχει ιδιότητες όπως name, value, onChange, onBlur</li>
+                            <li><strong>meta</strong>: Περιέχει πληροφορίες όπως error, touched, initialValue</li>
+                        </ul>
+                    </li>
+                    <li><code>{...field}</code> - Χρησιμοποιούμε τον τελεστή spread για να περάσουμε όλες τις ιδιότητες του field στο στοιχείο input.</li>
+                    <li><code>{...props}</code> - Περνάμε τυχόν επιπλέον ιδιότητες που δόθηκαν στο συστατικό TextField.</li>
+                    <li><code>className={meta.touched && meta.error ? 'input-error' : ''}</code> - Προσθέτουμε την κλάση CSS 'input-error' αν το πεδίο έχει "αγγιχτεί" και έχει σφάλμα.</li>
+                    <li><code>&lt;TextField label="..." name="..." type="..." /&gt;</code> - Χρησιμοποιούμε το προσαρμοσμένο συστατικό αντί για το Field του Formik, παρέχοντας απλούστερη και πιο συνεπή διεπαφή.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="advanced-form-concepts">
+            <h2>5. Συμπεράσματα και Προηγμένες Τεχνικές</h2>
+            
+            <p>Η διαχείριση και επικύρωση φορμών στο React μπορεί να γίνει με διάφορους τρόπους, από απλές λύσεις με useState μέχρι προηγμένες βιβλιοθήκες όπως το Formik. Παρακάτω συνοψίζουμε τις κύριες προσεγγίσεις:</p>
+            
+            <div class="callout">
+                <p><strong>Συνοπτικός Οδηγός Διαχείρισης Φορμών:</strong></p>
+                <ul>
+                    <li><strong>Απλές Φόρμες:</strong> Για απλές φόρμες με λίγα πεδία, η χρήση του useState είναι συχνά επαρκής.</li>
+                    <li><strong>Πολύπλοκες Φόρμες:</strong> Για φόρμες με πολλά πεδία ή σύνθετη επικύρωση, εξετάστε τη χρήση μιας βιβλιοθήκης όπως το Formik ή το React Hook Form.</li>
+                    <li><strong>Ελεγχόμενα vs Μη Ελεγχόμενα:</strong> Τα ελεγχόμενα συστατικά προσφέρουν περισσότερο έλεγχο, ενώ τα μη ελεγχόμενα μπορεί να είναι πιο αποδοτικά σε ορισμένες περιπτώσεις.</li>
+                    <li><strong>Επικύρωση:</strong> Επιλέξτε μεταξύ ενσωματωμένης επικύρωσης, προσαρμοσμένης επικύρωσης ή επικύρωσης σχήματος με βιβλιοθήκες όπως το Yup.</li>
+                </ul>
+            </div>
+            
+            <h3>Προηγμένες Τεχνικές</h3>
+            
+            <p>Καθώς εξοικειώνεστε με τη βασική διαχείριση φορμών, μπορείτε να εξερευνήσετε και άλλες προηγμένες τεχνικές:</p>
+            
+            <ul>
+                <li><strong>Δυναμικές Φόρμες:</strong> Φόρμες με δυναμικό αριθμό πεδίων (π.χ., προσθήκη περισσότερων στοιχείων σε μια λίστα).</li>
+                <li><strong>Πολυβηματικές Φόρμες:</strong> Φόρμες που καθοδηγούν τους χρήστες μέσα από μια σειρά βημάτων.</li>
+                <li><strong>Ασύγχρονη Επικύρωση:</strong> Επικύρωση που απαιτεί κλήσεις API (π.χ., έλεγχος αν ένα όνομα χρήστη είναι διαθέσιμο).</li>
+                <li><strong>Σύνθετες Διεπαφές Χρήστη:</strong> Ενσωμάτωση προηγμένων στοιχείων όπως rich text editors, pickers ημερομηνίας/ώρας, κ.λπ.</li>
+                <li><strong>Έλεγχος Απόδοσης:</strong> Βελτιστοποίηση μεγάλων φορμών για καλύτερη απόδοση.</li>
+            </ul>
+            
+            <div class="callout success">
+                <p><strong>Τελικές Συμβουλές για Αρχάριους:</strong></p>
+                <ol>
+                    <li>Ξεκινήστε απλά και προσθέστε πολυπλοκότητα σταδιακά.</li>
+                    <li>Εστιάστε στην εμπειρία χρήστη - παρέχετε άμεση ανατροφοδότηση και σαφή μηνύματα σφαλμάτων.</li>
+                    <li>Μάθετε καλά τα βασικά προτού κινηθείτε προς βιβλιοθήκες τρίτων.</li>
+                    <li>Δοκιμάστε τη φόρμα σας με διαφορετικά σενάρια για να εντοπίσετε πιθανά προβλήματα.</li>
+                    <li>Μην ξεχνάτε την προσβασιμότητα - διασφαλίστε ότι οι φόρμες σας είναι προσβάσιμες από όλους τους χρήστες.</li>
+                </ol>
+            </div>
+        </section>
+<section id="file-uploads">
+    <h2>6. Χειρισμός Αρχείων στις Φόρμες</h2>
+    
+    <p>Ο χειρισμός αρχείων στις φόρμες του React είναι μια συχνή απαίτηση σε πολλές εφαρμογές. Σε αντίθεση με τα απλά πεδία κειμένου, ο χειρισμός αρχείων απαιτεί ειδική μεταχείριση λόγω της φύσης των αρχείων και του τρόπου με τον οποίο υποβάλλονται.</p>
+    
+    <div class="callout">
+        <p><strong>Βασικές Έννοιες:</strong></p>
+        <ul>
+            <li><strong>File API:</strong> Η διεπαφή του browser που επιτρέπει την αλληλεπίδραση με αρχεία</li>
+            <li><strong>FormData:</strong> Ένα αντικείμενο που επιτρέπει την αποστολή δεδομένων φόρμας, συμπεριλαμβανομένων των αρχείων</li>
+            <li><strong>Μη Ελεγχόμενα Συστατικά:</strong> Συνήθως χρησιμοποιούνται για τον χειρισμό αρχείων, καθώς η τιμή τους δεν μπορεί να ρυθμιστεί προγραμματιστικά</li>
+        </ul>
+    </div>
+
+    <h3>Βασικό Παράδειγμα Ανεβάσματος Αρχείου</h3>
+    <pre><code>import React, { useState, useRef } from 'react';
+
+function FileUploadForm() {
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const fileInputRef = useRef(null);
+  
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    
+    if (selectedFile) {
+      setFile(selectedFile);
+      
+      // Δημιουργία URL προεπισκόπησης για εικόνες
+      if (selectedFile.type.startsWith('image/')) {
+        const fileReader = new FileReader();
+        
+        fileReader.onload = () => {
+          setPreviewUrl(fileReader.result);
+        };
+        
+        fileReader.readAsDataURL(selectedFile);
+      } else {
+        setPreviewUrl(null);
+      }
+    }
+  };
+  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    
+    if (!file) {
+      alert('Παρακαλώ επιλέξτε ένα αρχείο');
+      return;
+    }
+    
+    // Δημιουργία αντικειμένου FormData
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    // Παράδειγμα αποστολής αρχείου σε ένα API
+    try {
+      console.log('Ανέβασμα αρχείου...', file.name);
+      
+      // Προσομοίωση αποστολής σε API
+      // Στην πραγματικότητα, θα χρησιμοποιούσατε fetch ή axios
+      // π.χ. const response = await fetch('/api/upload', {
+      //   method: 'POST',
+      //   body: formData
+      // });
+      
+      // Καθαρισμός μετά από επιτυχή υποβολή
+      setFile(null);
+      setPreviewUrl(null);
+      fileInputRef.current.value = '';
+      
+      alert('Το αρχείο ανέβηκε με επιτυχία!');
+    } catch (error) {
+      alert('Σφάλμα κατά το ανέβασμα του αρχείου.');
+      console.error('Upload error:', error);
+    }
+  };
+  
+  const handleReset = () => {
+    setFile(null);
+    setPreviewUrl(null);
+    fileInputRef.current.value = '';
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="file"&gt;Επιλέξτε αρχείο:&lt;/label&gt;
+        &lt;input
+          id="file"
+          name="file"
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/*,.pdf,.doc,.docx"
+        /&gt;
+      &lt;/div&gt;
+      
+      {file && (
+        &lt;div&gt;
+          &lt;p&gt;Επιλεγμένο αρχείο: {file.name}&lt;/p&gt;
+          &lt;p&gt;Τύπος: {file.type}&lt;/p&gt;
+          &lt;p&gt;Μέγεθος: {(file.size / 1024).toFixed(2)} KB&lt;/p&gt;
+        &lt;/div&gt;
+      )}
+      
+      {previewUrl && (
+        &lt;div&gt;
+          &lt;h4&gt;Προεπισκόπηση:&lt;/h4&gt;
+          &lt;img 
+            src={previewUrl} 
+            alt="Προεπισκόπηση" 
+            style={{ maxWidth: '300px', maxHeight: '300px' }} 
+          /&gt;
+        &lt;/div&gt;
+      )}
+      
+      &lt;div&gt;
+        &lt;button type="submit" disabled={!file}&gt;Ανέβασμα&lt;/button&gt;
+        &lt;button type="button" onClick={handleReset} disabled={!file}&gt;Ακύρωση&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+
+    <div class="code-explanation">
+        <h4>Επεξήγηση Κώδικα:</h4>
+        <ul>
+            <li><code>const [file, setFile] = useState(null);</code> - Αποθηκεύουμε το επιλεγμένο αρχείο στο state.</li>
+            <li><code>const [previewUrl, setPreviewUrl] = useState(null);</code> - Αποθηκεύουμε το URL προεπισκόπησης εικόνας στο state.</li>
+            <li><code>const fileInputRef = useRef(null);</code> - Δημιουργούμε μια αναφορά στο στοιχείο input για να μπορούμε να το καθαρίσουμε προγραμματιστικά.</li>
+            <li><code>const handleFileChange = (event) => {...};</code> - Χειριζόμαστε την αλλαγή του αρχείου όταν ο χρήστης επιλέγει ένα νέο αρχείο.</li>
+            <li><code>event.target.files[0]</code> - Αποκτούμε πρόσβαση στο πρώτο επιλεγμένο αρχείο από το input.</li>
+            <li><code>const fileReader = new FileReader();</code> - Δημιουργούμε ένα αντικείμενο FileReader για να διαβάσουμε το περιεχόμενο του αρχείου.</li>
+            <li><code>fileReader.readAsDataURL(selectedFile);</code> - Διαβάζουμε το αρχείο ως URL δεδομένων (Data URL).</li>
+            <li><code>const formData = new FormData();</code> - Δημιουργούμε ένα αντικείμενο FormData για να στείλουμε το αρχείο στον server.</li>
+            <li><code>formData.append('file', file);</code> - Προσθέτουμε το αρχείο στο FormData αντικείμενο.</li>
+            <li><code>accept="image/*,.pdf,.doc,.docx"</code> - Περιορίζουμε τους τύπους αρχείων που μπορεί να επιλέξει ο χρήστης.</li>
+            <li><code>ref={fileInputRef}</code> - Συνδέουμε την αναφορά με το στοιχείο input.</li>
+            <li><code>fileInputRef.current.value = '';</code> - Καθαρίζουμε το πεδίο εισαγωγής αρχείου.</li>
+        </ul>
+    </div>
+
+    <h3>Ανέβασμα Πολλαπλών Αρχείων</h3>
+    <pre><code>import React, { useState } from 'react';
+
+function MultipleFileUpload() {
+  const [files, setFiles] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState({});
+  
+  const handleFileChange = (event) => {
+    // Μετατροπή του FileList σε πίνακα
+    const selectedFiles = Array.from(event.target.files);
+    setFiles(selectedFiles);
+    
+    // Αρχικοποίηση της προόδου ανεβάσματος για κάθε αρχείο
+    const initialProgress = {};
+    selectedFiles.forEach(file => {
+      initialProgress[file.name] = 0;
+    });
+    
+    setUploadProgress(initialProgress);
+  };
+  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    
+    if (files.length === 0) {
+      alert('Παρακαλώ επιλέξτε τουλάχιστον ένα αρχείο');
+      return;
+    }
+    
+    // Αποστολή κάθε αρχείου ξεχωριστά
+    for (const file of files) {
+      try {
+        await uploadFile(file);
+      } catch (error) {
+        console.error(`Error uploading ${file.name}:`, error);
+      }
+    }
+    
+    alert('Όλα τα αρχεία ανέβηκαν με επιτυχία!');
+    setFiles([]);
+    event.target.reset();
+  };
+  
+  // Προσομοίωση ανεβάσματος αρχείου με πρόοδο
+  const uploadFile = (file) => {
+    return new Promise((resolve) => {
+      let progress = 0;
+      
+      // Προσομοίωση ανεβάσματος με διαστήματα
+      const interval = setInterval(() => {
+        progress += 10;
+        
+        // Ενημέρωση της προόδου για το συγκεκριμένο αρχείο
+        setUploadProgress(prev => ({
+          ...prev,
+          [file.name]: progress
+        }));
+        
+        if (progress >= 100) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 300);
+    });
+  };
+  
+  const removeFile = (fileName) => {
+    setFiles(files.filter(file => file.name !== fileName));
+    
+    // Αφαίρεση της προόδου για το αρχείο
+    setUploadProgress(prev => {
+      const updated = { ...prev };
+      delete updated[fileName];
+      return updated;
+    });
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="multipleFiles"&gt;Επιλέξτε αρχεία:&lt;/label&gt;
+        &lt;input
+          id="multipleFiles"
+          name="multipleFiles"
+          type="file"
+          multiple
+          onChange={handleFileChange}
+          accept="image/*,.pdf"
+        /&gt;
+      &lt;/div&gt;
+      
+      {files.length > 0 && (
+        &lt;div&gt;
+          &lt;h4&gt;Επιλεγμένα Αρχεία:&lt;/h4&gt;
+          &lt;ul&gt;
+            {files.map((file, index) => (
+              &lt;li key={index}&gt;
+                &lt;div&gt;
+                  &lt;span&gt;{file.name} ({(file.size / 1024).toFixed(2)} KB)&lt;/span&gt;
+                  &lt;button 
+                    type="button" 
+                    onClick={() => removeFile(file.name)}
+                  &gt;
+                    Αφαίρεση
+                  &lt;/button&gt;
+                &lt;/div&gt;
+                
+                {uploadProgress[file.name] > 0 && (
+                  &lt;div className="progress-bar"&gt;
+                    &lt;div 
+                      className="progress" 
+                      style={{ width: `${uploadProgress[file.name]}%` }}
+                    &gt;
+                      {uploadProgress[file.name]}%
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                )}
+              &lt;/li&gt;
+            ))}
+          &lt;/ul&gt;
+        &lt;/div&gt;
+      )}
+      
+      &lt;button type="submit" disabled={files.length === 0}&gt;
+        Ανέβασμα {files.length > 0 ? `(${files.length} αρχεία)` : ''}
+      &lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+
+    <div class="code-explanation">
+        <h4>Επεξήγηση Κώδικα:</h4>
+        <ul>
+            <li><code>const [files, setFiles] = useState([]);</code> - Αποθηκεύουμε τα επιλεγμένα αρχεία σε έναν πίνακα.</li>
+            <li><code>const [uploadProgress, setUploadProgress] = useState({});</code> - Αποθηκεύουμε την πρόοδο ανεβάσματος για κάθε αρχείο σε ένα αντικείμενο.</li>
+            <li><code>Array.from(event.target.files)</code> - Μετατρέπουμε το FileList αντικείμενο σε JavaScript πίνακα.</li>
+            <li><code>multiple</code> - Επιτρέπουμε την επιλογή πολλαπλών αρχείων από τον χρήστη.</li>
+            <li><code>await uploadFile(file);</code> - Ανεβάζουμε κάθε αρχείο ξεχωριστά και περιμένουμε την ολοκλήρωσή του.</li>
+            <li><code>setUploadProgress(prev => ({ ...prev, [file.name]: progress }));</code> - Ενημερώνουμε την πρόοδο για ένα συγκεκριμένο αρχείο.</li>
+            <li><code>files.filter(file => file.name !== fileName)</code> - Αφαιρούμε ένα αρχείο από τον πίνακα με βάση το όνομά του.</li>
+            <li><code>style={{ width: `${uploadProgress[file.name]}%` }}</code> - Δημιουργούμε μια οπτική αναπαράσταση της προόδου ανεβάσματος.</li>
+        </ul>
+    </div>
+
+    <div class="callout success">
+        <p><strong>Συμβουλές για το Ανέβασμα Αρχείων:</strong></p>
+        <ul>
+            <li><strong>Έλεγχος Τύπου και Μεγέθους:</strong> Πάντα να ελέγχετε τον τύπο και το μέγεθος των αρχείων πριν από το ανέβασμα για να αποφύγετε προβλήματα.</li>
+            <li><strong>Ένδειξη Προόδου:</strong> Παρέχετε στους χρήστες πληροφορίες για την πρόοδο του ανεβάσματος, ειδικά για μεγάλα αρχεία.</li>
+            <li><strong>Ασφάλεια:</strong> Πάντα να επικυρώνετε τα αρχεία και στον server, καθώς οι έλεγχοι στον client μπορούν να παρακαμφθούν.</li>
+            <li><strong>Drag and Drop:</strong> Σκεφτείτε να προσθέσετε λειτουργικότητα drag and drop για καλύτερη εμπειρία χρήστη.</li>
+        </ul>
+    </div>
+
+<h3>Ενσωμάτωση Ανεβάσματος Αρχείων με Formik</h3>
+    <pre><code>import React, { useState } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+
+// Ορισμός των επιτρεπόμενων τύπων αρχείων
+const SUPPORTED_FORMATS = [
+  'image/jpg',
+  'image/jpeg',
+  'image/png',
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+];
+
+// Μέγιστο μέγεθος αρχείου (5MB)
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+function FormikFileUpload() {
+  const [preview, setPreview] = useState(null);
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required('Το όνομα είναι υποχρεωτικό'),
+    email: Yup.string()
+      .email('Μη έγκυρη διεύθυνση email')
+      .required('Το email είναι υποχρεωτικό'),
+    message: Yup.string().required('Το μήνυμα είναι υποχρεωτικό'),
+    file: Yup.mixed()
+      .required('Παρακαλώ επιλέξτε ένα αρχείο')
+      .test(
+        'fileSize',
+        'Το αρχείο είναι πολύ μεγάλο (μέγιστο 5MB)',
+        value => value && value.size <= MAX_FILE_SIZE
+      )
+      .test(
+        'fileType',
+        'Μη υποστηριζόμενος τύπος αρχείου',
+        value => value && SUPPORTED_FORMATS.includes(value.type)
+      )
+  });
+
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+    // Δημιουργία FormData
+    const formData = new FormData();
+    formData.append('name', values.name);
+    formData.append('email', values.email);
+    formData.append('message', values.message);
+    formData.append('file', values.file);
+
+    // Προσομοίωση αποστολής δεδομένων
+    setTimeout(() => {
+      console.log('Υποβολή φόρμας με αρχείο:', values.file.name);
+      
+      // Επαναφορά της φόρμας και του preview
+      resetForm();
+      setPreview(null);
+      setSubmitting(false);
+      
+      alert('Η φόρμα υποβλήθηκε με επιτυχία!');
+    }, 1000);
+  };
+
+  return (
+    &lt;Formik
+      initialValues={{
+        name: '',
+        email: '',
+        message: '',
+        file: null
+      }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    &gt;
+      {({ isSubmitting, setFieldValue, values }) => (
+        &lt;Form&gt;
+          &lt;div&gt;
+            &lt;label htmlFor="name"&gt;Όνομα:&lt;/label&gt;
+            &lt;Field type="text" name="name" /&gt;
+            &lt;ErrorMessage name="name" component="div" className="error-message" /&gt;
+          &lt;/div&gt;
+
+          &lt;div&gt;
+            &lt;label htmlFor="email"&gt;Email:&lt;/label&gt;
+            &lt;Field type="email" name="email" /&gt;
+            &lt;ErrorMessage name="email" component="div" className="error-message" /&gt;
+          &lt;/div&gt;
+
+          &lt;div&gt;
+            &lt;label htmlFor="message"&gt;Μήνυμα:&lt;/label&gt;
+            &lt;Field as="textarea" name="message" rows="4" /&gt;
+            &lt;ErrorMessage name="message" component="div" className="error-message" /&gt;
+          &lt;/div&gt;
+
+          &lt;div&gt;
+            &lt;label htmlFor="file"&gt;Αρχείο:&lt;/label&gt;
+            &lt;input
+              id="file"
+              name="file"
+              type="file"
+              onChange={(event) => {
+                const file = event.currentTarget.files[0];
+                setFieldValue('file', file);
+                
+                // Δημιουργία προεπισκόπησης για εικόνες
+                if (file && file.type.startsWith('image/')) {
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    setPreview(reader.result);
+                  };
+                  reader.readAsDataURL(file);
+                } else {
+                  setPreview(null);
+                }
+              }}
+            /&gt;
+            &lt;ErrorMessage name="file" component="div" className="error-message" /&gt;
+          &lt;/div&gt;
+
+          {preview && (
+            &lt;div&gt;
+              &lt;h4&gt;Προεπισκόπηση:&lt;/h4&gt;
+              &lt;img 
+                src={preview} 
+                alt="Προεπισκόπιση αρχείου" 
+                style={{ maxWidth: '300px', maxHeight: '300px' }} 
+              /&gt;
+            &lt;/div&gt;
+          )}
+
+          {values.file && !values.file.type.startsWith('image/') && (
+            &lt;div&gt;
+              &lt;p&gt;Επιλεγμένο αρχείο: {values.file.name}&lt;/p&gt;
+              &lt;p&gt;Τύπος: {values.file.type}&lt;/p&gt;
+              &lt;p&gt;Μέγεθος: {(values.file.size / 1024).toFixed(2)} KB&lt;/p&gt;
+            &lt;/div&gt;
+          )}
+
+          &lt;button type="submit" disabled={isSubmitting}&gt;
+            {isSubmitting ? 'Υποβολή...' : 'Υποβολή'}
+          &lt;/button&gt;
+        &lt;/Form&gt;
+      )}
+    &lt;/Formik&gt;
+  );
+}
+
+export default FormikFileUpload;</code></pre>
+
+    <div class="code-explanation">
+        <h4>Επεξήγηση Κώδικα:</h4>
+        <ul>
+            <li><code>const SUPPORTED_FORMATS = [...];</code> - Ορίζουμε τους επιτρεπόμενους τύπους αρχείων.</li>
+            <li><code>const MAX_FILE_SIZE = 5 * 1024 * 1024;</code> - Ορίζουμε το μέγιστο μέγεθος αρχείου (5MB).</li>
+            <li><code>Yup.mixed()</code> - Χρησιμοποιούμε τον τύπο mixed για να επικυρώσουμε το αρχείο.</li>
+            <li><code>.test('fileSize', '...', value => ...)</code> - Προσθέτουμε προσαρμοσμένο έλεγχο για το μέγεθος του αρχείου.</li>
+            <li><code>.test('fileType', '...', value => ...)</code> - Προσθέτουμε προσαρμοσμένο έλεγχο για τον τύπο του αρχείου.</li>
+            <li><code>formData.append('file', values.file);</code> - Προσθέτουμε το αρχείο στο FormData αντικείμενο.</li>
+            <li><code>setFieldValue('file', file);</code> - Ενημερώνουμε την τιμή του πεδίου 'file' στο Formik.</li>
+            <li><code>onChange={(event) => {...}}</code> - Χειριζόμαστε την αλλαγή του αρχείου και δημιουργούμε προεπισκόπηση αν είναι εικόνα.</li>
+        </ul>
+    </div>
+
+    <div class="callout">
+        <p><strong>Ανέβασμα Αρχείων στον Server:</strong></p>
+        <p>Για να ανεβάσετε αρχεία σε πραγματικές εφαρμογές, θα χρειαστείτε μια αντίστοιχη υλοποίηση στον server. Παρακάτω είναι ένα απλό παράδειγμα χρησιμοποιώντας τη βιβλιοθήκη axios:</p>
+        <pre><code>import axios from 'axios';
+
+// Ανέβασμα αρχείου με axios
+const uploadFile = async (file, onProgressUpdate) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await axios.post('/api/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      onUploadProgress: (progressEvent) => {
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        onProgressUpdate(percentCompleted);
+      }
+    });
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    throw error;
+  }
+};</code></pre>
+    </div>
+
+    <div class="callout success">
+        <p><strong>Προηγμένες Τεχνικές για Ανέβασμα Αρχείων:</strong></p>
+        <ul>
+            <li><strong>Drag and Drop:</strong> Χρησιμοποιήστε το API HTML5 Drag and Drop για πιο διαισθητική εμπειρία χρήστη.</li>
+            <li><strong>Συνέχιση Ανεβάσματος:</strong> Υλοποιήστε συνέχιση ανεβάσματος για μεγάλα αρχεία σε περίπτωση διακοπής της σύνδεσης.</li>
+            <li><strong>Συμπίεση Αρχείων:</strong> Συμπιέστε εικόνες και άλλα αρχεία πριν από το ανέβασμα για καλύτερη απόδοση.</li>
+            <li><strong>Λεπτομερής Έλεγχος Προόδου:</strong> Παρέχετε λεπτομερείς πληροφορίες για την πρόοδο ανεβάσματος.</li>
+            <li><strong>Προεπισκόπηση Περιεχομένου:</strong> Παρέχετε προεπισκόπηση για διάφορους τύπους αρχείων, όχι μόνο για εικόνες.</li>
+        </ul>
+    </div>
+
+    <div class="callout warning">
+        <p><strong>Σημαντικές Επισημάνσεις:</strong></p>
+        <ul>
+            <li>Πάντα να επικυρώνετε τα αρχεία τόσο στον client όσο και στον server, καθώς οι έλεγχοι στον client μπορούν να παρακαμφθούν.</li>
+            <li>Λάβετε υπόψη το μέγεθος των αρχείων και τους περιορισμούς του server σας.</li>
+            <li>Μην ξεχνάτε να διαχειρίζεστε τα σφάλματα κατά το ανέβασμα αρχείων και να παρέχετε σαφείς πληροφορίες στους χρήστες.</li>
+            <li>Σκεφτείτε την ασφάλεια και τη συμμόρφωση με κανονισμούς όπως το GDPR όταν χειρίζεστε αρχεία χρηστών.</li>
+        </ul>
+    </div>
+</section>
+
+    </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-jsx.min.js"></script>
+
+<button id="back-to-top" title="Back to top">↑</button>
+<script src="course-interactions.js"></script>
+
+<script>
+    const backToTopButton = document.getElementById('back-to-top');
+  
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      backToTopButton.style.display = 'block';
+    } else {
+      backToTopButton.style.display = 'none';
+    }
+  });
+  
+  backToTopButton.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+</script>
+</body>
+</html>

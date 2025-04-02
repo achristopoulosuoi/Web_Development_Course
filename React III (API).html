@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ενσωμάτωση API στο React</title>
+	<link rel="stylesheet" href="styles.css">
+<body>
+    <div class="container">
+	<a href="Index.html" class="back-to-index">← Επιστροφή στο Ευρετήριο</a>
+        <h1>Ενσωμάτωση API στο React</h1>
+        
+        <section id="introduction-to-api">
+            <h2>1. Εισαγωγή στην Ενσωμάτωση API</h2>
+            <p>Οι περισσότερες σύγχρονες εφαρμογές React επικοινωνούν με εξωτερικά APIs για να ανακτήσουν ή να αποθηκεύσουν δεδομένα. Η κατανόηση του τρόπου ενσωμάτωσης των κλήσεων API στις εφαρμογές React είναι καθοριστική για τη δημιουργία διαδραστικών και δυναμικών διεπαφών χρήστη.</p>
+            
+            <div class="callout">
+                <p><strong>Βασικές Έννοιες:</strong></p>
+                <ul>
+                    <li><strong>API (Application Programming Interface):</strong> Ένα σύνολο κανόνων που επιτρέπουν σε διαφορετικές εφαρμογές να επικοινωνούν μεταξύ τους.</li>
+                    <li><strong>REST API:</strong> Μια αρχιτεκτονική στιλ για τη δημιουργία διαδικτυακών υπηρεσιών που χρησιμοποιεί HTTP μεθόδους (GET, POST, PUT, DELETE) για τη διαχείριση δεδομένων.</li>
+                    <li><strong>Ασύγχρονες Κλήσεις:</strong> Οι κλήσεις API είναι συνήθως ασύγχρονες, που σημαίνει ότι δεν μπλοκάρουν την εκτέλεση του υπόλοιπου κώδικα.</li>
+                    <li><strong>Διαχείριση Καταστάσεων:</strong> Η διαχείριση των καταστάσεων φόρτωσης, επιτυχίας και σφάλματος κατά την επικοινωνία με ένα API.</li>
+                </ul>
+            </div>
+
+            <h3>Τεχνολογίες και Εργαλεία</h3>
+            <p>Υπάρχουν διάφορες μέθοδοι για την πραγματοποίηση κλήσεων HTTP σε εφαρμογές React:</p>
+            <ul>
+                <li><strong>Fetch API:</strong> Ενσωματωμένο στους σύγχρονους browsers, παρέχει μια απλή διεπαφή για την πραγματοποίηση HTTP αιτημάτων.</li>
+                <li><strong>Axios:</strong> Μια δημοφιλής βιβλιοθήκη HTTP πελάτη που παρέχει πιο εύχρηστη διεπαφή και πρόσθετες λειτουργίες.</li>
+                <li><strong>React Query:</strong> Μια βιβλιοθήκη για τη διαχείριση της κατάστασης των δεδομένων από το server και την caching στο React.</li>
+                <li><strong>SWR:</strong> Μια βιβλιοθήκη React hooks για ανάκτηση δεδομένων με στρατηγικές stale-while-revalidate.</li>
+            </ul>
+
+            <p>Σε αυτή την ενότητα, θα επικεντρωθούμε στο Fetch API και το Axios, καθώς είναι οι πιο διαδεδομένες επιλογές.</p>
+        </section>
+
+        <section id="fetch-api">
+            <h2>2. Βασικές Κλήσεις API με το Fetch API</h2>
+            
+            <p>Το Fetch API είναι ενσωματωμένο στους σύγχρονους browsers και παρέχει μια απλή μέθοδο για την πραγματοποίηση HTTP αιτημάτων. Ακολουθεί ένα βασικό παράδειγμα χρήσης του Fetch με το React:</p>
+            
+            <h3>Βασικό GET Αίτημα</h3>
+            <pre><code>import React, { useState, useEffect } from 'react';
+
+function UserList() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Συνάρτηση για την ανάκτηση των χρηστών
+    const fetchUsers = async () => {
+      try {
+        // Ξεκινάμε τη φόρτωση
+        setLoading(true);
+        
+        // Πραγματοποιούμε το API αίτημα
+        const response = await fetch('https://jsonplaceholder.typicode.com/users');
+        
+        // Έλεγχος για επιτυχή απόκριση
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // Μετατροπή της απόκρισης σε JSON
+        const data = await response.json();
+        
+        // Αποθήκευση των δεδομένων στο state
+        setUsers(data);
+        setError(null);
+      } catch (error) {
+        // Αποθήκευση του σφάλματος στο state
+        setError(error.message);
+        setUsers([]);
+      } finally {
+        // Ολοκλήρωση της φόρτωσης
+        setLoading(false);
+      }
+    };
+
+    // Κλήση της συνάρτησης ανάκτησης
+    fetchUsers();
+  }, []); // Άδειος πίνακας εξαρτήσεων για εκτέλεση μόνο κατά το mount
+
+  // Απόδοση UI με βάση τις διαφορετικές καταστάσεις
+  if (loading) return &lt;div&gt;Φόρτωση...&lt;/div&gt;;
+  if (error) return &lt;div&gt;Σφάλμα: {error}&lt;/div&gt;;
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Λίστα Χρηστών&lt;/h2&gt;
+      &lt;ul&gt;
+        {users.map(user =&gt; (
+          &lt;li key={user.id}&gt;
+            &lt;strong&gt;{user.name}&lt;/strong&gt; ({user.email})
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li><strong>State Setup:</strong> Χρησιμοποιούμε τρεις μεταβλητές state:
+                      <ul>
+                        <li><code>users</code>: Για την αποθήκευση των δεδομένων που ανακτούμε.</li>
+                        <li><code>loading</code>: Για την παρακολούθηση της κατάστασης φόρτωσης.</li>
+                        <li><code>error</code>: Για την αποθήκευση τυχόν σφαλμάτων που προκύπτουν.</li>
+                      </ul>
+                    </li>
+                    <li><strong>useEffect Hook:</strong> Χρησιμοποιείται για την πραγματοποίηση του API αιτήματος όταν το component τοποθετείται στο DOM.</li>
+                    <li><strong>async/await:</strong> Χρησιμοποιούμε async/await για καθαρότερο χειρισμό των ασύγχρονων κλήσεων και πιο ευανάγνωστο κώδικα.</li>
+                    <li><strong>fetch API:</strong> Η μέθοδος <code>fetch()</code> επιστρέφει μια Promise που επιλύεται στο αντικείμενο Response.</li>
+                    <li><strong>Error Handling:</strong> Χρησιμοποιούμε ένα try-catch block για τον χειρισμό σφαλμάτων και τον έλεγχο της επιτυχίας της απόκρισης.</li>
+                    <li><strong>Conditional Rendering:</strong> Αποδίδουμε διαφορετικό UI με βάση τις καταστάσεις <code>loading</code> και <code>error</code>.</li>
+                    <li><strong>Data Rendering:</strong> Αφού φορτωθούν τα δεδομένα, χρησιμοποιούμε τη μέθοδο <code>map()</code> για να αποδώσουμε τη λίστα χρηστών.</li>
+                </ul>
+            </div>
+            
+            <h3>POST Αίτημα με το Fetch API</h3>
+            <pre><code>import React, { useState } from 'react';
+
+function CreatePost() {
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Επαναφορά των μηνυμάτων
+    setError(null);
+    setSuccess(false);
+    
+    // Έλεγχος αν τα πεδία είναι συμπληρωμένα
+    if (!title || !body) {
+      setError('Παρακαλώ συμπληρώστε όλα τα πεδία');
+      return;
+    }
+    
+    // Δημιουργία του αντικειμένου δεδομένων
+    const postData = {
+      title,
+      body,
+      userId: 1, // Σταθερή τιμή για το παράδειγμα
+    };
+    
+    try {
+      // Ξεκινάμε την υποβολή
+      setSubmitting(true);
+      
+      // Πραγματοποιούμε το POST αίτημα
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+      });
+      
+      // Έλεγχος για επιτυχή απόκριση
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      // Μετατροπή της απόκρισης σε JSON
+      const result = await response.json();
+      
+      console.log('Post created:', result);
+      
+      // Επιτυχής δημιουργία
+      setSuccess(true);
+      
+      // Καθαρισμός της φόρμας
+      setTitle('');
+      setBody('');
+    } catch (error) {
+      // Αποθήκευση του σφάλματος
+      setError(`Σφάλμα κατά την υποβολή: ${error.message}`);
+      setSuccess(false);
+    } finally {
+      // Ολοκλήρωση της υποβολής
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Δημιουργία Νέας Ανάρτησης&lt;/h2&gt;
+      
+      {error && &lt;div style={{ color: 'red', marginBottom: '10px' }}&gt;{error}&lt;/div&gt;}
+      {success && &lt;div style={{ color: 'green', marginBottom: '10px' }}&gt;Η ανάρτηση δημιουργήθηκε με επιτυχία!&lt;/div&gt;}
+      
+      &lt;form onSubmit={handleSubmit}&gt;
+        &lt;div&gt;
+          &lt;label htmlFor="title"&gt;Τίτλος:&lt;/label&gt;
+          &lt;input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) =&gt; setTitle(e.target.value)}
+            disabled={submitting}
+          /&gt;
+        &lt;/div&gt;
+        
+        &lt;div&gt;
+          &lt;label htmlFor="body"&gt;Περιεχόμενο:&lt;/label&gt;
+          &lt;textarea
+            id="body"
+            value={body}
+            onChange={(e) =&gt; setBody(e.target.value)}
+            disabled={submitting}
+            rows="4"
+          /&gt;
+        &lt;/div&gt;
+        
+        &lt;button type="submit" disabled={submitting}&gt;
+          {submitting ? 'Υποβολή...' : 'Δημιουργία Ανάρτησης'}
+        &lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li><strong>Form State:</strong> Χρησιμοποιούμε state για να διαχειριστούμε τις τιμές της φόρμας και τις καταστάσεις υποβολής.</li>
+                    <li><strong>API Request Configuration:</strong> Στο <code>fetch()</code> παρέχουμε ένα δεύτερο όρισμα με ρυθμίσεις όπως:
+                      <ul>
+                        <li><code>method</code>: Καθορίζει τη μέθοδο HTTP (POST σε αυτή την περίπτωση).</li>
+                        <li><code>headers</code>: Περιλαμβάνει headers όπως το 'Content-Type' για να υποδείξει τον τύπο των δεδομένων.</li>
+                        <li><code>body</code>: Περιέχει τα δεδομένα που στέλνουμε, μετατρεμμένα σε JSON string.</li>
+                      </ul>
+                    </li>
+                    <li><strong>Form Validation:</strong> Πραγματοποιούμε βασικό έλεγχο ότι τα απαραίτητα πεδία είναι συμπληρωμένα.</li>
+                    <li><strong>User Feedback:</strong> Παρέχουμε οπτικές ενδείξεις για την κατάσταση της υποβολής (φόρτωση, επιτυχία, σφάλμα).</li>
+                    <li><strong>Form Reset:</strong> Καθαρίζουμε τη φόρμα μετά από επιτυχή υποβολή.</li>
+                </ul>
+            </div>
+            
+            <div class="callout warning">
+                <p><strong>Προσοχή:</strong> Το JSONPlaceholder που χρησιμοποιούμε στα παραδείγματα είναι ένα δωρεάν fake API για δοκιμές. Δεν πραγματοποιεί πραγματική αποθήκευση δεδομένων. Σε μια πραγματική εφαρμογή, θα επικοινωνείτε με το δικό σας backend API.</p>
+            </div>
+        </section>
+
+        <section id="axios">
+            <h2>3. Χρήση του Axios για Κλήσεις API</h2>
+            
+            <p>Το Axios είναι μια δημοφιλής βιβλιοθήκη για την πραγματοποίηση HTTP αιτημάτων. Προσφέρει μια πιο εύχρηστη διεπαφή από το fetch και πρόσθετες λειτουργίες όπως αυτόματο μετασχηματισμό JSON, ακύρωση αιτημάτων, και προστασία από επιθέσεις XSRF.</p>
+
+            <h3>Εγκατάσταση του Axios</h3>
+            <pre><code>npm install axios</code></pre>
+            <p>ή</p>
+            <pre><code>yarn add axios</code></pre>
+            
+            <h3>GET Αίτημα με το Axios</h3>
+            <pre><code>import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function ProductList() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Συνάρτηση για την ανάκτηση των προϊόντων
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        
+        // Πραγματοποίηση του GET αιτήματος με το axios
+        const response = await axios.get('https://fakestoreapi.com/products');
+        
+        // Το axios αυτόματα μετατρέπει την απόκριση σε JSON και την τοποθετεί στο response.data
+        setProducts(response.data);
+        setError(null);
+      } catch (error) {
+        // Το axios παρέχει λεπτομερείς πληροφορίες σφάλματος
+        setError(error.response ? `Σφάλμα: ${error.response.status}` : error.message);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) return &lt;div&gt;Φόρτωση προϊόντων...&lt;/div&gt;;
+  if (error) return &lt;div&gt;{error}&lt;/div&gt;;
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Κατάλογος Προϊόντων&lt;/h2&gt;
+      &lt;div className="product-grid"&gt;
+        {products.map(product =&gt; (
+          &lt;div key={product.id} className="product-card"&gt;
+            &lt;img 
+              src={product.image} 
+              alt={product.title} 
+              style={{ maxWidth: '100px', maxHeight: '100px' }}
+            /&gt;
+            &lt;h3&gt;{product.title}&lt;/h3&gt;
+            &lt;p&gt;{product.price} €&lt;/p&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li><strong>Εισαγωγή του Axios:</strong> Εισάγουμε τη βιβλιοθήκη axios στην αρχή του αρχείου.</li>
+                    <li><strong>Απλοποιημένη Σύνταξη:</strong> Η μέθοδος <code>axios.get()</code> είναι πιο συνοπτική από το fetch.</li>
+                    <li><strong>Αυτόματος JSON Μετασχηματισμός:</strong> Το axios μετατρέπει αυτόματα την απόκριση σε JSON.</li>
+                    <li><strong>Διαχείριση Σφαλμάτων:</strong> Το axios παρέχει πιο λεπτομερείς πληροφορίες σφάλματος μέσω του αντικειμένου error.</li>
+                    <li><strong>Δομή Απόκρισης:</strong> Τα πραγματικά δεδομένα βρίσκονται στο <code>response.data</code> αντί να χρειάζεται να καλέσουμε <code>response.json()</code>.</li>
+                </ul>
+            </div>
+            
+            <h3>POST Αίτημα με το Axios</h3>
+            <pre><code>import React, { useState } from 'react';
+import axios from 'axios';
+
+function LoginForm() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Επαναφορά των μηνυμάτων
+    setError(null);
+    setSuccess(false);
+    
+    // Έλεγχος αν τα πεδία είναι συμπληρωμένα
+    if (!email || !password) {
+      setError('Παρακαλώ συμπληρώστε όλα τα πεδία');
+      return;
+    }
+    
+    // Δημιουργία των δεδομένων σύνδεσης
+    const loginData = {
+      email,
+      password
+    };
+    
+    try {
+      setLoading(true);
+      
+      // Πραγματοποίηση του POST αιτήματος με το axios
+      const response = await axios.post(
+        'https://reqres.in/api/login',
+        loginData,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      
+      console.log('Login successful:', response.data);
+      
+      // Αποθήκευση του token (σε πραγματική εφαρμογή)
+      // localStorage.setItem('token', response.data.token);
+      
+      setSuccess(true);
+    } catch (error) {
+      // Διαχείριση διαφορετικών τύπων σφαλμάτων
+      if (error.response) {
+        // Ο server απάντησε με κωδικό εκτός του 2xx
+        setError(`Σφάλμα σύνδεσης: ${error.response.data.error || error.response.status}`);
+      } else if (error.request) {
+        // Το αίτημα έγινε αλλά δεν ελήφθη απόκριση
+        setError('Δεν ήταν δυνατή η επικοινωνία με τον server');
+      } else {
+        // Κάτι άλλο προκάλεσε σφάλμα
+        setError(`Σφάλμα: ${error.message}`);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Σύνδεση&lt;/h2&gt;
+      
+      {error && &lt;div style={{ color: 'red', marginBottom: '10px' }}&gt;{error}&lt;/div&gt;}
+      {success && &lt;div style={{ color: 'green', marginBottom: '10px' }}&gt;Η σύνδεση ήταν επιτυχής!&lt;/div&gt;}
+      
+      &lt;form onSubmit={handleSubmit}&gt;
+        &lt;div&gt;
+          &lt;label htmlFor="email"&gt;Email:&lt;/label&gt;
+          &lt;input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) =&gt; setEmail(e.target.value)}
+            disabled={loading}
+          /&gt;
+        &lt;/div&gt;
+        
+        &lt;div&gt;
+          &lt;label htmlFor="password"&gt;Κωδικός:&lt;/label&gt;
+          &lt;input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) =&gt; setPassword(e.target.value)}
+            disabled={loading}
+          /&gt;
+        &lt;/div&gt;
+        
+        &lt;button type="submit" disabled={loading}&gt;
+          {loading ? 'Σύνδεση...' : 'Σύνδεση'}
+        &lt;/button&gt;
+      &lt;/form&gt;
+      
+      &lt;div className="note"&gt;
+        &lt;small&gt;
+          Για δοκιμή, χρησιμοποιήστε: email: eve.holt@reqres.in, password: cityslicka
+        &lt;/small&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-jsx.min.js"></script>
+
+<button id="back-to-top" title="Back to top">↑</button>
+<script src="course-interactions.js"></script>
+
+<script>
+    const backToTopButton = document.getElementById('back-to-top');
+  
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      backToTopButton.style.display = 'block';
+    } else {
+      backToTopButton.style.display = 'none';
+    }
+  });
+  
+  backToTopButton.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+</script>
+</body>
+</html>
+    </script>
+  </body>
+</html>

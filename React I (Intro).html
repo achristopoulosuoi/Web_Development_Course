@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Βασικές Αρχές React</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+	<a href="Index.html" class="back-to-index">← Επιστροφή στο Ευρετήριο</a>
+        <h1>Βασικές Αρχές React</h1>
+        
+        <section id="introduction-to-react">
+            <h2>1. Εισαγωγή στην React</h2>
+            <p>Η React είναι μια βιβλιοθήκη JavaScript για τη δημιουργία διεπαφών χρήστη (UI), ιδιαίτερα κατάλληλη για εφαρμογές μονής σελίδας (single-page applications). Αναπτύχθηκε και συντηρείται από το Facebook (τώρα Meta) και επιτρέπει στους προγραμματιστές να δημιουργούν επαναχρησιμοποιήσιμα στοιχεία διεπαφής χρήστη που ενημερώνονται και αποδίδονται αποτελεσματικά όταν αλλάζουν τα δεδομένα.</p>
+            
+            <p>Σε αντίθεση με παραδοσιακές προσεγγίσεις όπου ο προγραμματιστής πρέπει να ενημερώνει χειροκίνητα το DOM, η React διαχειρίζεται αυτόματα αυτές τις ενημερώσεις μέσω του μηχανισμού της εικονικής DOM (Virtual DOM).</p>
+            
+            <div class="callout">
+                <p><strong>Βασικές Έννοιες της React:</strong></p>
+                <ul>
+                    <li><strong>Αρχιτεκτονική Βασισμένη σε Συστατικά (Component-Based):</strong> Δημιουργία αυτόνομων συστατικών που διαχειρίζονται τη δική τους κατάσταση (state). Αυτό σημαίνει ότι μπορείτε να σχεδιάσετε μικρά, επαναχρησιμοποιήσιμα μέρη (components) που συνδυάζονται για να σχηματίσουν πολύπλοκες διεπαφές.</li>
+                    <li><strong>Δηλωτική Προσέγγιση (Declarative):</strong> Σχεδιασμός απλών προβολών για κάθε κατάσταση στην εφαρμογή σας. Αντί να περιγράφετε βήμα προς βήμα πώς να αλλάξει το UI (επιτακτικός προγραμματισμός), δηλώνετε απλώς πώς θέλετε να φαίνεται η διεπαφή σε κάθε κατάσταση.</li>
+                    <li><strong>Εικονική DOM (Virtual DOM):</strong> Αποτελεσματική ενημέρωση και απόδοση των συστατικών όταν αλλάζουν τα δεδομένα. Η React δημιουργεί ένα ελαφρύ αντίγραφο του πραγματικού DOM στη μνήμη και συγκρίνει την προηγούμενη και την τρέχουσα κατάσταση για να βρει τις ελάχιστες αλλαγές που πρέπει να γίνουν.</li>
+                    <li><strong>Μονοκατευθυντική Ροή Δεδομένων (Unidirectional Data Flow):</strong> Τα δεδομένα ρέουν προς τα κάτω από τα γονικά στα παιδικά συστατικά. Αυτό καθιστά πιο προβλέψιμη τη συμπεριφορά της εφαρμογής και ευκολότερο τον εντοπισμό σφαλμάτων.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="creating-react-project">
+            <h2>2. Δημιουργία ενός Project React</h2>
+            
+            <h3>Χρησιμοποιώντας το Create React App</h3>
+            <p>Το Create React App είναι ένα φιλικό περιβάλλον για την εκμάθηση της React και ο καλύτερος τρόπος για να ξεκινήσετε τη δημιουργία μιας νέας εφαρμογής μονής σελίδας σε React. Παρέχει ένα προ-διαμορφωμένο περιβάλλον με όλα τα απαραίτητα εργαλεία και βιβλιοθήκες, ώστε να μπορείτε να επικεντρωθείτε αμέσως στον προγραμματισμό.</p>
+            
+            <pre><code>npx create-react-app my-app
+cd my-app
+npm start</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ol>
+                    <li><code>npx create-react-app my-app</code>: Αυτή η εντολή χρησιμοποιεί το εργαλείο npx (που έρχεται με το npm) για να εκτελέσει το πακέτο create-react-app χωρίς να χρειάζεται να το εγκαταστήσετε παγκοσμίως. Το <code>my-app</code> είναι το όνομα που δίνετε στο project σας και θα δημιουργηθεί ένας φάκελος με αυτό το όνομα.</li>
+                    <li><code>cd my-app</code>: Αυτή η εντολή σας μεταφέρει μέσα στον νέο φάκελο του project που μόλις δημιουργήσατε.</li>
+                    <li><code>npm start</code>: Ξεκινά έναν τοπικό διακομιστή ανάπτυξης και ανοίγει την εφαρμογή σας στον προεπιλεγμένο φυλλομετρητή. Η εφαρμογή θα ανανεώνεται αυτόματα κάθε φορά που κάνετε αλλαγές στον κώδικα.</li>
+                </ol>
+            </div>
+            
+            <h3>Δομή του Project</h3>
+            <p>Η τυπική δομή ενός project με το Create React App μοιάζει με αυτή:</p>
+            <pre><code>my-app/
+├── node_modules/
+├── public/
+│   ├── index.html
+│   ├── favicon.ico
+│   └── manifest.json
+├── src/
+│   ├── App.js
+│   ├── App.css
+│   ├── App.test.js
+│   ├── index.js
+│   ├── index.css
+│   ├── logo.svg
+│   └── reportWebVitals.js
+├── package.json
+├── README.md
+└── package-lock.json</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση της δομής του project:</h4>
+                <ul>
+                    <li><code>node_modules/</code>: Περιέχει όλα τα εγκατεστημένα πακέτα npm που χρησιμοποιεί το project σας. Δεν χρειάζεται να επεξεργαστείτε τίποτα εδώ.</li>
+                    <li><code>public/</code>: Περιέχει στατικά αρχεία που δεν θα υποστούν επεξεργασία από το webpack, όπως το <code>index.html</code> που είναι το σημείο εισόδου της εφαρμογής σας στον browser.</li>
+                    <li><code>src/</code>: Εδώ βρίσκεται ο κώδικας της εφαρμογής σας. Θα περνάτε τον περισσότερο χρόνο σας σε αυτό το φάκελο.</li>
+                    <li><code>package.json</code>: Περιέχει πληροφορίες για το project σας, συμπεριλαμβανομένων των εξαρτήσεων (dependencies) και των scripts που μπορείτε να εκτελέσετε.</li>
+                </ul>
+            </div>
+            
+            <p>Μπορείτε να οργανώσετε περαιτέρω το project σας δημιουργώντας υποφακέλους στον κατάλογο src:</p>
+            <ul>
+                <li><code>components/</code>: Για επαναχρησιμοποιήσιμα συστατικά UI. Εδώ θα αποθηκεύετε τα React components που μπορούν να χρησιμοποιηθούν σε διάφορα μέρη της εφαρμογής σας.</li>
+                <li><code>pages/</code>: Για συστατικά σελίδας που συνθέτουν πολλαπλά components. Αυτά είναι συνήθως μεγαλύτερα components που αντιπροσωπεύουν ολόκληρες σελίδες ή οθόνες της εφαρμογής σας.</li>
+                <li><code>assets/</code>: Για εικόνες, γραμματοσειρές και άλλα στατικά αρχεία που χρησιμοποιούνται στην εφαρμογή σας.</li>
+                <li><code>hooks/</code>: Για προσαρμοσμένα React hooks. Τα hooks είναι λειτουργίες που σας επιτρέπουν να "συνδεθείτε" με χαρακτηριστικά της React όπως το state και ο κύκλος ζωής των components.</li>
+                <li><code>context/</code>: Για παρόχους React context. Το React Context API επιτρέπει το διαμοιρασμό δεδομένων μεταξύ components χωρίς να χρειάζεται να περάσετε props σε κάθε επίπεδο.</li>
+                <li><code>services/</code>: Για κλήσεις API και άλλες υπηρεσίες. Εδώ θα αποθηκεύετε κώδικα που επικοινωνεί με εξωτερικές πηγές δεδομένων.</li>
+                <li><code>utils/</code>: Για βοηθητικές συναρτήσεις. Αυτές είναι επαναχρησιμοποιήσιμες συναρτήσεις που δεν είναι ειδικές για το React αλλά βοηθούν σε διάφορες εργασίες.</li>
+            </ul>
+            
+            <div class="callout success">
+                <p><strong>Συμβουλή για αρχάριους:</strong> Δεν χρειάζεται να δημιουργήσετε όλους αυτούς τους φακέλους από την αρχή. Ξεκινήστε με μια απλή δομή και επεκτείνετέ την καθώς μεγαλώνει η εφαρμογή σας. Η σωστή οργάνωση θα κάνει πιο εύκολη τη συντήρηση του κώδικά σας μακροπρόθεσμα.</p>
+            </div>
+        </section>
+
+        <section id="components">
+            <h2>3. Συστατικά (Components) στη React</h2>
+            
+            <p>Τα συστατικά (components) είναι τα δομικά στοιχεία κάθε εφαρμογής React. Ένα component είναι μια συνάρτηση JavaScript ή μια κλάση που δέχεται εισόδους (που ονομάζονται "props") και επιστρέφει ένα στοιχείο React που περιγράφει τι θα πρέπει να εμφανίζεται στην οθόνη.</p>
+            
+            <div class="callout">
+                <p><strong>Πώς να σκέφτεστε τα components:</strong> Φανταστείτε τα ως επαναχρησιμοποιήσιμα κομμάτια διεπαφής χρήστη (UI), όπως τα τουβλάκια LEGO. Κάθε component μπορεί να συνδυαστεί με άλλα για να δημιουργήσει πολύπλοκες διεπαφές, διατηρώντας παράλληλα τον κώδικα οργανωμένο και διαχειρίσιμο.</p>
+            </div>
+            
+            <h3>Functional Components (Συναρτησιακά Συστατικά)</h3>
+            <p>Ο σύγχρονος και προτεινόμενος τρόπος για να γράψετε React components:</p>
+            <pre><code>// src/components/Greeting.js
+import React from 'react';
+function Greeting(props) {
+  return (
+    &lt;div className="greeting"&gt;
+      &lt;h1&gt;Hello, {props.name}!&lt;/h1&gt;
+      &lt;p&gt;Welcome to React.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+export default Greeting;</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ol>
+                    <li><code>import React from 'react';</code>: Εισάγουμε τη βιβλιοθήκη React που είναι απαραίτητη για τη δημιουργία React components.</li>
+                    <li><code>function Greeting(props) { ... }</code>: Ορίζουμε μια συνάρτηση με το όνομα "Greeting" που δέχεται ένα αντικείμενο "props" ως παράμετρο. Αυτό το αντικείμενο περιέχει όλες τις ιδιότητες που περνάμε στο component.</li>
+                    <li><code>return ( ... );</code>: Η συνάρτηση επιστρέφει JSX, μια σύνταξη που μοιάζει με HTML αλλά μας επιτρέπει να ενσωματώνουμε JavaScript μέσα σε αγκύλες {}.</li>
+                    <li><code>{props.name}</code>: Αυτή η έκφραση μέσα σε αγκύλες εμφανίζει την τιμή της ιδιότητας "name" που περνιέται στο component.</li>
+                    <li><code>export default Greeting;</code>: Εξάγουμε το component ώστε να μπορεί να εισαχθεί και να χρησιμοποιηθεί σε άλλα αρχεία.</li>
+                </ol>
+                <p><strong>Σημείωση:</strong> Παρατηρήστε ότι χρησιμοποιούμε <code>className</code> αντί για <code>class</code> στο JSX, επειδή το <code>class</code> είναι δεσμευμένη λέξη στη JavaScript.</p>
+            </div>
+            
+            <p>Χρήση σύνταξης βέλους (arrow function):</p>
+            <pre><code>// src/components/Greeting.js
+import React from 'react';
+const Greeting = (props) => {
+  return (
+    &lt;div className="greeting"&gt;
+      &lt;h1&gt;Hello, {props.name}!&lt;/h1&gt;
+      &lt;p&gt;Welcome to React.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+};
+export default Greeting;</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Διαφορές με την προηγούμενη σύνταξη:</h4>
+                <p>Αυτή η εκδοχή χρησιμοποιεί τη σύνταξη βέλους (arrow function) της ES6, η οποία είναι πιο συνοπτική. Λειτουργικά, είναι ισοδύναμη με την κανονική συνάρτηση που είδαμε προηγουμένως. Η επιλογή μεταξύ των δύο συντάξεων είναι θέμα προσωπικής προτίμησης και συνέπειας του στυλ κώδικα.</p>
+                <p>Πολλοί προγραμματιστές React προτιμούν τις arrow functions επειδή είναι πιο συνοπτικές και έχουν προβλέψιμη συμπεριφορά με το <code>this</code> (αν και αυτό δεν είναι σημαντικό στα functional components).</p>
+            </div>
+            
+            <h3>Class Components (Συστατικά Κλάσης)</h3>
+            <p>Αν και λιγότερο συνηθισμένα στη σύγχρονη React, τα class components εξακολουθούν να υποστηρίζονται:</p>
+            <pre><code>// src/components/GreetingClass.js
+import React, { Component } from 'react';
+class GreetingClass extends Component {
+  render() {
+    return (
+      &lt;div className="greeting"&gt;
+        &lt;h1&gt;Hello, {this.props.name}!&lt;/h1&gt;
+        &lt;p&gt;Welcome to React.&lt;/p&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+export default GreetingClass;</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ol>
+                    <li><code>import React, { Component } from 'react';</code>: Εισάγουμε τόσο το React όσο και την κλάση Component που χρησιμοποιείται ως βάση για τα class components.</li>
+                    <li><code>class GreetingClass extends Component { ... }</code>: Ορίζουμε μια νέα κλάση που κληρονομεί από την React.Component.</li>
+                    <li><code>render() { ... }</code>: Κάθε class component πρέπει να έχει μια μέθοδο render() που επιστρέφει το JSX που θα εμφανιστεί.</li>
+                    <li><code>{this.props.name}</code>: Στα class components, προσπελαύνουμε τα props μέσω του <code>this</code>.</li>
+                </ol>
+                <p><strong>Πλεονεκτήματα των class components:</strong> Παραδοσιακά, τα class components παρείχαν περισσότερες δυνατότητες όπως τη διαχείριση κατάστασης (state) και τη χρήση μεθόδων κύκλου ζωής (lifecycle methods). Ωστόσο, με την εισαγωγή των Hooks στη React 16.8, τα functional components μπορούν πλέον να κάνουν όλα όσα μπορούν τα class components, με πιο απλό και συνοπτικό τρόπο.</p>
+            </div>
+            
+            <div class="callout">
+                <p><strong>Προτίμηση στη Σύγχρονη React:</strong> Τα Functional Components με Hooks γενικά προτιμώνται έναντι των Class Components στη σύγχρονη ανάπτυξη React λόγω της απλότητάς τους και των ισχυρών δυνατοτήτων που προσθέτουν τα Hooks. Θα μάθουμε περισσότερα για τα Hooks σε επόμενη ενότητα.</p>
+            </div>
+
+            <h3>Χρήση Components</h3>
+            <p>Τα components μπορούν να χρησιμοποιηθούν μέσα σε άλλα components, επιτρέποντας τη σύνθεση πολύπλοκων διεπαφών από απλούστερα κομμάτια:</p>
+            <pre><code>// src/App.js
+import React from 'react';
+import Greeting from './components/Greeting';
+import './App.css';
+function App() {
+  return (
+    &lt;div className="app"&gt;
+      &lt;Greeting name="John" /&gt;
+      &lt;Greeting name="Alice" /&gt;
+    &lt;/div&gt;
+  );
+}
+export default App;</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ol>
+                    <li><code>import Greeting from './components/Greeting';</code>: Εισάγουμε το component Greeting που δημιουργήσαμε προηγουμένως.</li>
+                    <li><code>import './App.css';</code>: Εισάγουμε ένα αρχείο CSS για να στυλιζάρουμε το component App.</li>
+                    <li><code>&lt;Greeting name="John" /&gt;</code>: Χρησιμοποιούμε το component Greeting και του περνάμε ένα prop με όνομα "name" και τιμή "John". Αυτό θα εμφανίσει το μήνυμα "Hello, John!".</li>
+                    <li><code>&lt;Greeting name="Alice" /&gt;</code>: Χρησιμοποιούμε το ίδιο component ξανά αλλά με διαφορετική τιμή για το prop "name". Αυτό δείχνει την επαναχρησιμοποιησιμότητα των components.</li>
+                </ol>
+                <p><strong>Σημείωση:</strong> Όταν χρησιμοποιούμε ένα component, αρχίζουμε το όνομά του με κεφαλαίο γράμμα (π.χ. <code>&lt;Greeting /&gt;</code>). Αυτό είναι σημαντικό γιατί η React χρησιμοποιεί αυτή τη σύμβαση για να διακρίνει μεταξύ προσαρμοσμένων components και ενσωματωμένων HTML στοιχείων.</p>
+            </div>
+
+            <div class="callout success">
+                <p><strong>Καλή πρακτική:</strong> Διατηρήστε τα components σας μικρά και εστιασμένα σε μία λειτουργία. Αυτό κάνει τον κώδικα πιο εύκολο στη συντήρηση, τον έλεγχο και την επαναχρησιμοποίηση. Εάν ένα component αρχίζει να γίνεται πολύ μεγάλο ή περίπλοκο, σκεφτείτε να το διασπάσετε σε μικρότερα, πιο διαχειρίσιμα components.</p>
+            </div>
+        </section>
+
+        <section id="jsx">
+            <h2>4. JSX: JavaScript XML</h2>
+            
+            <p>Το JSX είναι μια επέκταση σύνταξης για τη JavaScript που μοιάζει με HTML/XML και καθιστά ευκολότερη τη σύνταξη και κατανόηση των δομών των React components.</p>
+            
+            <div class="callout">
+                <p><strong>Τι είναι το JSX:</strong> Το JSX είναι ένας συνδυασμός JavaScript και XML που σας επιτρέπει να γράφετε δομές HTML-like μέσα στον JavaScript κώδικα. Δεν είναι ούτε HTML ούτε καθαρή JavaScript, αλλά μια ειδική σύνταξη που μετατρέπεται (transpiles) σε κανονική JavaScript πριν εκτελεστεί στον browser.</p>
+            </div>
+            
+            <h3>Βασική Σύνταξη JSX</h3>
+            <pre><code>const element = &lt;h1&gt;Hello, world!&lt;/h1&gt;;</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <p>Αυτή η απλή γραμμή δείχνει πώς το JSX επιτρέπει τη μίξη κώδικα που μοιάζει με HTML μέσα σε JavaScript. Εδώ, δημιουργούμε ένα στοιχείο React που αναπαριστά ένα στοιχείο &lt;h1&gt; με το κείμενο "Hello, world!". </p>
+                <p>Χωρίς JSX, θα έπρεπε να γράψουμε κάτι πιο περίπλοκο όπως <code>React.createElement('h1', null, 'Hello, world!')</code>.</p>
+            </div>
+            
+            <h3>Ενσωμάτωση Εκφράσεων (Embedding Expressions)</h3>
+            <p>Μπορείτε να ενσωματώσετε οποιαδήποτε JavaScript έκφραση στο JSX τυλίγοντάς την σε αγκύλες:</p>
+            <pre><code>const name = 'John';
+const element = &lt;h1&gt;Hello, {name}!&lt;/h1&gt;;</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <p>Εδώ, η μεταβλητή <code>name</code> περιέχει το string "John". Χρησιμοποιώντας τις αγκύλες <code>{}</code> μέσα στο JSX, μπορούμε να εισάγουμε αυτή την τιμή μέσα στο HTML. Το αποτέλεσμα θα είναι ένα στοιχείο &lt;h1&gt; με το κείμενο "Hello, John!".</p>
+            </div>
+            
+            <pre><code>function formatName(user) {
+  return user.firstName + ' ' + user.lastName;
+}
+const user = {
+  firstName: 'John',
+  lastName: 'Doe'
+};
+const element = (
+  &lt;h1&gt;
+    Hello, {formatName(user)}!
+  &lt;/h1&gt;
+);</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ol>
+                    <li>Δημιουργούμε μια συνάρτηση <code>formatName</code> που παίρνει ένα αντικείμενο χρήστη και επιστρέφει το πλήρες όνομα.</li>
+                    <li>Δημιουργούμε ένα αντικείμενο <code>user</code> με ιδιότητες <code>firstName</code> και <code>lastName</code>.</li>
+                    <li>Μέσα στο JSX, καλούμε τη συνάρτηση <code>formatName</code> περνώντας το αντικείμενο χρήστη.</li>
+                    <li>Το αποτέλεσμα της κλήσης της συνάρτησης ("John Doe") θα εισαχθεί στο σημείο των αγκυλών.</li>
+                </ol>
+                <p>Αυτό δείχνει ότι μπορείτε να χρησιμοποιήσετε οποιαδήποτε έκφραση JavaScript μέσα στις αγκύλες, συμπεριλαμβανομένων κλήσεων συναρτήσεων, αριθμητικών πράξεων, συνθηκών κλπ.</p>
+            </div>
+            
+            <h3>Ιδιότητες JSX (JSX Attributes)</h3>
+            <p>Μπορείτε να καθορίσετε ιδιότητες χρησιμοποιώντας είτε διπλά εισαγωγικά για string literals είτε αγκύλες για εκφράσεις JavaScript:</p>
+            <pre><code>// String literal
+const element = &lt;a href="https://reactjs.org"&gt;Visit React Website&lt;/a&gt;;
+// JavaScript expression
+const link = 'https://reactjs.org';
+const element = &lt;a href={link}&gt;Visit React Website&lt;/a&gt;;</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <p>Στο πρώτο παράδειγμα, χρησιμοποιούμε απευθείας ένα string literal ("https://reactjs.org") για την ιδιότητα href.</p>
+                <p>Στο δεύτερο παράδειγμα, αποθηκεύουμε το URL σε μια μεταβλητή και στη συνέχεια περνάμε αυτή τη μεταβλητή μέσα σε αγκύλες.</p>
+                <p>Και οι δύο προσεγγίσεις είναι έγκυρες και έχουν το ίδιο αποτέλεσμα, αλλά η δεύτερη είναι πιο ευέλικτη καθώς επιτρέπει τη δυναμική αλλαγή της τιμής.</p>
+            </div>
+            
+            <div class="callout warning">
+                <p><strong>Διαφορές HTML vs JSX:</strong></p>
+                <ul>
+                    <li>Το JSX χρησιμοποιεί <code>className</code> αντί για <code>class</code> για CSS κλάσεις (επειδή το <code>class</code> είναι δεσμευμένη λέξη στη JavaScript)</li>
+                    <li>Το JSX χρησιμοποιεί <code>htmlFor</code> αντί για <code>for</code> στα στοιχεία label (επειδή το <code>for</code> είναι δεσμευμένη λέξη στη JavaScript)</li>
+                    <li>Οι ιδιότητες JSX είναι σε camelCase (π.χ., <code>onClick</code>, <code>tabIndex</code>) αντί για lowercase όπως στην HTML</li>
+                    <li>Τα self-closing tags πρέπει να έχουν μια κάθετο (<code>&lt;img /&gt;</code>)</li>
+                    <li>Όλα τα στοιχεία πρέπει να κλείνουν (π.χ., <code>&lt;br /&gt;</code> αντί για απλά <code>&lt;br&gt;</code>)</li>
+                </ul>
+            </div>
+            
+            <h3>Το JSX Αναπαριστά Αντικείμενα</h3>
+            <p>Πίσω από τις σκηνές, το JSX μετατρέπεται (transpiled) σε κλήσεις React.createElement():</p>
+            <pre><code>// Αυτό το JSX
+const element = (
+  &lt;h1 className="greeting"&gt;
+    Hello, world!
+  &lt;/h1&gt;
+);
+// Μετατρέπεται σε
+const element = React.createElement(
+  'h1',
+  {className: 'greeting'},
+  'Hello, world!'
+);</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <p>Αυτό το παράδειγμα δείχνει τι συμβαίνει στο παρασκήνιο όταν γράφετε JSX. Το JSX δεν εκτελείται απευθείας στο browser, αλλά μετατρέπεται σε κανονική JavaScript.</p>
+                <p>Η React.createElement() δημιουργεί ένα αντικείμενο που περιγράφει το στοιχείο που θέλετε να αποδώσετε. Παίρνει τρεις παραμέτρους:</p>
+                <ol>
+                    <li>Τον τύπο του στοιχείου ('h1' σε αυτή την περίπτωση)</li>
+                    <li>Τις ιδιότητες (props) του στοιχείου (εδώ είναι ένα αντικείμενο με την ιδιότητα className)</li>
+                    <li>Τα περιεχόμενα του στοιχείου ('Hello, world!' σε αυτή την περίπτωση)</li>
+                </ol>
+                <p>Αυτός ο μετασχηματισμός γίνεται αυτόματα από εργαλεία όπως το Babel κατά τη διάρκεια της διαδικασίας build.</p>
+            </div>
+
+            <div class="callout success">
+                <p><strong>Συμβουλή για αρχάριους:</strong> Μπορεί να φαίνεται περίεργο στην αρχή το να γράφετε HTML μέσα σε JavaScript, αλλά το JSX κάνει πολύ πιο εύκολη τη δημιουργία React components. Δεν χρειάζεται να απομνημονεύσετε πώς λειτουργεί η React.createElement(). Αντίθετα, μπορείτε να σκέφτεστε οπτικά πώς θέλετε να δομήσετε το UI σας. Με την εξάσκηση, το JSX θα γίνει πολύ φυσικό!</p>
+            </div>
+        </section>
+
+        <section id="props">
+            <h2>5. Props: Μεταβίβαση Δεδομένων</h2>
+            
+            <p>Τα Props (συντομογραφία του "properties") είναι ο τρόπος με τον οποίο τα συστατικά λαμβάνουν δεδομένα από το γονικό τους συστατικό. Τα Props είναι αμετάβλητα (immutable) - τα συστατικά δεν πρέπει ποτέ να τροποποιούν τα δικά τους props.</p>
+            
+            <div class="callout">
+                <p><strong>Κατανόηση των Props:</strong> Μπορείτε να σκεφτείτε τα props ως παραμέτρους που περνάτε σε μια συνάρτηση. Όπως οι παράμετροι μιας συνάρτησης, τα props επιτρέπουν στο component να λαμβάνει διαφορετικές τιμές κάθε φορά που χρησιμοποιείται, καθιστώντας το επαναχρησιμοποιήσιμο για διαφορετικές περιπτώσεις.</p>
+            </div>
+            
+            <h3>Μεταβίβαση Props</h3>
+            <pre><code>// Γονικό component
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;UserProfile 
+        username="johndoe" 
+        name="John Doe" 
+        isAdmin={true}
+        roles={['editor', 'reviewer']} 
+      /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <p>Στο παράδειγμα αυτό, το γονικό component <code>App</code> αποδίδει ένα component <code>UserProfile</code> και του περνάει τέσσερα διαφορετικά props:</p>
+                <ol>
+                    <li><code>username="johndoe"</code>: Ένα string prop που περνιέται χρησιμοποιώντας τα εισαγωγικά.</li>
+                    <li><code>name="John Doe"</code>: Άλλο ένα string prop.</li>
+                    <li><code>isAdmin={true}</code>: Ένα boolean prop. Επειδή δεν είναι string, περνιέται μέσα σε αγκύλες.</li>
+                    <li><code>roles={['editor', 'reviewer']}</code>: Ένα array prop που περιέχει δύο strings. Επίσης περνιέται μέσα σε αγκύλες.</li>
+                </ol>
+                <p>Παρατηρήστε ότι χρησιμοποιούμε αγκύλες <code>{}</code> για να περάσουμε τιμές που δεν είναι strings (αριθμούς, booleans, arrays, objects, κλπ).</p>
+            </div>
+            
+            <h3>Λήψη Props</h3>
+            <pre><code>// Παιδικό component
+function UserProfile(props) {
+  return (
+    &lt;div className="user-profile"&gt;
+      &lt;h2&gt;{props.name}&lt;/h2&gt;
+      &lt;p&gt;Username: {props.username}&lt;/p&gt;
+      &lt;p&gt;Admin: {props.isAdmin ? 'Yes' : 'No'}&lt;/p&gt;
+      &lt;p&gt;Roles: {props.roles.join(', ')}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <p>Το component <code>UserProfile</code> λαμβάνει όλα τα props ως ένα ενιαίο αντικείμενο με όνομα <code>props</code>. Στη συνέχεια, προσπελαύνει τα επιμέρους props ως ιδιότητες αυτού του αντικειμένου:</p>
+                <ol>
+                    <li><code>{props.name}</code>: Εμφανίζει το όνομα του χρήστη ως επικεφαλίδα.</li>
+                    <li><code>{props.username}</code>: Εμφανίζει το όνομα χρήστη.</li>
+                    <li><code>{props.isAdmin ? 'Yes' : 'No'}</code>: Χρησιμοποιεί τον τελεστή τριών τιμών (ternary operator) για να εμφανίσει "Yes" αν το <code>isAdmin</code> είναι true, αλλιώς "No".</li>
+                    <li><code>{props.roles.join(', ')}</code>: Χρησιμοποιεί τη μέθοδο <code>join</code> για να μετατρέψει τον πίνακα ρόλων σε μια συμβολοσειρά με τους ρόλους χωρισμένους με κόμμα.</li>
+                </ol>
+            </div>
+            
+            <h3>Αποδόμηση Props (Props Destructuring)</h3>
+            <p>Μπορείτε να αποδομήσετε τα props για πιο καθαρό κώδικα:</p>
+            <pre><code>function UserProfile({ username, name, isAdmin, roles }) {
+  return (
+    &lt;div className="user-profile"&gt;
+      &lt;h2&gt;{name}&lt;/h2&gt;
+      &lt;p&gt;Username: {username}&lt;/p&gt;
+      &lt;p&gt;Admin: {isAdmin ? 'Yes' : 'No'}&lt;/p&gt;
+      &lt;p&gt;Roles: {roles.join(', ')}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <p>Αυτή η εκδοχή χρησιμοποιεί τη σύνταξη αποδόμησης (destructuring) της ES6, η οποία σας επιτρέπει να εξάγετε ιδιότητες από ένα αντικείμενο απευθείας σε μεταβλητές.</p>
+                <p>Αντί να λαμβάνετε ένα μοναδικό αντικείμενο <code>props</code> και να προσπελαύνετε τις ιδιότητές του (π.χ. <code>props.name</code>), εξάγετε απευθείας τις επιμέρους ιδιότητες που χρειάζεστε.</p>
+                <p>Αυτό κάνει τον κώδικα πιο καθαρό και συνοπτικό, ειδικά όταν χρησιμοποιείτε τα ίδια props πολλές φορές μέσα στο component.</p>
+            </div>
+            
+            <h3>Προεπιλεγμένες Τιμές Props (Default Props)</h3>
+            <p>Μπορείτε να ορίσετε προεπιλεγμένες τιμές για props που δεν περνιούνται:</p>
+            <pre><code>function UserProfile({ username, name, isAdmin = false, roles = [] }) {
+  return (
+    &lt;div className="user-profile"&gt;
+      &lt;h2&gt;{name}&lt;/h2&gt;
+      &lt;p&gt;Username: {username}&lt;/p&gt;
+      &lt;p&gt;Admin: {isAdmin ? 'Yes' : 'No'}&lt;/p&gt;
+      &lt;p&gt;Roles: {roles.join(', ')}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+// Εναλλακτικά, χρησιμοποιώντας την ιδιότητα defaultProps
+UserProfile.defaultProps = {
+  isAdmin: false,
+  roles: []
+};</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <p>Υπάρχουν δύο τρόποι να ορίσετε προεπιλεγμένες τιμές για props:</p>
+                <ol>
+                    <li><strong>Μέσα στην αποδόμηση:</strong> Χρησιμοποιώντας τη σύνταξη αποδόμησης, μπορείτε να ορίσετε προεπιλεγμένες τιμές απευθείας (π.χ. <code>isAdmin = false</code>). Αυτή η τιμή θα χρησιμοποιηθεί αν το prop είναι <code>undefined</code>.</li>
+                    <li><strong>Χρησιμοποιώντας το defaultProps:</strong> Εναλλακτικά, μπορείτε να ορίσετε την ιδιότητα <code>defaultProps</code> στο component, η οποία είναι ένα αντικείμενο που περιέχει προεπιλεγμένες τιμές για διάφορα props.</li>
+                </ol>
+                <p>Οι προεπιλεγμένες τιμές είναι χρήσιμες για να κάνετε τα components σας πιο ανθεκτικά, καθώς μπορούν να λειτουργήσουν ακόμα και αν ορισμένα props δεν περνιούνται.</p>
+                <p>Στο παράδειγμα, αν δεν περαστεί το <code>isAdmin</code>, θα είναι <code>false</code> εξ ορισμού, και αν δεν περαστεί το <code>roles</code>, θα είναι ένας κενός πίνακας.</p>
+            </div>
+            
+            <h3>Το Prop Children</h3>
+            <p>Το ειδικό prop <code>children</code> επιτρέπει στα components να περιέχουν ένθετο περιεχόμενο:</p>
+            <pre><code>// Component Container
+function Card({ title, children }) {
+  return (
+    &lt;div className="card"&gt;
+      &lt;div className="card-header"&gt;
+        &lt;h3&gt;{title}&lt;/h3&gt;
+      &lt;/div&gt;
+      &lt;div className="card-body"&gt;
+        {children}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+// Χρήση του component Card
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;Card title="Welcome"&gt;
+        &lt;p&gt;This is the content inside the card.&lt;/p&gt;
+        &lt;button&gt;Click me&lt;/button&gt;
+      &lt;/Card&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <p>Το <code>children</code> είναι ένα ειδικό prop που αναφέρεται στο περιεχόμενο που βρίσκεται μεταξύ των tags ανοίγματος και κλεισίματος ενός component.</p>
+                <ol>
+                    <li>Ορίζουμε ένα component <code>Card</code> που δέχεται δύο props: <code>title</code> και <code>children</code>.</li>
+                    <li>Το <code>Card</code> αποδίδει μια δομή με μια επικεφαλίδα που χρησιμοποιεί το <code>title</code> και ένα σώμα που εμφανίζει το <code>children</code>.</li>
+                    <li>Στο <code>App</code>, χρησιμοποιούμε το <code>Card</code> με ένα ζεύγος ετικετών ανοίγματος/κλεισίματος και τοποθετούμε το περιεχόμενο που θέλουμε να εμφανιστεί στο σώμα της κάρτας μεταξύ αυτών των ετικετών.</li>
+                </ol>
+                <p>Αυτή η προσέγγιση είναι πολύ ισχυρή γιατί σας επιτρέπει να δημιουργείτε επαναχρησιμοποιήσιμα components που μπορούν να περιβάλλουν οποιοδήποτε περιεχόμενο. Είναι παρόμοιο με το πώς χρησιμοποιούμε ετικέτες HTML όπως τα <code>&lt;div&gt;</code> ή <code>&lt;section&gt;</code>.</p>
+            </div>
+            
+            <h3>PropTypes για Έλεγχο Τύπων</h3>
+            <p>Η React παρέχει έναν τρόπο για να επικυρώσετε τα props χρησιμοποιώντας το PropTypes:</p>
+            <pre><code>import PropTypes from 'prop-types';
+function UserProfile({ username, name, isAdmin, roles }) {
+  // Κώδικας component
+}
+UserProfile.propTypes = {
+  username: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  isAdmin: PropTypes.bool,
+  roles: PropTypes.arrayOf(PropTypes.string)
+};</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <p>Το PropTypes είναι ένα εργαλείο που σας επιτρέπει να καθορίσετε ποιους τύπους δεδομένων περιμένει να λάβει το component σας για κάθε prop. Είναι εξαιρετικά χρήσιμο για:</p>
+                <ol>
+                    <li>Αποσφαλμάτωση: Παρέχει προειδοποιήσεις στην κονσόλα αν περαστεί λάθος τύπος</li>
+                    <li>Τεκμηρίωση: Καθιστά σαφές στους άλλους προγραμματιστές τι είδους δεδομένα περιμένει το component</li>
+                </ol>
+                <p>Στο παράδειγμα:</p>
+                <ul>
+                    <li><code>username: PropTypes.string.isRequired</code>: Το <code>username</code> πρέπει να είναι string και είναι υποχρεωτικό.</li>
+                    <li><code>name: PropTypes.string.isRequired</code>: Το <code>name</code> πρέπει να είναι string και είναι υποχρεωτικό.</li>
+                    <li><code>isAdmin: PropTypes.bool</code>: Το <code>isAdmin</code> πρέπει να είναι boolean (αν παρέχεται).</li>
+                    <li><code>roles: PropTypes.arrayOf(PropTypes.string)</code>: Το <code>roles</code> πρέπει να είναι ένας πίνακας από strings (αν παρέχεται).</li>
+                </ul>
+                <p>Σημειώστε ότι τα PropTypes ελέγχουν τους τύπους μόνο κατά την ανάπτυξη (development), όχι στην παραγωγή (production), οπότε δεν επηρεάζουν την απόδοση της εφαρμογής σας στο τελικό περιβάλλον.</p>
+            </div>
+
+            <div class="callout success">
+                <p><strong>Θέματα προς κατανόηση για τα Props:</strong></p>
+                <ol>
+                    <li><strong>Μονόδρομη ροή δεδομένων:</strong> Τα props ρέουν μόνο από το γονικό στο παιδικό component, ποτέ αντίστροφα.</li>
+                    <li><strong>Αμεταβλητότητα (Immutability):</strong> Τα props είναι μόνο για ανάγνωση. Ένα component δεν πρέπει ποτέ να τροποποιεί τα δικά του props.</li>
+                    <li><strong>Επαναχρησιμοποίηση:</strong> Τα props καθιστούν τα components επαναχρησιμοποιήσιμα καθώς μπορούν να συμπεριφέρονται διαφορετικά βάσει των props που λαμβάνουν.</li>
+                    <li><strong>Τύποι δεδομένων:</strong> Τα props μπορούν να είναι οποιοσδήποτε τύπος δεδομένων JavaScript: strings, αριθμοί, booleans, objects, arrays, συναρτήσεις, ακόμα και άλλα React elements.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="state-and-hooks">
+            <h2>6. State και Hooks</h2>
+            
+            <p>Το State επιτρέπει στα React components να αλλάζουν το αποτέλεσμά τους με την πάροδο του χρόνου σε απόκριση σε ενέργειες χρήστη, απαντήσεις δικτύου και οτιδήποτε άλλο.</p>
+            
+            <div class="callout">
+                <p><strong>Κατανόηση του State:</strong> Ενώ τα props περνιούνται από το γονικό component, το state είναι εσωτερικό στο component και διαχειρίζεται δεδομένα που μπορεί να αλλάξουν κατά τη διάρκεια ζωής του component. Μπορείτε να το σκεφτείτε ως την "μνήμη" του component που του επιτρέπει να "θυμάται" και να αντιδρά σε αλλαγές.</p>
+            </div>
+            
+            <h3>Hook useState</h3>
+            <p>Το hook <code>useState</code> σας επιτρέπει να προσθέτετε state σε functional components:</p>
+            <pre><code>import React, { useState } from 'react';
+
+function Counter() {
+  // Δήλωση μιας μεταβλητής state 'count' με αρχική τιμή 0
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Έχετε κάνει κλικ {count} φορές&lt;/p&gt;
+      &lt;button onClick={() => setCount(count + 1)}&gt;
+        Κάντε κλικ εδώ
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ol>
+                    <li><code>import React, { useState } from 'react';</code>: Εισάγουμε το hook useState από τη React.</li>
+                    <li><code>const [count, setCount] = useState(0);</code>: Αυτή η γραμμή κάνει τρία πράγματα:
+                        <ul>
+                            <li>Δημιουργεί μια μεταβλητή state με όνομα <code>count</code> και αρχική τιμή <code>0</code>.</li>
+                            <li>Δημιουργεί μια συνάρτηση <code>setCount</code> που χρησιμοποιείται για να ενημερώνει αυτή την τιμή.</li>
+                            <li>Χρησιμοποιεί array destructuring <code>[ ]</code> για να αναθέσει αυτές τις δύο τιμές από το array που επιστρέφει το useState.</li>
+                        </ul>
+                    </li>
+                    <li><code>onClick={() => setCount(count + 1)}</code>: Όταν κάνουμε κλικ στο κουμπί, καλείται η συνάρτηση setCount για να αυξήσει την τιμή του count κατά 1. Κάθε φορά που καλείται η setCount, το component επαναποδίδεται (re-renders) με τη νέα τιμή.</li>
+                </ol>
+                <p><strong>Σημαντικό:</strong> Ποτέ μην τροποποιείτε την τιμή του state απευθείας (π.χ., <code>count = count + 1</code>). Πάντα να χρησιμοποιείτε τη συνάρτηση setter (π.χ., <code>setCount(count + 1)</code>). Μόνο έτσι η React θα γνωρίζει ότι το state άλλαξε και πρέπει να επαναποδώσει το component.</p>
+            </div>
+            
+            <h3>Χρήση Πολλαπλών Μεταβλητών State</h3>
+            <pre><code>import React, { useState } from 'react';
+
+function UserForm() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Επεξεργασία υποβολής φόρμας
+    console.log('Υποβολή:', { name, email });
+    
+    // Επαναφορά φόρμας
+    setName('');
+    setEmail('');
+    setIsSubmitting(false);
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="name"&gt;Όνομα:&lt;/label&gt;
+        &lt;input
+          type="text"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="email"&gt;Email:&lt;/label&gt;
+        &lt;input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;button type="submit" disabled={isSubmitting}&gt;
+        {isSubmitting ? 'Υποβολή...' : 'Υποβολή'}
+      &lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <p>Αυτό το παράδειγμα δείχνει πώς μπορείτε να χρησιμοποιήσετε πολλαπλές μεταβλητές state σε ένα component:</p>
+                <ol>
+                    <li>Έχουμε τρεις διαφορετικές μεταβλητές state:
+                        <ul>
+                            <li><code>name</code>: Αποθηκεύει το κείμενο που εισάγεται στο πεδίο ονόματος.</li>
+                            <li><code>email</code>: Αποθηκεύει το κείμενο που εισάγεται στο πεδίο email.</li>
+                            <li><code>isSubmitting</code>: Ένα boolean που υποδεικνύει αν η φόρμα βρίσκεται σε διαδικασία υποβολής.</li>
+                        </ul>
+                    </li>
+                    <li><code>onChange={(e) => setName(e.target.value)}</code>: Όταν ο χρήστης πληκτρολογεί στο πεδίο ονόματος, καλούμε τη συνάρτηση setName με τη νέα τιμή από το συμβάν (event). Το <code>e.target.value</code> περιέχει το τρέχον κείμενο του πεδίου εισαγωγής.</li>
+                    <li><code>disabled={isSubmitting}</code>: Το κουμπί υποβολής απενεργοποιείται όταν το isSubmitting είναι true, αποτρέποντας πολλαπλές υποβολές.</li>
+                    <li><code>{isSubmitting ? 'Υποβολή...' : 'Υποβολή'}</code>: Χρησιμοποιούμε τον τελεστή τριών τιμών για να αλλάξουμε το κείμενο του κουμπιού ανάλογα με την κατάσταση υποβολής.</li>
+                </ol>
+                <p>Σε αντίθεση με τα class components που έχουν ένα ενιαίο αντικείμενο state, τα functional components μπορούν να έχουν όσες μεταβλητές state χρειάζονται, καθεμιά με τη δική της συνάρτηση ενημέρωσης.</p>
+            </div>
+            
+            <h3>State με Αντικείμενα</h3>
+            <p>Όταν χρησιμοποιείτε αντικείμενα με το <code>useState</code>, πρέπει να διατηρείτε τις προηγούμενες τιμές του state χρησιμοποιώντας τον τελεστή spread:</p>
+            <pre><code>import React, { useState } from 'react';
+
+function UserForm() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData, // Διατήρηση των υπαρχουσών τιμών
+      [name]: value // Ενημέρωση μόνο του πεδίου που άλλαξε
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Δεδομένα φόρμας:', formData);
+    // Επεξεργασία υποβολής
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="name"&gt;Όνομα:&lt;/label&gt;
+        &lt;input
+          type="text"
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="email"&gt;Email:&lt;/label&gt;
+        &lt;input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="password"&gt;Κωδικός:&lt;/label&gt;
+        &lt;input
+          type="password"
+          id="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;button type="submit"&gt;Υποβολή&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ol>
+                    <li>Αντί για ξεχωριστές μεταβλητές state, χρησιμοποιούμε ένα αντικείμενο <code>formData</code> που περιέχει όλα τα πεδία της φόρμας.</li>
+                    <li>Η συνάρτηση <code>handleChange</code> είναι το κλειδί εδώ:
+                        <ul>
+                            <li><code>const { name, value } = e.target;</code>: Αποσυνθέτουμε το όνομα του πεδίου και την τιμή του από το συμβάν.</li>
+                            <li><code>...formData</code>: Χρησιμοποιούμε τον τελεστή spread για να διατηρήσουμε όλες τις υπάρχουσες τιμές στο αντικείμενο.</li>
+                            <li><code>[name]: value</code>: Χρησιμοποιούμε computed property name για να ενημερώσουμε δυναμικά μόνο το συγκεκριμένο πεδίο που άλλαξε.</li>
+                        </ul>
+                    </li>
+                    <li>Προσέξτε το ιδιότητα <code>name</code> στα στοιχεία input: πρέπει να αντιστοιχεί στο όνομα του πεδίου στο αντικείμενο formData.</li>
+                </ol>
+                <p><strong>Γιατί χρησιμοποιούμε τον τελεστή spread:</strong> Το <code>useState</code> δεν συγχωνεύει αυτόματα αντικείμενα όπως το <code>this.setState</code> στα class components. Αν δεν συμπεριλάβουμε το <code>...formData</code>, τότε όλα τα υπόλοιπα πεδία θα χαθούν κατά την ενημέρωση. Αυτή η προσέγγιση μας επιτρέπει να ενημερώνουμε μόνο τα συγκεκριμένα πεδία που χρειάζονται αλλαγή, διατηρώντας παράλληλα τα υπόλοιπα.</p>
+            </div>
+            
+            <h3>Hook useEffect</h3>
+            <p>Το hook <code>useEffect</code> σας επιτρέπει να εκτελείτε παρενέργειες (side effects) σε functional components, παρόμοια με τις μεθόδους <code>componentDidMount</code>, <code>componentDidUpdate</code> και <code>componentWillUnmount</code> στα class components.</p>
+            
+            <pre><code>import React, { useState, useEffect } from 'react';
+
+function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Αυτό το effect εκτελείται όταν το component τοποθετείται στο DOM
+    // και κάθε φορά που αλλάζει το userId
+    
+    const fetchUser = async () => {
+      try {
+        setLoading(true);
+        // Προσομοίωση κλήσης API
+        const response = await fetch(`https://api.example.com/users/${userId}`);
+        
+        if (!response.ok) {
+          throw new Error('Αποτυχία ανάκτησης χρήστη');
+        }
+        
+        const userData = await response.json();
+        setUser(userData);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+    
+    // Συνάρτηση καθαρισμού (προαιρετική)
+    return () => {
+      // Αυτή εκτελείται πριν το effect εκτελεστεί ξανά ή όταν το component απομακρύνεται από το DOM
+      console.log('Καθαρισμός προηγούμενου effect');
+    };
+  }, [userId]); // Πίνακας εξαρτήσεων - το effect εκτελείται όταν αλλάζουν αυτές οι τιμές
+
+  if (loading) return &lt;div&gt;Φόρτωση...&lt;/div&gt;;
+  if (error) return &lt;div&gt;Σφάλμα: {error}&lt;/div&gt;;
+  if (!user) return &lt;div&gt;Δεν βρέθηκε χρήστης&lt;/div&gt;;
+
+  return (
+    &lt;div className="user-profile"&gt;
+      &lt;h2&gt;Προφίλ του/της {user.name}&lt;/h2&gt;
+      &lt;p&gt;Email: {user.email}&lt;/p&gt;
+      &lt;p&gt;Όνομα χρήστη: {user.username}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ol>
+                    <li>Το <code>useEffect</code> είναι ένα hook που σας επιτρέπει να εκτελείτε παρενέργειες σε functional components. Παρενέργειες περιλαμβάνουν:
+                        <ul>
+                            <li>Ανάκτηση δεδομένων (fetch data)</li>
+                            <li>Χειροκίνητη τροποποίηση του DOM</li>
+                            <li>Εγγραφές σε εξωτερικές υπηρεσίες</li>
+                            <li>Ορισμό χρονιστών (timers)</li>
+                        </ul>
+                    </li>
+                    <li>Η συνάρτηση <code>useEffect</code> δέχεται δύο παραμέτρους:
+                        <ul>
+                            <li>Μια συνάρτηση που περιέχει τον κώδικα του effect</li>
+                            <li>Ένα πίνακα εξαρτήσεων που καθορίζει πότε πρέπει να επανεκτελεστεί το effect</li>
+                        </ul>
+                    </li>
+                    <li>Στο παράδειγμα, το effect περιέχει μια ασύγχρονη συνάρτηση <code>fetchUser</code> που ανακτά δεδομένα χρήστη από ένα API.</li>
+                    <li>Χρησιμοποιούμε τρεις μεταβλητές state για να διαχειριστούμε τις διαφορετικές καταστάσεις:
+                        <ul>
+                            <li><code>user</code>: Τα δεδομένα του χρήστη</li>
+                            <li><code>loading</code>: Αν η ανάκτηση βρίσκεται σε εξέλιξη</li>
+                            <li><code>error</code>: Τυχόν σφάλμα που προέκυψε</li>
+                        </ul>
+                    </li>
+                    <li>Η συνάρτηση που επιστρέφεται από το effect (προαιρετική) είναι μια συνάρτηση καθαρισμού που εκτελείται:
+                        <ul>
+                            <li>Πριν το effect εκτελεστεί ξανά</li>
+                            <li>Όταν το component αφαιρείται από το DOM (unmounts)</li>
+                        </ul>
+                    </li>
+                    <li>Ο πίνακας <code>[userId]</code> είναι ο πίνακας εξαρτήσεων. Το effect θα εκτελεστεί ξανά όταν αλλάξει το <code>userId</code>.</li>
+                </ol>
+                <p>Το pattern "φόρτωση/σφάλμα/δεδομένα" είναι πολύ συνηθισμένο σε εφαρμογές React και σας επιτρέπει να χειρίζεστε διαφορετικές καταστάσεις με κομψό τρόπο.</p>
+            </div>
+            
+            <h3>Διαφορετικές Εξαρτήσεις useEffect</h3>
+            <div class="callout">
+                <p><strong>Μοτίβα Εξαρτήσεων useEffect:</strong></p>
+                <ul>
+                    <li><code>useEffect(() => { ... });</code> - Εκτελείται μετά από κάθε απόδοση (render)</li>
+                    <li><code>useEffect(() => { ... }, []);</code> - Εκτελείται μόνο μία φορά μετά την αρχική απόδοση (παρόμοια με το componentDidMount)</li>
+                    <li><code>useEffect(() => { ... }, [prop1, state2]);</code> - Εκτελείται όταν αλλάζει οποιαδήποτε εξάρτηση</li>
+                </ul>
+                <p>Αυτά τα διαφορετικά μοτίβα σας επιτρέπουν να ελέγχετε πότε ακριβώς θα εκτελούνται οι παρενέργειες σας, βελτιστοποιώντας την απόδοση της εφαρμογής.</p>
+            </div>
+            
+            <h3>Άλλα Συνηθισμένα Hooks</h3>
+            <ul>
+                <li><code>useContext</code> - Εγγραφή σε React context για πρόσβαση σε δεδομένα που είναι διαθέσιμα σε όλο το δέντρο των components</li>
+                <li><code>useReducer</code> - Διαχείριση πολύπλοκης λογικής state, παρόμοια με το Redux</li>
+                <li><code>useCallback</code> - Απομνημόνευση συναρτήσεων για την αποφυγή περιττών επαναποδόσεων (re-renders)</li>
+                <li><code>useMemo</code> - Απομνημόνευση υπολογισμένων τιμών για καλύτερη απόδοση</li>
+                <li><code>useRef</code> - Δημιουργία μεταβλητού αντικειμένου που διατηρείται μεταξύ αποδόσεων χωρίς να προκαλεί επαναπόδοση</li>
+            </ul>
+
+            <div class="code-explanation">
+                <h4>Συνοπτική επεξήγηση των άλλων hooks:</h4>
+                <ol>
+                    <li><strong>useContext:</strong> Σας επιτρέπει να προσπελάσετε δεδομένα από ένα Context της React χωρίς να χρειάζεται να περνάτε props σε κάθε επίπεδο. Είναι χρήσιμο για θέματα, εξουσιοδότηση χρήστη, ρυθμίσεις εφαρμογής, κλπ.</li>
+                    <li><strong>useReducer:</strong> Παρόμοιο με το useState, αλλά για πιο πολύπλοκη λογική state. Λειτουργεί παρόμοια με τους reducers του Redux, όπου ορίζετε πώς αλλάζει το state σας με βάση τις "ενέργειες" (actions).</li>
+                    <li><strong>useCallback:</strong> "Απομνημονεύει" μια συνάρτηση ώστε να μην δημιουργείται εκ νέου σε κάθε απόδοση. Χρήσιμο όταν περνάτε συναρτήσεις σε βελτιστοποιημένα child components.</li>
+                    <li><strong>useMemo:</strong> "Απομνημονεύει" το αποτέλεσμα ενός υπολογισμού ώστε να μην εκτελείται ξανά αν οι εισροές δεν έχουν αλλάξει. Χρήσιμο για δαπανηρούς υπολογισμούς.</li>
+                    <li><strong>useRef:</strong> Παρέχει ένα μεταβλητό αντικείμενο reference που διατηρείται μεταξύ των αποδόσεων. Χρήσιμο για:
+                        <ul>
+                            <li>Αποθήκευση αναφορών σε στοιχεία DOM</li>
+                            <li>Αποθήκευση προηγούμενων τιμών</li>
+                            <li>Διατήρηση μεταβλητών που δεν επηρεάζουν την απόδοση</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="callout success">
+                <p><strong>Γιατί τα Hooks είναι σημαντικά:</strong></p>
+                <p>Τα Hooks, που εισήχθησαν στη React 16.8, επέτρεψαν στα functional components να έχουν όλες τις δυνατότητες των class components (state, lifecycle methods, κλπ) με πιο κομψό τρόπο. Πλεονεκτήματα των hooks:</p>
+                <ul>
+                    <li><strong>Ευκολότερη επαναχρησιμοποίηση λογικής:</strong> Μπορείτε να εξάγετε λογική σε προσαρμοσμένα hooks.</li>
+                    <li><strong>Καθαρότερος κώδικας:</strong> Αποφεύγετε την πολυπλοκότητα των class components, όπως το <code>this</code> και οι binding μέθοδοι.</li>
+                    <li><strong>Καλύτερη οργάνωση:</strong> Ομαδοποιείτε σχετικό κώδικα με βάση τι κάνει, όχι σε ποια μέθοδο lifecycle ανήκει.</li>
+                    <li><strong>Μικρότερο μέγεθος bundle:</strong> Τα functional components με hooks συνήθως οδηγούν σε μικρότερο μέγεθος κώδικα.</li>
+                </ul>
+            </div>
+        </section>
+
+		<section id="conditional-rendering">
+            <h2>7. Υπό Συνθήκη Απόδοση (Conditional Rendering)</h2>
+            
+            <p>Η React σας επιτρέπει να αποδίδετε υπό συνθήκη components ή στοιχεία με βάση την τρέχουσα κατάσταση (state) ή τα props. Αυτό σημαίνει ότι μπορείτε να αποφασίσετε τι θα εμφανιστεί στην οθόνη ανάλογα με διάφορες συνθήκες, όπως αν ένας χρήστης είναι συνδεδεμένος, αν τα δεδομένα φορτώνονται ακόμα, αν υπάρχει κάποιο σφάλμα, κλπ.</p>
+            
+            <h3>If/Else στο JSX</h3>
+            <p>Ο πιο απλός τρόπος για υπό συνθήκη απόδοση είναι με τη χρήση if/else εκτός του JSX:</p>
+            <pre><code>function UserGreeting({ isLoggedIn, username }) {
+  if (isLoggedIn) {
+    return &lt;h1&gt;Welcome back, {username}!&lt;/h1&gt;;
+  } else {
+    return &lt;h1&gt;Please sign in&lt;/h1&gt;;
+  }
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Αυτό το component δέχεται δύο props: <code>isLoggedIn</code> (boolean) και <code>username</code> (string).</li>
+                    <li>Ανάλογα με την τιμή του <code>isLoggedIn</code>, επιστρέφει διαφορετικό περιεχόμενο.</li>
+                    <li>Αν ο χρήστης είναι συνδεδεμένος (<code>isLoggedIn === true</code>), εμφανίζει ένα μήνυμα καλωσορίσματος με το όνομα χρήστη.</li>
+                    <li>Διαφορετικά, εμφανίζει ένα μήνυμα που προτρέπει το χρήστη να συνδεθεί.</li>
+                    <li>Αυτή η προσέγγιση είναι καθαρή και εύκολη στην κατανόηση, ειδικά για αρχάριους.</li>
+                </ul>
+            </div>
+            
+            <h3>Τελεστής Υπό Συνθήκη (Ternary Operator)</h3>
+            <p>Για πιο συνοπτικό κώδικα, μπορείτε να χρησιμοποιήσετε τον τελεστή τριών τιμών (ternary operator) μέσα στο JSX:</p>
+            <pre><code>function UserGreeting({ isLoggedIn, username }) {
+  return (
+    &lt;h1&gt;
+      {isLoggedIn 
+        ? `Welcome back, ${username}!` 
+        : 'Please sign in'}
+    &lt;/h1&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Αυτό το παράδειγμα κάνει ακριβώς το ίδιο με το προηγούμενο, αλλά χρησιμοποιεί τον τελεστή τριών τιμών <code>condition ? valueIfTrue : valueIfFalse</code>.</li>
+                    <li><strong>Πλεονέκτημα:</strong> Μπορείτε να το χρησιμοποιήσετε απευθείας μέσα στο JSX.</li>
+                    <li>Είναι πιο συνοπτικό και συχνά προτιμάται για απλές συνθήκες.</li>
+                    <li>Το backtick (<code>`</code>) χρησιμοποιείται για template literals στη JavaScript, επιτρέποντας την ενσωμάτωση μεταβλητών μέσα σε strings με το σύμβολο <code>${}</code>.</li>
+                </ul>
+            </div>
+            
+            <h3>Λογικός Τελεστής AND (&&)</h3>
+            <p>Για περιπτώσεις όπου θέλετε να εμφανίσετε κάτι μόνο όταν μια συνθήκη είναι αληθής, και τίποτα όταν είναι ψευδής, μπορείτε να χρησιμοποιήσετε τον λογικό τελεστή AND (&&):</p>
+            <pre><code>function Notifications({ messages }) {
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Notifications&lt;/h2&gt;
+      {messages.length > 0 && (
+        &lt;p&gt;You have {messages.length} unread messages.&lt;/p&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Αυτό το component δέχεται ένα prop <code>messages</code> που είναι ένας πίνακας (array) μηνυμάτων.</li>
+                    <li>Ο λογικός τελεστής <code>&&</code> λειτουργεί ως εξής: αν η αριστερή πλευρά είναι αληθής (true), τότε επιστρέφει τη δεξιά πλευρά. Αν είναι ψευδής (false), επιστρέφει false, το οποίο η React δεν αποδίδει.</li>
+                    <li>Στο παράδειγμα, η παράγραφος με τον αριθμό των μη αναγνωσμένων μηνυμάτων θα εμφανιστεί μόνο αν υπάρχουν μηνύματα (<code>messages.length > 0</code>).</li>
+                    <li>Αν δεν υπάρχουν μηνύματα, τότε μόνο η επικεφαλίδα "Notifications" θα εμφανιστεί.</li>
+                    <li>Αυτή η μέθοδος είναι πιο συνοπτική από τον τελεστή τριών τιμών όταν δεν χρειάζεστε ένα "αλλιώς" τμήμα.</li>
+                </ul>
+            </div>
+            
+            <h3>Switch Case στο JSX</h3>
+            <p>Για πιο πολύπλοκες συνθήκες με πολλές πιθανές περιπτώσεις, μπορείτε να χρησιμοποιήσετε την εντολή switch:</p>
+            <pre><code>function StatusMessage({ status }) {
+  let message;
+  
+  switch (status) {
+    case 'loading':
+      message = &lt;p&gt;Loading...&lt;/p&gt;;
+      break;
+    case 'success':
+      message = &lt;p className="success"&gt;Data loaded successfully!&lt;/p&gt;;
+      break;
+    case 'error':
+      message = &lt;p className="error"&gt;Error loading data&lt;/p&gt;;
+      break;
+    default:
+      message = null;
+  }
+  
+  return (
+    &lt;div className="status-container"&gt;
+      {message}
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Αυτό το component δέχεται ένα prop <code>status</code> που μπορεί να έχει διάφορες τιμές.</li>
+                    <li>Χρησιμοποιούμε την εντολή switch για να ελέγξουμε την τιμή του status και να αναθέσουμε το κατάλληλο JSX στη μεταβλητή <code>message</code>.</li>
+                    <li>Ανάλογα με την κατάσταση, εμφανίζεται διαφορετικό μήνυμα με διαφορετικό στυλ:
+                        <ul>
+                            <li>'loading': Ένα απλό μήνυμα φόρτωσης</li>
+                            <li>'success': Ένα μήνυμα επιτυχίας με μια κλάση CSS "success"</li>
+                            <li>'error': Ένα μήνυμα σφάλματος με μια κλάση CSS "error"</li>
+                            <li>default: Τίποτα (null) αν δεν ταιριάζει με κανένα από τα παραπάνω</li>
+                        </ul>
+                    </li>
+                    <li>Τέλος, αποδίδουμε το message μέσα σε ένα div.</li>
+                    <li>Αυτή η προσέγγιση είναι χρήσιμη όταν έχετε πολλές διαφορετικές καταστάσεις για τις οποίες πρέπει να αποδώσετε διαφορετικό περιεχόμενο.</li>
+                </ul>
+            </div>
+            
+            <h3>Υπό Συνθήκη Απόδοση με τη Μέθοδο map</h3>
+            <p>Μπορείτε να συνδυάσετε την υπό συνθήκη απόδοση με την απόδοση λιστών:</p>
+            <pre><code>function UserList({ users }) {
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;User List&lt;/h2&gt;
+      
+      {users.length === 0 ? (
+        &lt;p&gt;No users found&lt;/p&gt;
+      ) : (
+        &lt;ul&gt;
+          {users.map(user => (
+            &lt;li key={user.id}&gt;
+              {user.name} ({user.email})
+            &lt;/li&gt;
+          ))}
+        &lt;/ul&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Αυτό το component δέχεται ένα prop <code>users</code> που είναι ένας πίνακας χρηστών.</li>
+                    <li>Πρώτα ελέγχουμε αν ο πίνακας είναι κενός (<code>users.length === 0</code>).</li>
+                    <li>Αν είναι κενός, εμφανίζουμε το μήνυμα "No users found".</li>
+                    <li>Αλλιώς, αποδίδουμε μια λίστα (<code>&lt;ul&gt;</code>) και χρησιμοποιούμε τη μέθοδο <code>map</code> για να μετατρέψουμε κάθε αντικείμενο χρήστη σε ένα στοιχείο λίστας (<code>&lt;li&gt;</code>).</li>
+                    <li>Για κάθε χρήστη, εμφανίζουμε το όνομα και το email του.</li>
+                    <li>Το <code>key={user.id}</code> είναι σημαντικό για την απόδοση λιστών στη React (περισσότερα γι' αυτό στην επόμενη ενότητα).</li>
+                    <li>Αυτός ο συνδυασμός υπό συνθήκης απόδοσης και απόδοσης λιστών είναι πολύ συνηθισμένος σε εφαρμογές React.</li>
+                </ul>
+            </div>
+
+            <div class="callout success">
+                <p><strong>Συμβουλή για αρχάριους:</strong> Η υπό συνθήκη απόδοση είναι από τα πιο σημαντικά μοτίβα στη React. Με αυτήν, μπορείτε να δημιουργήσετε δυναμικά UIs που προσαρμόζονται στην κατάσταση της εφαρμογής σας. Δοκιμάστε όλες τις παραπάνω μεθόδους για να καταλάβετε πότε είναι καλύτερη η κάθε μια!</p>
+            </div>
+        </section>
+
+        <section id="lists-and-keys">
+            <h2>8. Λίστες και Κλειδιά (Lists and Keys)</h2>
+            
+            <p>Η React κάνει εύκολη την απόδοση λιστών δεδομένων. Το prop <code>key</code> είναι κρίσιμο για να μπορεί η React να ενημερώνει αποτελεσματικά το DOM όταν αλλάζουν τα στοιχεία της λίστας.</p>
+            
+            <h3>Απόδοση Λιστών</h3>
+            <pre><code>function TodoList({ todos }) {
+  return (
+    &lt;ul&gt;
+      {todos.map(todo => (
+        &lt;li key={todo.id}&gt;
+          {todo.text}
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Αυτό το component δέχεται ένα prop <code>todos</code> που είναι ένας πίνακας με εργασίες (todo items).</li>
+                    <li>Χρησιμοποιούμε τη μέθοδο <code>map</code> για να μετατρέψουμε κάθε αντικείμενο todo σε ένα στοιχείο λίστας (<code>&lt;li&gt;</code>).</li>
+                    <li>Η μέθοδος <code>map</code> είναι μια ενσωματωμένη μέθοδος των πινάκων στη JavaScript που:
+                        <ol>
+                            <li>Παίρνει κάθε στοιχείο του πίνακα ένα-ένα</li>
+                            <li>Εφαρμόζει μια συνάρτηση σε αυτό</li>
+                            <li>Επιστρέφει έναν νέο πίνακα με τα αποτελέσματα</li>
+                        </ol>
+                    </li>
+                    <li>Για κάθε todo, αποδίδουμε το κείμενό του (<code>todo.text</code>).</li>
+                    <li><strong>Σημαντικό:</strong> Κάθε στοιχείο λίστας έχει ένα μοναδικό <code>key</code> prop που είναι το ID του todo.</li>
+                </ul>
+            </div>
+            
+            <div class="callout warning">
+                <p><strong>Κανόνες για το prop Key:</strong></p>
+                <ul>
+                    <li><strong>Τα keys πρέπει να είναι μοναδικά ανάμεσα στα αδέρφια στοιχεία.</strong> Δηλαδή, σε έναν πίνακα στοιχείων, κάθε στοιχείο πρέπει να έχει διαφορετικό key. Τα keys δεν χρειάζεται να είναι μοναδικά σε όλη την εφαρμογή ή ακόμα και σε διαφορετικές λίστες - μόνο μέσα στην ίδια λίστα.</li>
+                    <li><strong>Τα keys δεν πρέπει να αλλάζουν ή να δημιουργούνται τυχαία.</strong> Αν τα keys αλλάζουν μεταξύ των αποδόσεων, χάνουν το σκοπό τους και μπορεί να προκαλέσουν προβλήματα απόδοσης ή λάθη στα δεδομένα UI.</li>
+                    <li><strong>Χρησιμοποιείτε σταθερά IDs από τα δεδομένα σας όταν είναι διαθέσιμα.</strong> Τα καλύτερα keys είναι μοναδικά αναγνωριστικά που προέρχονται από τα ίδια τα δεδομένα, όπως IDs από μια βάση δεδομένων.</li>
+                    <li><strong>Χρησιμοποιείτε τους δείκτες (indexes) ως keys μόνο ως έσχατη λύση.</strong> Χρησιμοποιήστε τους μόνο όταν τα στοιχεία δεν έχουν σταθερά IDs και δεν θα αναδιαταχθούν ή φιλτραριστούν ποτέ.</li>
+                </ul>
+            </div>
+            
+            <div class="code-explanation">
+                <h4>Γιατί είναι σημαντικά τα Keys:</h4>
+                <ul>
+                    <li>Η React χρησιμοποιεί τα keys για να αναγνωρίζει ποια στοιχεία έχουν αλλάξει, προστεθεί ή αφαιρεθεί.</li>
+                    <li>Χωρίς keys, η React θα πρέπει να ενημερώσει ολόκληρη τη λίστα αντί μόνο τα στοιχεία που άλλαξαν.</li>
+                    <li>Τα σωστά keys βοηθούν στη βελτιστοποίηση της απόδοσης και αποφεύγουν περίεργα bugs UI.</li>
+                    <li><strong>Παράδειγμα προβλήματος χωρίς σωστά keys:</strong> Αν έχετε μια λίστα με state (π.χ. checkboxes) και δεν έχετε σωστά keys, το state μπορεί να "μπερδευτεί" όταν αλλάζουν τα στοιχεία της λίστας.</li>
+                </ul>
+            </div>
+            
+            <h3>Λίστα με Σύνθετα Components</h3>
+            <pre><code>function ProductList({ products, onProductSelect }) {
+  return (
+    &lt;div className="product-list"&gt;
+      {products.map(product => (
+        &lt;ProductCard
+          key={product.id}
+          product={product}
+          onSelect={() => onProductSelect(product.id)}
+        /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+
+function ProductCard({ product, onSelect }) {
+  return (
+    &lt;div className="product-card" onClick={onSelect}&gt;
+      &lt;img src={product.image} alt={product.name} /&gt;
+      &lt;h3&gt;{product.name}&lt;/h3&gt;
+      &lt;p&gt;${product.price.toFixed(2)}&lt;/p&gt;
+      {product.inStock ? (
+        &lt;span className="in-stock"&gt;In Stock&lt;/span&gt;
+      ) : (
+        &lt;span className="out-of-stock"&gt;Out of Stock&lt;/span&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Εδώ έχουμε δύο components: <code>ProductList</code> που αποδίδει μια λίστα προϊόντων, και <code>ProductCard</code> που αποδίδει ένα μεμονωμένο προϊόν.</li>
+                    <li>Το <code>ProductList</code> δέχεται δύο props:
+                        <ul>
+                            <li><code>products</code>: Ένας πίνακας με αντικείμενα προϊόντων</li>
+                            <li><code>onProductSelect</code>: Μια συνάρτηση callback που καλείται όταν ο χρήστης επιλέγει ένα προϊόν</li>
+                        </ul>
+                    </li>
+                    <li>Χρησιμοποιούμε τη μέθοδο <code>map</code> για να μετατρέψουμε κάθε αντικείμενο product σε ένα component <code>ProductCard</code>.</li>
+                    <li>Κάθε <code>ProductCard</code> λαμβάνει:
+                        <ul>
+                            <li>Ένα μοναδικό <code>key</code> prop που είναι το ID του προϊόντος</li>
+                            <li>Το αντικείμενο <code>product</code> που περιέχει όλες τις πληροφορίες του προϊόντος</li>
+                            <li>Μια συνάρτηση <code>onSelect</code> που καλεί την <code>onProductSelect</code> με το ID του συγκεκριμένου προϊόντος</li>
+                        </ul>
+                    </li>
+                    <li>Το <code>ProductCard</code> αποδίδει ένα div με:
+                        <ul>
+                            <li>Μια εικόνα του προϊόντος</li>
+                            <li>Το όνομα του προϊόντος</li>
+                            <li>Την τιμή του προϊόντος (με δύο δεκαδικά ψηφία με τη μέθοδο <code>toFixed(2)</code>)</li>
+                            <li>Μια ένδειξη διαθεσιμότητας που αλλάζει ανάλογα με το αν το προϊόν είναι σε απόθεμα</li>
+                        </ul>
+                    </li>
+                    <li>Χρησιμοποιούμε τον τελεστή τριών τιμών για να εμφανίσουμε διαφορετικό span ανάλογα με το αν το προϊόν είναι σε απόθεμα.</li>
+                    <li>Όταν ο χρήστης κάνει κλικ στο div του προϊόντος, καλείται η συνάρτηση <code>onSelect</code>.</li>
+                </ul>
+            </div>
+            
+            <h3>Εξαγωγή Components Στοιχείων Λίστας</h3>
+            <p>Όταν αποδίδετε λίστες, είναι συχνά πιο καθαρό να εξάγετε το στοιχείο λίστας σε ένα ξεχωριστό component:</p>
+            <pre><code>function TodoItem({ todo, onToggle, onDelete }) {
+  return (
+    &lt;li className={todo.completed ? 'completed' : ''}&gt;
+      &lt;input
+        type="checkbox"
+        checked={todo.completed}
+        onChange={() => onToggle(todo.id)}
+      /&gt;
+      &lt;span className="todo-text"&gt;{todo.text}&lt;/span&gt;
+      &lt;button onClick={() => onDelete(todo.id)}&gt;
+        Delete
+      &lt;/button&gt;
+    &lt;/li&gt;
+  );
+}
+
+function TodoList({ todos, onToggleTodo, onDeleteTodo }) {
+  return (
+    &lt;ul className="todo-list"&gt;
+      {todos.map(todo => (
+        &lt;TodoItem
+          key={todo.id}
+          todo={todo}
+          onToggle={onToggleTodo}
+          onDelete={onDeleteTodo}
+        /&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Έχουμε χωρίσει τη λειτουργικότητα σε δύο components:
+                        <ul>
+                            <li><code>TodoItem</code>: Ένα component που αποδίδει ένα μεμονωμένο στοιχείο λίστας</li>
+                            <li><code>TodoList</code>: Ένα component που αποδίδει την πλήρη λίστα</li>
+                        </ul>
+                    </li>
+                    <li>Το <code>TodoItem</code> δέχεται τρία props:
+                        <ul>
+                            <li><code>todo</code>: Το αντικείμενο με τις πληροφορίες της εργασίας</li>
+                            <li><code>onToggle</code>: Μια συνάρτηση callback που καλείται όταν ο χρήστης αλλάζει την κατάσταση του checkbox</li>
+                            <li><code>onDelete</code>: Μια συνάρτηση callback που καλείται όταν ο χρήστης κάνει κλικ στο κουμπί διαγραφής</li>
+                        </ul>
+                    </li>
+                    <li>Το στοιχείο <code>&lt;li&gt;</code> έχει μια κλάση CSS που αλλάζει ανάλογα με το αν το todo είναι ολοκληρωμένο ή όχι.</li>
+                    <li>Το <code>TodoList</code> χρησιμοποιεί τη μέθοδο <code>map</code> για να αποδώσει ένα <code>TodoItem</code> για κάθε todo.</li>
+                    <li><strong>Σημείωση για το key:</strong> Το <code>key</code> τοποθετείται στο υψηλότερο component που δημιουργείται μέσα στο <code>map</code>, σε αυτή την περίπτωση το <code>TodoItem</code>.</li>
+                </ul>
+            </div>
+
+            <div class="callout success">
+                <p><strong>Συχνά Λάθη με τις Λίστες για Αρχάριους:</strong></p>
+                <ol>
+                    <li><strong>Παράληψη του key:</strong> Η React θα εμφανίσει προειδοποίηση στην κονσόλα αν δεν παρέχετε keys. Μην το αγνοείτε!</li>
+                    <li><strong>Χρήση μη μοναδικών keys:</strong> Αν δύο στοιχεία έχουν το ίδιο key, μπορεί να προκληθούν απρόβλεπτα προβλήματα.</li>
+                    <li><strong>Χρήση του index ως key όταν η λίστα αλλάζει:</strong> Αν τα στοιχεία της λίστας μπορεί να αλλάξουν σειρά, να προστεθούν ή να αφαιρεθούν, τότε ο index δεν είναι αξιόπιστο key.</li>
+                </ol>
+                
+                <p><strong>Πότε να Χρησιμοποιείτε το Index ως Key:</strong></p>
+                <ul>
+                    <li>Μόνο όταν η λίστα είναι στατική (δεν αλλάζει)</li>
+                    <li>Όταν δεν έχετε μοναδικά IDs</li>
+                    <li>Όταν η λίστα δεν θα αναδιαταχθεί ή φιλτραριστεί</li>
+                </ul>
+                
+                <p><strong>Βελτιώσεις Απόδοσης:</strong></p>
+                <ul>
+                    <li>Αποφύγετε την επανα-δημιουργία συναρτήσεων σε κάθε απόδοση για στοιχεία λίστας</li>
+                    <li>Για πολύ μεγάλες λίστες, σκεφτείτε τεχνικές "εικονικής λίστας" (virtual listing) που αποδίδουν μόνο τα ορατά στοιχεία</li>
+                </ul>
+            </div>
+            
+            <div class="callout">
+                <p><strong>Σύνδεση με Προηγούμενες Ενότητες:</strong></p>
+                <ul>
+                    <li>Οι λίστες συχνά συνδυάζονται με την υπό συνθήκη απόδοση (Ενότητα 7)</li>
+                    <li>Τα στοιχεία λίστας συχνά έχουν το δικό τους state (Ενότητα 6)</li>
+                    <li>Μπορείτε να περάσετε διαφορετικά props σε κάθε στοιχείο λίστας (Ενότητα 5)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="forms-and-controlled-components">
+            <h2>9. Φόρμες και Controlled Components</h2>
+            
+            <p>Οι φόρμες είναι ένα βασικό μέρος των διαδραστικών εφαρμογών. Η React παρέχει έναν τρόπο για τη διαχείριση των δεδομένων εισόδου χρήστη μέσω των controlled components.</p>
+            
+            <div class="callout">
+                <p><strong>Τι είναι ένα Controlled Component;</strong> Είναι ένα στοιχείο φόρμας HTML που η τιμή του ελέγχεται από το state της React. Με αυτόν τον τρόπο, το React state γίνεται η "μοναδική πηγή αλήθειας" για την τιμή του στοιχείου φόρμας.</p>
+            </div>
+            
+            <h3>Βασική Φόρμα με Controlled Components</h3>
+            <pre><code>import React, { useState } from 'react';
+
+function SimpleForm() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Υποβολή:', { name, email });
+    // Εδώ θα μπορούσατε να στείλετε τα δεδομένα σε ένα API
+    
+    // Καθαρισμός της φόρμας
+    setName('');
+    setEmail('');
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="name"&gt;Όνομα:&lt;/label&gt;
+        &lt;input
+          type="text"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="email"&gt;Email:&lt;/label&gt;
+        &lt;input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;button type="submit"&gt;Υποβολή&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Χρησιμοποιούμε δύο state hooks για να παρακολουθούμε τις τιμές των πεδίων της φόρμας:
+                        <ul>
+                            <li><code>name</code>: Για το πεδίο ονόματος</li>
+                            <li><code>email</code>: Για το πεδίο email</li>
+                        </ul>
+                    </li>
+                    <li>Για κάθε πεδίο εισαγωγής (input), ορίζουμε:
+                        <ul>
+                            <li><code>value={state}</code>: Συνδέει την τιμή του πεδίου με τη μεταβλητή state</li>
+                            <li><code>onChange={(e) => setState(e.target.value)}</code>: Ενημερώνει το state όταν ο χρήστης πληκτρολογεί</li>
+                        </ul>
+                    </li>
+                    <li>Η συνάρτηση <code>handleSubmit</code>:
+                        <ul>
+                            <li>Καλείται όταν υποβάλλεται η φόρμα</li>
+                            <li>Χρησιμοποιεί <code>e.preventDefault()</code> για να αποτρέψει την προεπιλεγμένη συμπεριφορά του browser (ανανέωση σελίδας)</li>
+                            <li>Συλλέγει τα δεδομένα από το state</li>
+                            <li>Καθαρίζει τη φόρμα επαναφέροντας τα state σε κενά strings</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <h3>Διαχείριση Πολλαπλών Πεδίων με Ένα State</h3>
+            <p>Για φόρμες με πολλά πεδία, μπορείτε να χρησιμοποιήσετε ένα αντικείμενο state αντί για ξεχωριστές μεταβλητές:</p>
+            <pre><code>import React, { useState } from 'react';
+
+function RegistrationForm() {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    agreeToTerms: false
+  });
+  
+  const [errors, setErrors] = useState({});
+  
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value
+    });
+  };
+  
+  const validate = () => {
+    const newErrors = {};
+    
+    if (!formData.username) newErrors.username = 'Το όνομα χρήστη είναι υποχρεωτικό';
+    if (!formData.email) newErrors.email = 'Το email είναι υποχρεωτικό';
+    if (!formData.email.includes('@')) newErrors.email = 'Το email δεν είναι έγκυρο';
+    if (formData.password.length < 6) newErrors.password = 'Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες';
+    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Οι κωδικοί δεν ταιριάζουν';
+    if (!formData.agreeToTerms) newErrors.agreeToTerms = 'Πρέπει να αποδεχτείτε τους όρους';
+    
+    return newErrors;
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    const formErrors = validate();
+    
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+    
+    // Καθαρισμός σφαλμάτων
+    setErrors({});
+    
+    console.log('Φόρμα έγκυρη, δεδομένα:', formData);
+    // Εδώ θα υποβάλλατε τα δεδομένα στο server
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit} className="registration-form"&gt;
+      &lt;div className="form-group"&gt;
+        &lt;label htmlFor="username"&gt;Όνομα Χρήστη:&lt;/label&gt;
+        &lt;input
+          type="text"
+          id="username"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          className={errors.username ? 'error' : ''}
+        /&gt;
+        {errors.username && &lt;span className="error-message"&gt;{errors.username}&lt;/span&gt;}
+      &lt;/div&gt;
+      
+      &lt;div className="form-group"&gt;
+        &lt;label htmlFor="email"&gt;Email:&lt;/label&gt;
+        &lt;input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          className={errors.email ? 'error' : ''}
+        /&gt;
+        {errors.email && &lt;span className="error-message"&gt;{errors.email}&lt;/span&gt;}
+      &lt;/div&gt;
+      
+      &lt;div className="form-group"&gt;
+        &lt;label htmlFor="password"&gt;Κωδικός:&lt;/label&gt;
+        &lt;input
+          type="password"
+          id="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          className={errors.password ? 'error' : ''}
+        /&gt;
+        {errors.password && &lt;span className="error-message"&gt;{errors.password}&lt;/span&gt;}
+      &lt;/div&gt;
+      
+      &lt;div className="form-group"&gt;
+        &lt;label htmlFor="confirmPassword"&gt;Επιβεβαίωση Κωδικού:&lt;/label&gt;
+        &lt;input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          className={errors.confirmPassword ? 'error' : ''}
+        /&gt;
+        {errors.confirmPassword && &lt;span className="error-message"&gt;{errors.confirmPassword}&lt;/span&gt;}
+      &lt;/div&gt;
+      
+      &lt;div className="form-group checkbox"&gt;
+        &lt;input
+          type="checkbox"
+          id="agreeToTerms"
+          name="agreeToTerms"
+          checked={formData.agreeToTerms}
+          onChange={handleChange}
+          className={errors.agreeToTerms ? 'error' : ''}
+        /&gt;
+        &lt;label htmlFor="agreeToTerms"&gt;Αποδέχομαι τους όρους και τις προϋποθέσεις&lt;/label&gt;
+        {errors.agreeToTerms && &lt;span className="error-message"&gt;{errors.agreeToTerms}&lt;/span&gt;}
+      &lt;/div&gt;
+      
+      &lt;button type="submit"&gt;Εγγραφή&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Χρησιμοποιούμε ένα αντικείμενο <code>formData</code> για να αποθηκεύσουμε όλες τις τιμές της φόρμας.</li>
+                    <li>Ένα ξεχωριστό αντικείμενο <code>errors</code> αποθηκεύει τυχόν σφάλματα επικύρωσης.</li>
+                    <li>Η συνάρτηση <code>handleChange</code> είναι η βασική βελτίωση:
+                        <ul>
+                            <li>Αποσυνθέτει το όνομα, την τιμή, τον τύπο και την κατάσταση checked από το event target</li>
+                            <li>Ενημερώνει μόνο το συγκεκριμένο πεδίο του <code>formData</code> χρησιμοποιώντας computed property syntax <code>[name]: value</code></li>
+                            <li>Χειρίζεται διαφορετικά τα checkboxes (χρησιμοποιεί το <code>checked</code> αντί για <code>value</code>)</li>
+                        </ul>
+                    </li>
+                    <li>Η συνάρτηση <code>validate</code> ελέγχει όλα τα πεδία και επιστρέφει ένα αντικείμενο με τυχόν σφάλματα.</li>
+                    <li>Στη JSX, χρησιμοποιούμε υπό συνθήκη απόδοση για να εμφανίσουμε μηνύματα σφαλμάτων.</li>
+                    <li>Προσθέτουμε κλάσεις CSS με βάση την ύπαρξη σφαλμάτων για να δώσουμε οπτική ανατροφοδότηση.</li>
+                </ul>
+            </div>
+            
+            <h3>Χειρισμός Διαφορετικών Τύπων Στοιχείων Φόρμας</h3>
+            <pre><code>import React, { useState } from 'react';
+
+function SurveyForm() {
+  const [formData, setFormData] = useState({
+    name: '',
+    age: '',
+    gender: '',
+    interests: [],
+    feedback: '',
+    rating: 3,
+    notifyUpdates: false
+  });
+  
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    
+    // Ειδικός χειρισμός για checkboxes πολλαπλής επιλογής (π.χ. interests)
+    if (type === 'checkbox' && name.startsWith('interest-')) {
+      const interest = name.replace('interest-', '');
+      const updatedInterests = [...formData.interests];
+      
+      if (checked) {
+        // Προσθήκη στα ενδιαφέροντα αν δεν υπάρχει ήδη
+        if (!updatedInterests.includes(interest)) {
+          updatedInterests.push(interest);
+        }
+      } else {
+        // Αφαίρεση από τα ενδιαφέροντα
+        const index = updatedInterests.indexOf(interest);
+        if (index !== -1) {
+          updatedInterests.splice(index, 1);
+        }
+      }
+      
+      setFormData({
+        ...formData,
+        interests: updatedInterests
+      });
+    } else if (type === 'checkbox') {
+      // Για απλά checkboxes (π.χ. notifyUpdates)
+      setFormData({
+        ...formData,
+        [name]: checked
+      });
+    } else if (type === 'number') {
+      // Μετατροπή string σε αριθμό
+      setFormData({
+        ...formData,
+        [name]: value === '' ? '' : Number(value)
+      });
+    } else {
+      // Για text, textarea, select, radio κλπ.
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Δεδομένα έρευνας:', formData);
+    // Επεξεργασία δεδομένων...
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="name"&gt;Όνομα:&lt;/label&gt;
+        &lt;input
+          type="text"
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="age"&gt;Ηλικία:&lt;/label&gt;
+        &lt;input
+          type="number"
+          id="age"
+          name="age"
+          value={formData.age}
+          onChange={handleChange}
+          min="0"
+          max="120"
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label&gt;Φύλο:&lt;/label&gt;
+        &lt;div&gt;
+          &lt;label&gt;
+            &lt;input
+              type="radio"
+              name="gender"
+              value="male"
+              checked={formData.gender === 'male'}
+              onChange={handleChange}
+            /&gt;
+            Άνδρας
+          &lt;/label&gt;
+          
+          &lt;label&gt;
+            &lt;input
+              type="radio"
+              name="gender"
+              value="female"
+              checked={formData.gender === 'female'}
+              onChange={handleChange}
+            /&gt;
+            Γυναίκα
+          &lt;/label&gt;
+          
+          &lt;label&gt;
+            &lt;input
+              type="radio"
+              name="gender"
+              value="other"
+              checked={formData.gender === 'other'}
+              onChange={handleChange}
+            /&gt;
+            Άλλο
+          &lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label&gt;Ενδιαφέροντα:&lt;/label&gt;
+        &lt;div&gt;
+          &lt;label&gt;
+            &lt;input
+              type="checkbox"
+              name="interest-sports"
+              checked={formData.interests.includes('sports')}
+              onChange={handleChange}
+            /&gt;
+            Αθλητισμός
+          &lt;/label&gt;
+          
+          &lt;label&gt;
+            &lt;input
+              type="checkbox"
+              name="interest-music"
+              checked={formData.interests.includes('music')}
+              onChange={handleChange}
+            /&gt;
+            Μουσική
+          &lt;/label&gt;
+          
+          &lt;label&gt;
+            &lt;input
+              type="checkbox"
+              name="interest-reading"
+              checked={formData.interests.includes('reading')}
+              onChange={handleChange}
+            /&gt;
+            Ανάγνωση
+          &lt;/label&gt;
+          
+          &lt;label&gt;
+            &lt;input
+              type="checkbox"
+              name="interest-technology"
+              checked={formData.interests.includes('technology')}
+              onChange={handleChange}
+            /&gt;
+            Τεχνολογία
+          &lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="feedback"&gt;Σχόλια:&lt;/label&gt;
+        &lt;textarea
+          id="feedback"
+          name="feedback"
+          value={formData.feedback}
+          onChange={handleChange}
+          rows="4"
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="rating"&gt;Αξιολόγηση (1-5): {formData.rating}&lt;/label&gt;
+        &lt;input
+          type="range"
+          id="rating"
+          name="rating"
+          min="1"
+          max="5"
+          value={formData.rating}
+          onChange={handleChange}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label&gt;
+          &lt;input
+            type="checkbox"
+            name="notifyUpdates"
+            checked={formData.notifyUpdates}
+            onChange={handleChange}
+          /&gt;
+          Θέλω να λαμβάνω ενημερώσεις
+        &lt;/label&gt;
+      &lt;/div&gt;
+      
+      &lt;button type="submit"&gt;Υποβολή&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+<div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Αυτό το παράδειγμα δείχνει πώς να χειριστείτε διάφορους τύπους στοιχείων φόρμας:
+                        <ul>
+                            <li>Πεδία κειμένου (text)</li>
+                            <li>Αριθμητικά πεδία (number)</li>
+                            <li>Κουμπιά επιλογής (radio buttons)</li>
+                            <li>Κουτιά επιλογής (checkboxes) - απλά και πολλαπλά</li>
+                            <li>Περιοχή κειμένου (textarea)</li>
+                            <li>Ρυθμιστές (sliders)</li>
+                        </ul>
+                    </li>
+                    <li>Η συνάρτηση <code>handleChange</code> είναι πιο περίπλοκη για να χειριστεί τους διαφορετικούς τύπους στοιχείων:
+                        <ul>
+                            <li>Για τα checkboxes πολλαπλής επιλογής, διατηρούμε έναν πίνακα με τις επιλεγμένες τιμές</li>
+                            <li>Για τα απλά checkboxes, χρησιμοποιούμε την ιδιότητα <code>checked</code></li>
+                            <li>Για τα αριθμητικά πεδία, μετατρέπουμε την τιμή string σε number</li>
+                            <li>Για όλα τα υπόλοιπα (text, textarea, select, radio), χρησιμοποιούμε την ιδιότητα <code>value</code></li>
+                        </ul>
+                    </li>
+                    <li>Χρησιμοποιούμε κατάλληλες ιδιότητες HTML για κάθε τύπο στοιχείου:
+                        <ul>
+                            <li><code>min</code> και <code>max</code> για αριθμητικά πεδία και sliders</li>
+                            <li><code>rows</code> για περιοχές κειμένου</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="callout warning">
+                <p><strong>Διαφορές μεταξύ Controlled και Uncontrolled Components:</strong></p>
+                <ul>
+                    <li><strong>Controlled Components:</strong> Η React ελέγχει την τιμή του στοιχείου φόρμας. Κάθε αλλαγή ενημερώνει το state, και κάθε απόδοση χρησιμοποιεί το state ως την τιμή.</li>
+                    <li><strong>Uncontrolled Components:</strong> Το DOM διατηρεί τη δική του κατάσταση. Αντί να ενημερώνετε το state σε κάθε keystroke, μπορείτε να χρησιμοποιήσετε refs για να πάρετε τις τιμές της φόρμας όταν χρειάζεται (συνήθως κατά την υποβολή).</li>
+                </ul>
+                <p>Γενικά, τα controlled components παρέχουν περισσότερο έλεγχο και είναι προτιμότερα στις περισσότερες περιπτώσεις, αλλά μπορεί να είναι πιο verbose. Τα uncontrolled components μπορεί να είναι πιο απλά σε ορισμένες περιπτώσεις.</p>
+            </div>
+            
+            <h3>Uncontrolled Components με Refs</h3>
+            <pre><code>import React, { useRef } from 'react';
+
+function UncontrolledForm() {
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    const formData = {
+      name: nameRef.current.value,
+      email: emailRef.current.value
+    };
+    
+    console.log('Δεδομένα φόρμας:', formData);
+    // Επεξεργασία δεδομένων...
+    
+    // Προαιρετικά: Καθαρισμός της φόρμας
+    e.target.reset();
+  };
+  
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;div&gt;
+        &lt;label htmlFor="name"&gt;Όνομα:&lt;/label&gt;
+        &lt;input
+          type="text"
+          id="name"
+          ref={nameRef}
+          defaultValue=""
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div&gt;
+        &lt;label htmlFor="email"&gt;Email:&lt;/label&gt;
+        &lt;input
+          type="email"
+          id="email"
+          ref={emailRef}
+          defaultValue=""
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;button type="submit"&gt;Υποβολή&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Χρησιμοποιούμε το hook <code>useRef</code> για να δημιουργήσουμε "αναφορές" (refs) στα στοιχεία της φόρμας.</li>
+                    <li>Αντί να χρησιμοποιούμε <code>value</code> και <code>onChange</code>, συνδέουμε τα refs με τα στοιχεία της φόρμας και χρησιμοποιούμε <code>defaultValue</code> για αρχικές τιμές.</li>
+                    <li>Στη συνάρτηση handleSubmit</code>, προσπελαύνουμε τις τιμές των πεδίων μέσω των refs μόνο όταν υποβάλλεται η φόρμα.</li>
+                    <li>Το πλεονέκτημα αυτής της προσέγγισης είναι ότι είναι πιο απλή για απλές φόρμες και δεν προκαλεί επαναποδόσεις σε κάθε keystroke.</li>
+                    <li>Το μειονέκτημα είναι ότι έχετε λιγότερο έλεγχο και είναι πιο δύσκολο να εφαρμόσετε επικύρωση σε πραγματικό χρόνο.</li>
+                </ul>
+            </div>
+            
+            <div class="callout success">
+                <p><strong>Καλές πρακτικές για φόρμες React:</strong></p>
+                <ol>
+                    <li>Χρησιμοποιείτε controlled components όταν χρειάζεστε επικύρωση σε πραγματικό χρόνο ή δυναμική αλλαγή της φόρμας με βάση τις εισόδους του χρήστη.</li>
+                    <li>Σκεφτείτε τη χρήση βιβλιοθηκών όπως Formik ή React Hook Form για πολύπλοκες φόρμες για να μειώσετε τον επαναλαμβανόμενο κώδικα.</li>
+                    <li>Μην ξεχνάτε την προσβασιμότητα:
+                        <ul>
+                            <li>Συνδέετε πάντα τις ετικέτες (labels) με τα αντίστοιχα πεδία</li>
+                            <li>Παρέχετε κατάλληλη ανατροφοδότηση σφαλμάτων</li>
+                            <li>Διασφαλίζετε ότι η φόρμα σας μπορεί να χρησιμοποιηθεί μόνο με πληκτρολόγιο</li>
+                        </ul>
+                    </li>
+                    <li>Οργανώνετε τη λογική της φόρμας σε προσαρμοσμένα hooks για επαναχρησιμοποίηση.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="component-communication">
+            <h2>10. Επικοινωνία μεταξύ Components</h2>
+            
+            <p>Η επικοινωνία μεταξύ components είναι θεμελιώδης για τη δημιουργία διαδραστικών εφαρμογών React. Υπάρχουν διάφοροι τρόποι για να μεταφέρετε δεδομένα και να διαχειριστείτε την κατάσταση μεταξύ components.</p>
+            
+            <h3>1. Props: Από Γονικό σε Παιδικό Component</h3>
+            <p>Η πιο απλή μορφή επικοινωνίας είναι η μεταβίβαση δεδομένων από ένα γονικό σε ένα παιδικό component μέσω props:</p>
+            <pre><code>// Γονικό Component
+function ParentComponent() {
+  const [message, setMessage] = useState('Γεια σου, κόσμε!');
+  
+  return &lt;ChildComponent message={message} /&gt;;
+}
+
+// Παιδικό Component
+function ChildComponent({ message }) {
+  return &lt;div&gt;Μήνυμα από το γονικό: {message}&lt;/div&gt;;
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Το <code>ParentComponent</code> έχει μια κατάσταση (state) που περιέχει ένα μήνυμα.</li>
+                    <li>Περνάει αυτό το μήνυμα στο <code>ChildComponent</code> μέσω του prop <code>message</code>.</li>
+                    <li>Το παιδικό component λαμβάνει το μήνυμα ως prop και το εμφανίζει.</li>
+                    <li>Αυτή είναι μονοκατευθυντική ροή δεδομένων (από πάνω προς τα κάτω).</li>
+                </ul>
+            </div>
+            
+            <h3>2. Callback Functions: Από Παιδικό σε Γονικό Component</h3>
+            <p>Για να επικοινωνήσετε από ένα παιδικό προς ένα γονικό component, περνάτε callback functions ως props:</p>
+            <pre><code>// Γονικό Component
+function ParentComponent() {
+  const [count, setCount] = useState(0);
+  
+  // Callback function που θα περάσουμε στο παιδικό
+  const handleIncrement = () => {
+    setCount(count + 1);
+  };
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Αριθμός κλικ: {count}&lt;/p&gt;
+      &lt;ChildComponent onIncrement={handleIncrement} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Παιδικό Component
+function ChildComponent({ onIncrement }) {
+  return (
+    &lt;button onClick={onIncrement}&gt;
+      Κάντε κλικ για αύξηση
+    &lt;/button&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Το <code>ParentComponent</code> καθορίζει μια κατάσταση <code>count</code> και μια συνάρτηση <code>handleIncrement</code> που ενημερώνει αυτή την κατάσταση.</li>
+                    <li>Περνάει τη συνάρτηση <code>handleIncrement</code> στο <code>ChildComponent</code> ως prop με όνομα <code>onIncrement</code>.</li>
+                    <li>Το παιδικό component έχει ένα κουμπί που, όταν κάνετε κλικ, καλεί τη συνάρτηση <code>onIncrement</code>.</li>
+                    <li>Αυτό επιτρέπει στο παιδικό component να επικοινωνήσει με το γονικό, ενημερώνοντάς το πότε συμβαίνει ένα γεγονός (στην περίπτωση αυτή, ένα κλικ).</li>
+                </ul>
+            </div>
+            
+            <h3>3. Context API: Για Μοίρασμα Δεδομένων σε Πολλά Components</h3>
+            <p>Το Context API της React επιτρέπει το μοίρασμα δεδομένων μεταξύ πολλών components χωρίς να χρειάζεται να περάσετε props σε κάθε επίπεδο:</p>
+            <pre><code>// 1. Δημιουργία ενός Context
+import React, { createContext, useState, useContext } from 'react';
+
+// Δημιουργούμε το Context
+const ThemeContext = createContext();
+
+// 2. Δημιουργία ενός Provider Component
+function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState('light');
+  
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+  
+  // Η τιμή που θα είναι διαθέσιμη σε όλα τα components μέσα στον provider
+  const value = {
+    theme,
+    toggleTheme
+  };
+  
+  return (
+    &lt;ThemeContext.Provider value={value}&gt;
+      {children}
+    &lt;/ThemeContext.Provider&gt;
+  );
+}
+
+// 3. Χρήση του Context σε ένα Component
+function ThemedButton() {
+  // Πρόσβαση στα δεδομένα του context
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  
+  return (
+    &lt;button
+      style={{
+        backgroundColor: theme === 'light' ? '#fff' : '#333',
+        color: theme === 'light' ? '#333' : '#fff',
+        padding: '10px 15px',
+        border: `1px solid ${theme === 'light' ? '#333' : '#fff'}`
+      }}
+      onClick={toggleTheme}
+    &gt;
+      Αλλαγή σε {theme === 'light' ? 'σκούρο' : 'φωτεινό'} θέμα
+    &lt;/button&gt;
+  );
+}
+
+// 4. Χρήση του Provider σε ένα ανώτερο επίπεδο Component
+function App() {
+  return (
+    &lt;ThemeProvider&gt;
+      &lt;div style={{ padding: '20px' }}&gt;
+        &lt;h1&gt;Παράδειγμα Context API&lt;/h1&gt;
+        &lt;p&gt;Πατήστε το κουμπί για αλλαγή θέματος.&lt;/p&gt;
+        &lt;ThemedButton /&gt;
+        
+        {/* Το ThemedContent μπορεί επίσης να έχει πρόσβαση στο ίδιο context */}
+        &lt;ThemedContent /&gt;
+      &lt;/div&gt;
+    &lt;/ThemeProvider&gt;
+  );
+}
+
+// Ένα άλλο component που χρησιμοποιεί το ίδιο context
+function ThemedContent() {
+  const { theme } = useContext(ThemeContext);
+  
+  return (
+    &lt;div
+      style={{
+        backgroundColor: theme === 'light' ? '#f8f8f8' : '#222',
+        color: theme === 'light' ? '#333' : '#fff',
+        padding: '20px',
+        marginTop: '20px',
+        borderRadius: '5px'
+      }}
+    &gt;
+      &lt;h2&gt;Περιεχόμενο με {theme === 'light' ? 'φωτεινό' : 'σκούρο'} θέμα&lt;/h2&gt;
+      &lt;p&gt;Αυτό το περιεχόμενο αλλάζει βάσει του θέματος που επιλέγεται με το κουμπί.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Δημιουργούμε ένα context με την <code>createContext()</code>.</li>
+                    <li>Δημιουργούμε ένα provider component (<code>ThemeProvider</code>) που:
+                        <ul>
+                            <li>Διατηρεί τη δική του κατάσταση <code>theme</code> και τη συνάρτηση <code>toggleTheme</code></li>
+                            <li>Παρέχει αυτές τις τιμές μέσω του <code>ThemeContext.Provider</code></li>
+                            <li>Αποδίδει τα παιδικά components (<code>{children}</code>) ώστε να μπορούν να έχουν πρόσβαση στο context</li>
+                        </ul>
+                    </li>
+                    <li>Δημιουργούμε components (<code>ThemedButton</code> και <code>ThemedContent</code>) που:
+                        <ul>
+                            <li>Χρησιμοποιούν το hook <code>useContext()</code> για να έχουν πρόσβαση στις τιμές του context</li>
+                            <li>Προσαρμόζουν την εμφάνισή τους με βάση το τρέχον θέμα</li>
+                        </ul>
+                    </li>
+                    <li>Στο <code>App</code> component, τυλίγουμε όλα τα components που χρειάζονται πρόσβαση στο context με το <code>ThemeProvider</code>.</li>
+                    <li>Με αυτόν τον τρόπο, πολλά components μπορούν να έχουν πρόσβαση και να επηρεάζουν την ίδια κατάσταση χωρίς "prop drilling" (δηλαδή, χωρίς να περνούν props μέσω πολλών επιπέδων components).</li>
+                </ul>
+            </div>
+            
+            <div class="callout">
+                <p><strong>Πότε να χρησιμοποιείτε κάθε μέθοδο επικοινωνίας:</strong></p>
+                <ul>
+                    <li><strong>Props:</strong> Για απλή επικοινωνία γονικού-παιδικού, ειδικά όταν τα δεδομένα ρέουν από πάνω προς τα κάτω.</li>
+                    <li><strong>Callback Functions:</strong> Όταν τα παιδικά components πρέπει να επικοινωνήσουν με τα γονικά τους.</li>
+                    <li><strong>Context API:</strong> Για δεδομένα που πρέπει να είναι διαθέσιμα σε πολλά components σε διαφορετικά επίπεδα, όπως:
+                        <ul>
+                            <li>Θέματα και προτιμήσεις χρήστη</li>
+                            <li>Κατάσταση ταυτοποίησης</li>
+                            <li>Διεθνοποίηση (i18n)</li>
+                            <li>Προτιμήσεις διάταξης ή UI</li>
+                        </ul>
+                    </li>
+                    <li><strong>State Management Libraries (Redux, Zustand, κ.λπ.):</strong> Για πιο πολύπλοκη διαχείριση κατάστασης σε μεγάλες εφαρμογές.</li>
+                </ul>
+            </div>
+            
+            <h3>4. Custom Hooks για Κοινόχρηστη Λογική Κατάστασης</h3>
+            <p>Τα custom hooks επιτρέπουν τη δημιουργία επαναχρησιμοποιήσιμης λογικής που μπορεί να μοιραστεί σε διαφορετικά components:</p>
+            <pre><code>// Custom hook για κοινόχρηστη λογική
+import { useState, useEffect } from 'react';
+
+function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
+  
+  useEffect(() => {
+    // Συνάρτηση χειρισμού αλλαγής μεγέθους
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+    
+    // Προσθήκη event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Καθαρισμός του event listener όταν το component απομακρύνεται
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []); // Κενός πίνακας εξαρτήσεων για εκτέλεση μόνο στο mount/unmount
+  
+  return windowSize;
+}
+
+// Χρήση του custom hook σε διαφορετικά components
+function ResponsiveComponent1() {
+  const { width, height } = useWindowSize();
+  
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Component 1&lt;/h2&gt;
+      &lt;p&gt;Πλάτος παραθύρου: {width}px, Ύψος παραθύρου: {height}px&lt;/p&gt;
+      {width < 768 ? (
+        &lt;p&gt;Προβολή για κινητά&lt;/p&gt;
+      ) : (
+        &lt;p&gt;Προβολή για desktop&lt;/p&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+function ResponsiveComponent2() {
+  const { width } = useWindowSize();
+  
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Component 2&lt;/h2&gt;
+      &lt;div style={{ 
+        display: 'flex', 
+        flexDirection: width < 768 ? 'column' : 'row' 
+      }}&gt;
+        &lt;div style={{ flex: 1, padding: '10px' }}&gt;Panel 1&lt;/div&gt;
+        &lt;div style={{ flex: 1, padding: '10px' }}&gt;Panel 2&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+            
+            <div class="code-explanation">
+                <h4>Επεξήγηση του παραπάνω κώδικα:</h4>
+                <ul>
+                    <li>Δημιουργούμε ένα custom hook <code>useWindowSize</code> που:
+                        <ul>
+                            <li>Διατηρεί μια κατάσταση με το τρέχον μέγεθος παραθύρου</li>
+                            <li>Εγκαθιστά έναν event listener για να ενημερώνει την κατάσταση όταν αλλάζει το μέγεθος του παραθύρου</li>
+                            <li>Επιστρέφει το τρέχον μέγεθος παραθύρου</li>
+                        </ul>
+                    </li>
+                    <li>Το hook αυτό στη συνέχεια χρησιμοποιείται σε δύο διαφορετικά components:
+                        <ul>
+                            <li><code>ResponsiveComponent1</code> που προβάλλει διαφορετικό περιεχόμενο με βάση το πλάτος</li>
+                            <li><code>ResponsiveComponent2</code> που αλλάζει τη διάταξη (από οριζόντια σε κάθετη) με βάση το πλάτος</li>
+                        </ul>
+                    </li>
+                    <li>Αντί να επαναλαμβάνουμε τον ίδιο κώδικα για την παρακολούθηση του μεγέθους παραθύρου σε κάθε component, εξάγουμε αυτή τη λογική σε ένα επαναχρησιμοποιήσιμο hook.</li>
+                </ul>
+            </div>
+
+            <div class="callout success">
+                <p><strong>Καλές πρακτικές για επικοινωνία components:</strong></p>
+                <ol>
+                    <li>Διατηρήστε την κατάσταση όσο το δυνατόν πιο κοντά στο σημείο που χρησιμοποιείται.</li>
+                    <li>Ανεβάστε την κατάσταση (lifting state up) στον πλησιέστερο κοινό πρόγονο όταν πολλαπλά components πρέπει να έχουν πρόσβαση ή να επηρεάζουν την ίδια κατάσταση.</li>
+                    <li>Χρησιμοποιήστε το Context API για δεδομένα που χρειάζονται σε πολλά components για να αποφύγετε το "prop drilling".</li>
+                    <li>Σκεφτείτε τη χρήση βιβλιοθηκών διαχείρισης κατάστασης (Redux, Zustand, Recoil, Jotai) για πιο πολύπλοκες εφαρμογές.</li>
+                    <li>Εξάγετε κοινή λογική σε custom hooks για επαναχρησιμοποίηση.</li>
+                    <li>Διατηρήστε τη ροή δεδομένων προβλέψιμη και κατανοητή.</li>
+                </ol>
+            </div>
+        </section>
+    </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-jsx.min.js"></script>
+
+<button id="back-to-top" title="Back to top">↑</button>
+<script src="course-interactions.js"></script>
+
+<script>
+    const backToTopButton = document.getElementById('back-to-top');
+  
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      backToTopButton.style.display = 'block';
+    } else {
+      backToTopButton.style.display = 'none';
+    }
+  });
+  
+  backToTopButton.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+</script>
+</body>
+</html>
