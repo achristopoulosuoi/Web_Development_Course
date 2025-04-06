@@ -1,0 +1,2253 @@
+<!DOCTYPE html>
+<html lang="el">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PHP III: Προχωρημένα Θέματα</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="course-interactions.js" defer></script>
+        <script>
+            window.isIndexPage = false;
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <a href="index.html" class="back-to-index">← Επιστροφή στο Ευρετήριο</a>
+    
+            <h1>PHP III: Προχωρημένα Θέματα</h1>
+            
+            <section id="sessions-cookies">
+                <h2>1. Sessions & Cookies</h2>
+                
+                <p>Στις διαδικτυακές εφαρμογές, το HTTP είναι ένα πρωτόκολλο χωρίς κατάσταση (stateless), που σημαίνει ότι κάθε αίτημα που στέλνει ο πελάτης (browser) στον διακομιστή θεωρείται ανεξάρτητο από τα προηγούμενα. Για να διατηρήσουμε πληροφορίες μεταξύ των διαφορετικών αιτημάτων ενός χρήστη, χρησιμοποιούμε τα cookies και τις συνεδρίες (sessions).</p>
+                            
+            <h3>Cookies</h3>
+            <p>Τα cookies είναι μικρά αρχεία κειμένου που αποθηκεύονται στον υπολογιστή του χρήστη από τον περιηγητή. Επιτρέπουν στις ιστοσελίδες να αποθηκεύουν πληροφορίες για τον χρήστη, όπως προτιμήσεις, στοιχεία σύνδεσης, περιεχόμενα καλαθιού αγορών κ.λπ.</p>
+            
+            <h4>Δημιουργία Cookies με την PHP</h4>
+            <p>Χρησιμοποιούμε τη συνάρτηση <code>setcookie()</code> για να δημιουργήσουμε ένα cookie:</p>
+            
+            <pre><code>// Δημιουργία ενός απλού cookie
+setcookie("username", "johndoe", time() + 3600); // διάρκεια ζωής: 1 ώρα
+
+// Δημιουργία cookie με περισσότερες παραμέτρους
+setcookie(
+    "user_preferences",     // όνομα
+    "theme=dark",           // τιμή
+    time() + 86400 * 30,    // διάρκεια ζωής: 30 ημέρες
+    "/",                    // διαδρομή
+    "example.com",          // domain
+    true,                   // secure (μόνο https)
+    true                    // httponly (προστασία από JavaScript)
+);</code></pre>
+            
+            <div class="callout">
+                <p><strong>Σημείωση:</strong> Η συνάρτηση <code>setcookie()</code> πρέπει να καλείται πριν από οποιαδήποτε έξοδο προς τον browser (πριν από HTML, κενές γραμμές, κλπ).</p>            
+            <h4>Ανάκτηση Cookies</h4>
+            <p>Τα cookies είναι διαθέσιμα μέσω του πίνακα <code>$_COOKIE</code>:</p>
+            
+            <pre><code>// Έλεγχος αν υπάρχει το cookie
+if (isset($_COOKIE["username"])) {
+    echo "Καλώς ήρθες, " . $_COOKIE["username"];
+} else {
+    echo "Καλώς ήρθες, επισκέπτη";
+}</code></pre>
+            
+            <h4>Τροποποίηση και Διαγραφή Cookies</h4>
+            <p>Για να τροποποιήσετε ένα cookie, απλά ορίστε το ξανά με το ίδιο όνομα και διαφορετική τιμή. Για να διαγράψετε ένα cookie, ορίστε το με χρόνο λήξης στο παρελθόν:</p>
+            
+            <pre><code>// Ενημέρωση cookie
+setcookie("username", "janedoe", time() + 3600);
+
+// Διαγραφή cookie
+setcookie("username", "", time() - 3600);</code></pre>
+            
+            <h3>Συνεδρίες (Sessions)</h3>
+            <p>Οι συνεδρίες επιτρέπουν την αποθήκευση δεδομένων στον διακομιστή αντί στον υπολογιστή του χρήστη. Αυτό προσφέρει μεγαλύτερη ασφάλεια για ευαίσθητες πληροφορίες. Στον browser αποθηκεύεται μόνο ένα μοναδικό αναγνωριστικό συνεδρίας (session ID).</p>
+            
+            <h4>Έναρξη Συνεδρίας</h4>
+            <p>Χρησιμοποιούμε τη συνάρτηση <code>session_start()</code> για να ξεκινήσουμε ή να συνεχίσουμε μια συνεδρία:</p>
+            
+            <pre><code>// Έναρξη συνεδρίας
+session_start();</code></pre>
+            
+            <div class="callout">
+                <p><strong>Σημείωση:</strong> Όπως και το <code>setcookie()</code>, η <code>session_start()</code> πρέπει να καλείται πριν από οποιαδήποτε έξοδο προς τον browser.</p>            
+            <h4>Αποθήκευση Δεδομένων Συνεδρίας</h4>
+            <p>Τα δεδομένα συνεδρίας αποθηκεύονται στον πίνακα <code>$_SESSION</code>:</p>
+            
+            <pre><code>// Έναρξη συνεδρίας
+session_start();
+
+// Αποθήκευση δεδομένων συνεδρίας
+$_SESSION["user_id"] = 123;
+$_SESSION["username"] = "johndoe";
+$_SESSION["is_admin"] = false;</code></pre>
+            
+            <h4>Ανάκτηση Δεδομένων Συνεδρίας</h4>
+            <p>Η ανάκτηση γίνεται επίσης μέσω του πίνακα <code>$_SESSION</code>:</p>
+            
+            <pre><code>// Έναρξη συνεδρίας
+session_start();
+
+// Έλεγχος αν υπάρχουν τα δεδομένα συνεδρίας
+if (isset($_SESSION["username"])) {
+    echo "Συνδεδεμένος ως: " . $_SESSION["username"];
+    
+    // Έλεγχος δικαιωμάτων διαχειριστή
+    if ($_SESSION["is_admin"]) {
+        echo " (Διαχειριστής)";
+    }
+} else {
+    echo "Δεν έχετε συνδεθεί";
+}</code></pre>
+            
+            <h4>Τροποποίηση και Διαγραφή Δεδομένων Συνεδρίας</h4>
+            <p>Μπορείτε να τροποποιήσετε ή να διαγράψετε μεμονωμένες μεταβλητές συνεδρίας:</p>
+            
+            <pre><code>// Τροποποίηση μιας τιμής συνεδρίας
+$_SESSION["username"] = "janedoe";
+
+// Διαγραφή μιας μεταβλητής συνεδρίας
+unset($_SESSION["is_admin"]);</code></pre>
+            
+            <h4>Τερματισμός Συνεδρίας</h4>
+            <p>Για να τερματίσετε εντελώς μια συνεδρία (π.χ. κατά την αποσύνδεση χρήστη):</p>
+            
+            <pre><code>// Έναρξη συνεδρίας
+session_start();
+
+// Διαγραφή όλων των δεδομένων συνεδρίας
+$_SESSION = [];
+
+// Διαγραφή του cookie συνεδρίας
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(
+        session_name(),
+        '',
+        time() - 42000,
+        $params["path"],
+        $params["domain"],
+        $params["secure"],
+        $params["httponly"]
+    );
+}
+
+// Τερματισμός της συνεδρίας
+session_destroy();</code></pre>
+            
+            <h3>Παράδειγμα: Σύστημα Σύνδεσης με Sessions</h3>
+            <p>Ας δούμε ένα απλό παράδειγμα συστήματος σύνδεσης με χρήση συνεδριών:</p>
+            
+            <h4>Φόρμα Σύνδεσης (login.php)</h4>
+            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Σύνδεση Χρήστη&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h2&gt;Σύνδεση&lt;/h2&gt;
+    
+    &lt;?php
+    // Έλεγχος αν έχει σταλεί η φόρμα
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Απλός έλεγχος σύνδεσης (στην πραγματικότητα θα ελέγχαμε τα στοιχεία από τη βάση δεδομένων)
+        $valid_username = "admin";
+        $valid_password = "password123";
+        
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        
+        if ($username === $valid_username && $password === $valid_password) {
+            // Έναρξη συνεδρίας και αποθήκευση δεδομένων
+            session_start();
+            $_SESSION["user_id"] = 1;
+            $_SESSION["username"] = $username;
+            $_SESSION["is_logged_in"] = true;
+            
+            // Ανακατεύθυνση στη σελίδα προφίλ
+            header("Location: profile.php");
+            exit;
+        } else {
+            $error_message = "Λάθος όνομα χρήστη ή κωδικός πρόσβασης";
+        }
+    }
+    ?&gt;
+    
+    &lt;?php if (isset($error_message)): ?&gt;
+        &lt;p style="color: red;"&gt;&lt;?php echo $error_message; ?&gt;&lt;/p&gt;
+    &lt;?php endif; ?&gt;
+    
+    &lt;form method="post" action=""&gt;
+        &lt;div&gt;
+            &lt;label for="username"&gt;Όνομα Χρήστη:&lt;/label&gt;
+            &lt;input type="text" id="username" name="username" required&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            &lt;label for="password"&gt;Κωδικός Πρόσβασης:&lt;/label&gt;
+            &lt;input type="password" id="password" name="password" required&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            &lt;button type="submit"&gt;Σύνδεση&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            
+            <h4>Σελίδα Προφίλ (profile.php)</h4>
+            <pre><code>&lt;?php
+// Έναρξη συνεδρίας
+session_start();
+
+// Έλεγχος αν ο χρήστης είναι συνδεδεμένος
+if (!isset($_SESSION["is_logged_in"]) || $_SESSION["is_logged_in"] !== true) {
+    // Αν όχι, ανακατεύθυνση στη σελίδα σύνδεσης
+    header("Location: login.php");
+    exit;
+}
+?&gt;
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Προφίλ Χρήστη&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h2&gt;Καλώς ήρθες, &lt;?php echo $_SESSION["username"]; ?&gt;!&lt;/h2&gt;
+    &lt;p&gt;Αυτή είναι η σελίδα του προφίλ σας. Είστε συνδεδεμένος.&lt;/p&gt;
+    &lt;a href="logout.php"&gt;Αποσύνδεση&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            
+            <h4>Σελίδα Αποσύνδεσης (logout.php)</h4>
+            <pre><code>&lt;?php
+// Έναρξη συνεδρίας
+session_start();
+
+// Διαγραφή όλων των δεδομένων συνεδρίας
+$_SESSION = [];
+
+// Διαγραφή του cookie συνεδρίας
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(
+        session_name(),
+        '',
+        time() - 42000,
+        $params["path"],
+        $params["domain"],
+        $params["secure"],
+        $params["httponly"]
+    );
+}
+
+// Τερματισμός της συνεδρίας
+session_destroy();
+
+// Ανακατεύθυνση στη σελίδα σύνδεσης
+header("Location: login.php");
+exit;
+?&gt;</code></pre>
+            
+            <h3>Παράδειγμα: Αποθήκευση Προτιμήσεων με Cookies</h3>
+            <p>Ας δούμε ένα απλό παράδειγμα αποθήκευσης προτιμήσεων χρήστη με cookies:</p>
+            
+            <pre><code>&lt;?php
+// Έλεγχος αν έχει σταλεί η φόρμα
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Λήψη της προτίμησης θέματος
+    $theme = $_POST["theme"];
+    
+    // Αποθήκευση της προτίμησης σε cookie (διάρκεια: 30 ημέρες)
+    setcookie("preferred_theme", $theme, time() + 86400 * 30, "/");
+    
+    // Ανανέωση της σελίδας για να φορτωθεί το cookie
+    header("Location: " . $_SERVER["PHP_SELF"]);
+    exit;
+}
+
+// Λήψη της προτίμησης από το cookie (αν υπάρχει)
+$current_theme = isset($_COOKIE["preferred_theme"]) ? $_COOKIE["preferred_theme"] : "light";
+?&gt;
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Προτιμήσεις Θέματος&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            <?php if ($current_theme === "dark"): ?>
+            background-color: #333;
+            color: #fff;
+            <?php else: ?>
+            background-color: #fff;
+            color: #333;
+            <?php endif; ?>
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h2&gt;Επιλογή Θέματος&lt;/h2&gt;
+    
+    &lt;form method="post" action=""&gt;
+        &lt;div&gt;
+            &lt;label&gt;
+                &lt;input type="radio" name="theme" value="light" <?php if ($current_theme === "light") echo "checked"; ?>&gt;
+                Φωτεινό Θέμα
+            &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            &lt;label&gt;
+                &lt;input type="radio" name="theme" value="dark" <?php if ($current_theme === "dark") echo "checked"; ?>&gt;
+                Σκοτεινό Θέμα
+            &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            &lt;button type="submit"&gt;Αποθήκευση Προτίμησης&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+    
+    &lt;div style="margin-top: 20px;"&gt;
+        &lt;h3&gt;Περιεχόμενο Σελίδας&lt;/h3&gt;
+        &lt;p&gt;Αυτή είναι μια δοκιμαστική σελίδα για να επιδείξουμε τη χρήση των cookies για την αποθήκευση προτιμήσεων χρήστη.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            
+            <h3>Διαφορές μεταξύ Cookies και Sessions</h3>
+            <table>
+                <tr>
+                    <th>Χαρακτηριστικό</th>
+                    <th>Cookies</th>
+                    <th>Sessions</th>
+                </tr>
+                <tr>
+                    <td>Τοποθεσία αποθήκευσης</td>
+                    <td>Στον υπολογιστή του χρήστη</td>
+                    <td>Στον διακομιστή</td>
+                </tr>
+                <tr>
+                    <td>Ασφάλεια</td>
+                    <td>Λιγότερο ασφαλές (ο χρήστης μπορεί να τα επεξεργαστεί)</td>
+                    <td>Πιο ασφαλές (ο χρήστης δεν έχει άμεση πρόσβαση)</td>
+                </tr>
+                <tr>
+                    <td>Διάρκεια ζωής</td>
+                    <td>Μπορεί να οριστεί (π.χ. ημέρες, μήνες, έτη)</td>
+                    <td>Συνήθως μέχρι ο χρήστης να κλείσει τον περιηγητή</td>
+                </tr>
+                <tr>
+                    <td>Χωρητικότητα</td>
+                    <td>Περιορισμένη (συνήθως έως 4KB)</td>
+                    <td>Πρακτικά απεριόριστη (εξαρτάται από τον διακομιστή)</td>
+                </tr>
+                <tr>
+                    <td>Χρήση</td>
+                    <td>Μακροπρόθεσμη αποθήκευση, προτιμήσεις χρήστη</td>
+                    <td>Πληροφορίες σύνδεσης, καλάθι αγορών, προσωρινά δεδομένα</td>
+                </tr>
+            </table>
+            
+            <h3>Βέλτιστες Πρακτικές</h3>
+            <ul>
+                <li><strong>Ασφάλεια:</strong> Μην αποθηκεύετε ευαίσθητες πληροφορίες (π.χ. κωδικούς) σε cookies.</li>
+                <li><strong>Χρήση httpOnly:</strong> Ορίστε το flag httpOnly σε cookies για να αποτρέψετε την πρόσβαση μέσω JavaScript.</li>
+                <li><strong>Διαχείριση Συνεδριών:</strong> Καταστρέφετε τις συνεδρίες μετά από απενεργοποίηση και ορίστε timeout συνεδριών για ασφάλεια.</li>
+                <li><strong>Έλεγχοι Ασφαλείας:</strong> Πάντα να επικυρώνετε τα δεδομένα συνεδρίας πριν τα χρησιμοποιήσετε.</li>
+                <li><strong>GDPR & Απόρρητο:</strong> Ενημερώνετε τους χρήστες για τη χρήση cookies και ζητήστε συγκατάθεση όπου απαιτείται.</li>
+            </ul>
+            
+            <h3>Ρυθμίσεις Συνεδριών</h3>
+            <p>Η PHP παρέχει διάφορες λειτουργίες για τη διαμόρφωση των συνεδριών:</p>
+            
+            <pre><code>// Ορισμός του χρόνου ζωής του cookie συνεδρίας (σε δευτερόλεπτα)
+ini_set('session.cookie_lifetime', 3600); // 1 ώρα
+
+// Ορισμός της διαδρομής του cookie συνεδρίας
+ini_set('session.cookie_path', '/');
+
+// Ορισμός του ονόματος του cookie συνεδρίας
+session_name('MY_SESSION');
+
+// Ορισμός του χρόνου λήξης της συνεδρίας λόγω αδράνειας (σε δευτερόλεπτα)
+ini_set('session.gc_maxlifetime', 1800); // 30 λεπτά
+
+// Έναρξη συνεδρίας με τις νέες ρυθμίσεις
+session_start();</code></pre>
+            
+            <div class="callout">
+                <p><strong>Σημείωση:</strong> Οι παραπάνω ρυθμίσεις πρέπει να οριστούν πριν από την κλήση της <code>session_start()</code>.</p>
+            </div>
+            
+            <h3>Συμπέρασμα</h3>
+            <p>Τα cookies και οι συνεδρίες είναι θεμελιώδη εργαλεία για τη διατήρηση της κατάστασης σε διαδικτυακές εφαρμογές. Τα cookies είναι κατάλληλα για μακροπρόθεσμη αποθήκευση προτιμήσεων χρήστη, ενώ οι συνεδρίες είναι ιδανικές για πιο ευαίσθητα δεδομένα και προσωρινή αποθήκευση κατά τη διάρκεια μιας επίσκεψης. Η κατανόηση του τρόπου χρήσης και των διαφορών τους είναι ουσιώδης για την ανάπτυξη αποτελεσματικών και ασφαλών εφαρμογών PHP.</p>
+        </section>
+
+            <section id="oop-php">
+    <h2>2. Αντικειμενοστρεφής Προγραμματισμός</h2>
+    
+    <p>Ο Αντικειμενοστρεφής Προγραμματισμός (Object-Oriented Programming - OOP) είναι ένα πρότυπο προγραμματισμού που επιτρέπει την οργάνωση κώδικα σε αντικείμενα που περιέχουν δεδομένα και λειτουργίες. Η PHP υποστηρίζει πλήρως τον αντικειμενοστρεφή προγραμματισμό από την έκδοση 5 και μετά, παρέχοντας όλα τα βασικά χαρακτηριστικά του OOP.</p>
+    
+    <h3>Βασικές Έννοιες του OOP</h3>
+    
+    <ul>
+        <li><strong>Κλάσεις (Classes):</strong> Πρότυπα ή σχέδια για τη δημιουργία αντικειμένων</li>
+        <li><strong>Αντικείμενα (Objects):</strong> Στιγμιότυπα κλάσεων που περιέχουν δεδομένα και συμπεριφορές</li>
+        <li><strong>Ιδιότητες (Properties):</strong> Μεταβλητές που ανήκουν σε μια κλάση</li>
+        <li><strong>Μέθοδοι (Methods):</strong> Συναρτήσεις που ανήκουν σε μια κλάση</li>
+        <li><strong>Ενθυλάκωση (Encapsulation):</strong> Περιορισμός της άμεσης πρόσβασης στα δεδομένα μιας κλάσης</li>
+        <li><strong>Κληρονομικότητα (Inheritance):</strong> Η δυνατότητα μιας κλάσης να κληρονομεί ιδιότητες και μεθόδους από μια άλλη</li>
+        <li><strong>Πολυμορφισμός (Polymorphism):</strong> Η ικανότητα διαφορετικών κλάσεων να υλοποιούν τις ίδιες μεθόδους με διαφορετικό τρόπο</li>
+    </ul>
+    
+    <h3>Δημιουργία Κλάσεων και Αντικειμένων</h3>
+    
+    <p>Για να ορίσουμε μια κλάση στην PHP, χρησιμοποιούμε τη λέξη-κλειδί <code>class</code>:</p>
+    
+    <pre><code>// Ορισμός μιας απλής κλάσης
+class User {
+    // Ιδιότητες
+    public $username;
+    public $email;
+    
+    // Μέθοδος κατασκευαστή (constructor)
+    public function __construct($username, $email) {
+        $this->username = $username;
+        $this->email = $email;
+    }
+    
+    // Μέθοδος
+    public function displayInfo() {
+        echo "Όνομα χρήστη: " . $this->username . "<br>";
+        echo "Email: " . $this->email . "<br>";
+    }
+}</code></pre>
+    
+    <p>Για να δημιουργήσουμε ένα αντικείμενο από μια κλάση, χρησιμοποιούμε τον τελεστή <code>new</code>:</p>
+    
+    <pre><code>// Δημιουργία αντικειμένου
+$user1 = new User("johndoe", "john@example.com");
+
+// Πρόσβαση σε ιδιότητες
+echo $user1->username; // Εμφανίζει: johndoe
+
+// Κλήση μεθόδου
+$user1->displayInfo();</code></pre>
+    
+    <h3>Τροποποιητές Πρόσβασης (Access Modifiers)</h3>
+    
+    <p>Η PHP παρέχει τρεις τροποποιητές πρόσβασης για τις ιδιότητες και τις μεθόδους μιας κλάσης:</p>
+    
+    <ul>
+        <li><strong>public:</strong> Προσβάσιμες από παντού</li>
+        <li><strong>protected:</strong> Προσβάσιμες μόνο μέσα στην κλάση και σε κλάσεις που την κληρονομούν</li>
+        <li><strong>private:</strong> Προσβάσιμες μόνο μέσα στην κλάση που ορίζονται</li>
+    </ul>
+    
+    <pre><code>class Account {
+    public $accountNumber;    // Προσβάσιμο από παντού
+    protected $balance;       // Προσβάσιμο μόνο από την κλάση και τις υποκλάσεις
+    private $securityCode;    // Προσβάσιμο μόνο από την ίδια την κλάση
+    
+    public function __construct($accountNumber, $balance, $securityCode) {
+        $this->accountNumber = $accountNumber;
+        $this->balance = $balance;
+        $this->securityCode = $securityCode;
+    }
+    
+    public function getBalance() {
+        return $this->balance;
+    }
+    
+    private function validateSecurityCode($code) {
+        return $code === $this->securityCode;
+    }
+    
+    public function withdraw($amount, $code) {
+        if ($this->validateSecurityCode($code)) {
+            if ($amount <= $this->balance) {
+                $this->balance -= $amount;
+                return true;
+            }
+        }
+        return false;
+    }
+}</code></pre>
+    
+    <div class="callout">
+        <p><strong>Σημείωση:</strong> Ο έλεγχος πρόσβασης είναι βασικό στοιχείο της ενθυλάκωσης και βοηθά στην προστασία των δεδομένων από ακούσια τροποποίηση.</p>
+    </div>
+    
+    <h3>Κληρονομικότητα</h3>
+    
+    <p>Η κληρονομικότητα επιτρέπει σε μια κλάση να κληρονομεί ιδιότητες και μεθόδους από μια άλλη κλάση. Χρησιμοποιούμε τη λέξη-κλειδί <code>extends</code>:</p>
+    
+    <pre><code>// Βασική κλάση
+class Person {
+    protected $name;
+    protected $age;
+    
+    public function __construct($name, $age) {
+        $this->name = $name;
+        $this->age = $age;
+    }
+    
+    public function introduce() {
+        echo "Ονομάζομαι {$this->name} και είμαι {$this->age} ετών.";
+    }
+}
+
+// Υποκλάση που κληρονομεί από την Person
+class Student extends Person {
+    private $studentId;
+    
+    public function __construct($name, $age, $studentId) {
+        // Κλήση του κατασκευαστή της γονικής κλάσης
+        parent::__construct($name, $age);
+        $this->studentId = $studentId;
+    }
+    
+    public function introduce() {
+        // Επέκταση της μεθόδου της γονικής κλάσης
+        parent::introduce();
+        echo " Είμαι φοιτητής με αριθμό μητρώου {$this->studentId}.";
+    }
+}
+
+// Δημιουργία αντικειμένων
+$person = new Person("Γιώργος", 35);
+$student = new Student("Μαρία", 20, "CS12345");
+
+// Κλήση μεθόδων
+$person->introduce();  // Εμφανίζει: Ονομάζομαι Γιώργος και είμαι 35 ετών.
+echo "<br>";
+$student->introduce(); // Εμφανίζει: Ονομάζομαι Μαρία και είμαι 20 ετών. Είμαι φοιτητής με αριθμό μητρώου CS12345.</code></pre>
+    
+    <h3>Αφηρημένες Κλάσεις και Μέθοδοι</h3>
+    
+    <p>Οι αφηρημένες κλάσεις (abstract classes) δεν μπορούν να δημιουργήσουν αντικείμενα άμεσα, αλλά χρησιμεύουν ως βάση για άλλες κλάσεις:</p>
+    
+    <pre><code>// Αφηρημένη κλάση
+abstract class Shape {
+    protected $color;
+    
+    public function __construct($color) {
+        $this->color = $color;
+    }
+    
+    // Αφηρημένη μέθοδος (πρέπει να υλοποιηθεί από τις υποκλάσεις)
+    abstract public function calculateArea();
+    
+    public function getColor() {
+        return $this->color;
+    }
+}
+
+// Υποκλάση που υλοποιεί την αφηρημένη κλάση
+class Circle extends Shape {
+    private $radius;
+    
+    public function __construct($color, $radius) {
+        parent::__construct($color);
+        $this->radius = $radius;
+    }
+    
+    // Υλοποίηση της αφηρημένης μεθόδου
+    public function calculateArea() {
+        return pi() * $this->radius * $this->radius;
+    }
+}
+
+// Υποκλάση που υλοποιεί την αφηρημένη κλάση
+class Rectangle extends Shape {
+    private $width;
+    private $height;
+    
+    public function __construct($color, $width, $height) {
+        parent::__construct($color);
+        $this->width = $width;
+        $this->height = $height;
+    }
+    
+    // Υλοποίηση της αφηρημένης μεθόδου
+    public function calculateArea() {
+        return $this->width * $this->height;
+    }
+}
+
+// Χρήση των κλάσεων
+$circle = new Circle("Κόκκινο", 5);
+$rectangle = new Rectangle("Μπλε", 4, 6);
+
+echo "Κύκλος - Χρώμα: " . $circle->getColor() . ", Εμβαδόν: " . $circle->calculateArea() . "<br>";
+echo "Ορθογώνιο - Χρώμα: " . $rectangle->getColor() . ", Εμβαδόν: " . $rectangle->calculateArea();</code></pre>
+    
+    <h3>Διεπαφές (Interfaces)</h3>
+    
+    <p>Οι διεπαφές ορίζουν ένα συμβόλαιο για τις κλάσεις που τις υλοποιούν, καθορίζοντας ποιες μεθόδους πρέπει να παρέχουν:</p>
+    
+    <pre><code>// Ορισμός διεπαφής
+interface Logger {
+    public function log($message);
+}
+
+// Υλοποίηση διεπαφής
+class FileLogger implements Logger {
+    private $filename;
+    
+    public function __construct($filename) {
+        $this->filename = $filename;
+    }
+    
+    public function log($message) {
+        file_put_contents($this->filename, date("Y-m-d H:i:s") . ": " . $message . "\n", FILE_APPEND);
+    }
+}
+
+// Άλλη υλοποίηση της ίδιας διεπαφής
+class DatabaseLogger implements Logger {
+    private $conn;
+    
+    public function __construct($conn) {
+        $this->conn = $conn;
+    }
+    
+    public function log($message) {
+        // Υποθετικός κώδικας για καταγραφή στη βάση δεδομένων
+        $stmt = $this->conn->prepare("INSERT INTO logs (message, created_at) VALUES (?, NOW())");
+        $stmt->execute([$message]);
+    }
+}
+
+// Χρήση των κλάσεων
+$fileLogger = new FileLogger("application.log");
+$fileLogger->log("Αυτό είναι ένα μήνυμα καταγραφής στο αρχείο");</code></pre>
+    
+    <p>Μια κλάση μπορεί να υλοποιεί πολλαπλές διεπαφές:</p>
+    
+    <pre><code>interface Loggable {
+    public function log($message);
+}
+
+interface Serializable {
+    public function serialize();
+    public function unserialize($data);
+}
+
+// Υλοποίηση πολλαπλών διεπαφών
+class User implements Loggable, Serializable {
+    private $username;
+    private $email;
+    
+    public function __construct($username, $email) {
+        $this->username = $username;
+        $this->email = $email;
+    }
+    
+    public function log($message) {
+        echo "[User: {$this->username}] $message<br>";
+    }
+    
+    public function serialize() {
+        return serialize([
+            'username' => $this->username,
+            'email' => $this->email
+        ]);
+    }
+    
+    public function unserialize($data) {
+        $data = unserialize($data);
+        $this->username = $data['username'];
+        $this->email = $data['email'];
+    }
+}</code></pre>
+    
+    <h3>Σταθερές Κλάσης</h3>
+    
+    <p>Οι σταθερές κλάσης είναι αμετάβλητες τιμές που ανήκουν σε μια κλάση:</p>
+    
+    <pre><code>class MathConstants {
+    // Σταθερές κλάσης
+    const PI = 3.14159265359;
+    const E = 2.71828;
+    const GOLDEN_RATIO = 1.61803398875;
+}
+
+// Πρόσβαση σε σταθερές χωρίς δημιουργία αντικειμένου
+echo "Π = " . MathConstants::PI . "<br>";
+echo "e = " . MathConstants::E . "<br>";</code></pre>
+    
+    <h3>Στατικές Ιδιότητες και Μέθοδοι</h3>
+    
+    <p>Οι στατικές ιδιότητες και μέθοδοι ανήκουν στην κλάση και όχι σε συγκεκριμένα αντικείμενα:</p>
+    
+    <pre><code>class Counter {
+    // Στατική ιδιότητα
+    private static $count = 0;
+    
+    public function __construct() {
+        // Αύξηση του μετρητή σε κάθε νέο αντικείμενο
+        self::$count++;
+    }
+    
+    // Στατική μέθοδος
+    public static function getCount() {
+        return self::$count;
+    }
+}
+
+// Δημιουργία αντικειμένων
+$obj1 = new Counter();
+$obj2 = new Counter();
+$obj3 = new Counter();
+
+// Κλήση στατικής μεθόδου
+echo "Συνολικά αντικείμενα: " . Counter::getCount(); // Εμφανίζει: 3</code></pre>
+    
+    <div class="callout">
+        <p><strong>Σημείωση:</strong> Χρησιμοποιούμε <code>self::</code> για πρόσβαση σε στατικές ιδιότητες/μεθόδους μέσα από την κλάση και <code>ClassName::</code> για πρόσβαση από έξω.</p>
+    </div>
+    
+    <h3>Μαγικές Μέθοδοι</h3>
+    
+    <p>Η PHP παρέχει "μαγικές" μεθόδους που ενεργοποιούνται αυτόματα σε συγκεκριμένες περιπτώσεις:</p>
+    
+    <pre><code>class Product {
+    private $data = [];
+    
+    // Κατασκευαστής
+    public function __construct($name, $price) {
+        $this->data['name'] = $name;
+        $this->data['price'] = $price;
+    }
+    
+    // Καλείται όταν γίνεται προσπάθεια πρόσβασης σε μη προσβάσιμη ή ανύπαρκτη ιδιότητα
+    public function __get($name) {
+        if (array_key_exists($name, $this->data)) {
+            return $this->data[$name];
+        }
+        return null;
+    }
+    
+    // Καλείται όταν γίνεται προσπάθεια ορισμού μη προσβάσιμης ή ανύπαρκτης ιδιότητας
+    public function __set($name, $value) {
+        $this->data[$name] = $value;
+    }
+    
+    // Καλείται όταν γίνεται έλεγχος ύπαρξης μη προσβάσιμης ή ανύπαρκτης ιδιότητας
+    public function __isset($name) {
+        return isset($this->data[$name]);
+    }
+    
+    // Καλείται όταν γίνεται προσπάθεια μετατροπής του αντικειμένου σε συμβολοσειρά
+    public function __toString() {
+        return "Προϊόν: {$this->data['name']}, Τιμή: {$this->data['price']}€";
+    }
+}
+
+// Χρήση της κλάσης
+$product = new Product("Laptop", 899.99);
+
+// Χρήση __get
+echo $product->name;  // Εμφανίζει: Laptop
+
+// Χρήση __set
+$product->category = "Electronics";
+
+// Χρήση __isset
+if (isset($product->category)) {
+    echo "Κατηγορία: " . $product->category;
+}
+
+// Χρήση __toString
+echo $product;  // Εμφανίζει: Προϊόν: Laptop, Τιμή: 899.99€</code></pre>
+    
+    <p>Άλλες συχνά χρησιμοποιούμενες μαγικές μέθοδοι περιλαμβάνουν:</p>
+    <ul>
+        <li><code>__destruct()</code>: Καλείται όταν ένα αντικείμενο καταστρέφεται</li>
+        <li><code>__call()</code>: Καλείται όταν καλείται μια μη προσβάσιμη ή ανύπαρκτη μέθοδος</li>
+        <li><code>__clone()</code>: Καλείται όταν ένα αντικείμενο κλωνοποιείται</li>
+        <li><code>__sleep()</code> και <code>__wakeup()</code>: Χρησιμοποιούνται για σειριοποίηση/αποσειριοποίηση</li>
+    </ul>
+    
+    <h3>Namespaces</h3>
+    
+    <p>Τα namespaces επιτρέπουν την οργάνωση του κώδικα και την αποφυγή συγκρούσεων ονομάτων:</p>
+    
+    <pre><code>// Αρχείο: Logger.php
+namespace App\Utilities;
+
+class Logger {
+    public function log($message) {
+        echo "Καταγραφή: $message";
+    }
+}
+
+// Αρχείο: main.php
+require_once 'Logger.php';
+
+// Χρήση της κλάσης με πλήρες namespace
+$logger = new App\Utilities\Logger();
+$logger->log("Δοκιμαστικό μήνυμα");
+
+// Εναλλακτικά, με χρήση του use
+use App\Utilities\Logger;
+$logger = new Logger();
+$logger->log("Άλλο δοκιμαστικό μήνυμα");</code></pre>
+    
+    <h3>Εξαιρέσεις (Exceptions)</h3>
+    
+    <p>Οι εξαιρέσεις επιτρέπουν τον χειρισμό σφαλμάτων με δομημένο τρόπο:</p>
+    
+    <pre><code>class BankAccount {
+    private $balance;
+    
+    public function __construct($initialBalance) {
+        if ($initialBalance < 0) {
+            throw new InvalidArgumentException("Το αρχικό υπόλοιπο δεν μπορεί να είναι αρνητικό");
+        }
+        $this->balance = $initialBalance;
+    }
+    
+    public function withdraw($amount) {
+        if ($amount <= 0) {
+            throw new InvalidArgumentException("Το ποσό ανάληψης πρέπει να είναι θετικό");
+        }
+        
+        if ($amount > $this->balance) {
+            throw new Exception("Ανεπαρκές υπόλοιπο");
+        }
+        
+        $this->balance -= $amount;
+        return $amount;
+    }
+    
+    public function getBalance() {
+        return $this->balance;
+    }
+}
+
+// Χρήση try-catch για χειρισμό εξαιρέσεων
+try {
+    $account = new BankAccount(1000);
+    echo "Υπόλοιπο: " . $account->getBalance() . "€<br>";
+    
+    $withdrawn = $account->withdraw(500);
+    echo "Έγινε ανάληψη: " . $withdrawn . "€<br>";
+    echo "Νέο υπόλοιπο: " . $account->getBalance() . "€<br>";
+    
+    // Αυτό θα προκαλέσει εξαίρεση
+    $account->withdraw(2000);
+} catch (InvalidArgumentException $e) {
+    echo "Σφάλμα εισόδου: " . $e->getMessage();
+} catch (Exception $e) {
+    echo "Σφάλμα συναλλαγής: " . $e->getMessage();
+} finally {
+    echo "<br>Η λειτουργία ολοκληρώθηκε.";
+}</code></pre>
+    
+    <h3>Δημιουργία Προσαρμοσμένων Εξαιρέσεων</h3>
+    
+    <p>Μπορείτε να δημιουργήσετε προσαρμοσμένες κλάσεις εξαιρέσεων κληρονομώντας από την <code>Exception</code>:</p>
+    
+    <pre><code>// Προσαρμοσμένη εξαίρεση
+class InsufficientFundsException extends Exception {
+    private $availableBalance;
+    private $requiredAmount;
+    
+    public function __construct($message, $availableBalance, $requiredAmount, $code = 0, Exception $previous = null) {
+        parent::__construct($message, $code, $previous);
+        $this->availableBalance = $availableBalance;
+        $this->requiredAmount = $requiredAmount;
+    }
+    
+    public function getAvailableBalance() {
+        return $this->availableBalance;
+    }
+    
+    public function getRequiredAmount() {
+        return $this->requiredAmount;
+    }
+    
+    public function getShortage() {
+        return $this->requiredAmount - $this->availableBalance;
+    }
+}
+
+class BankAccount {
+    private $balance;
+    
+    public function __construct($balance) {
+        $this->balance = $balance;
+    }
+    
+    public function withdraw($amount) {
+        if ($amount > $this->balance) {
+            throw new InsufficientFundsException(
+                "Ανεπαρκές υπόλοιπο για την ανάληψη",
+                $this->balance,
+                $amount
+            );
+        }
+        
+        $this->balance -= $amount;
+        return $amount;
+    }
+}
+
+// Χρήση της προσαρμοσμένης εξαίρεσης
+try {
+    $account = new BankAccount(100);
+    $account->withdraw(150);
+} catch (InsufficientFundsException $e) {
+    echo "Σφάλμα: " . $e->getMessage() . "<br>";
+    echo "Διαθέσιμο υπόλοιπο: " . $e->getAvailableBalance() . "€<br>";
+    echo "Απαιτούμενο ποσό: " . $e->getRequiredAmount() . "€<br>";
+    echo "Έλλειμμα: " . $e->getShortage() . "€<br>";
+}</code></pre>
+    
+    <h3>Autoloading Κλάσεων</h3>
+    
+    <p>Το autoloading επιτρέπει την αυτόματη φόρτωση κλάσεων όταν χρειάζονται, αντί να απαιτούνται χειροκίνητα <code>require</code> για κάθε αρχείο:</p>
+    
+    <pre><code>// Μια απλή συνάρτηση autoload
+spl_autoload_register(function($className) {
+    // Μετατροπή του namespace σε διαδρομή αρχείου
+    $path = str_replace('\\', '/', $className) . '.php';
+    
+    // Έλεγχος αν το αρχείο υπάρχει
+    if (file_exists($path)) {
+        require_once $path;
+    }
+});</code></pre>
+    
+    <p>Στα σύγχρονα έργα PHP, το autoloading συνήθως διαχειρίζεται από το Composer:</p>
+    
+    <pre><code>// composer.json
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
+
+// Μετά την εγκατάσταση του Composer, απλά συμπεριλάβετε το αρχείο autoload
+require_once 'vendor/autoload.php';</code></pre>
+    
+    <h3>Σχεδιαστικά Πρότυπα (Design Patterns)</h3>
+    
+    <p>Τα σχεδιαστικά πρότυπα είναι επαναχρησιμοποιήσιμες λύσεις σε συχνά προβλήματα σχεδιασμού λογισμικού. Ας δούμε ένα απλό παράδειγμα του προτύπου Singleton:</p>
+    
+    <pre><code>class Database {
+    // Στατική ιδιότητα για αποθήκευση του μοναδικού αντικειμένου
+    private static $instance = null;
+    
+    // Ιδιότητες σύνδεσης
+    private $conn;
+    private $host;
+    private $username;
+    private $password;
+    private $database;
+    
+    // Ιδιωτικός κατασκευαστής για να εμποδίσει την άμεση δημιουργία αντικειμένων
+    private function __construct($host, $username, $password, $database) {
+        $this->host = $host;
+        $this->username = $username;
+        $this->password = $password;
+        $this->database = $database;
+        
+        // Σύνδεση με τη βάση δεδομένων
+        $this->conn = new mysqli($this->host, $this->username, $this->password, $this->database);
+        
+        if ($this->conn->connect_error) {
+            die("Σφάλμα σύνδεσης: " . $this->conn->connect_error);
+        }
+    }
+    
+    // Μέθοδος για την πρόσβαση στο Singleton
+    public static function getInstance($host, $username, $password, $database) {
+        // Αν δεν υπάρχει ήδη αντικείμενο, δημιουργούμε ένα νέο
+        if (self::$instance === null) {
+            self::$instance = new self($host, $username, $password, $database);
+        }
+        
+        return self::$instance;
+    }
+    
+    // Απενεργοποίηση του κλωνοποίησης
+    private function __clone() {}
+    
+    // Μέθοδος για εκτέλεση ερωτημάτων
+    public function query($sql) {
+        return $this->conn->query($sql);
+    }
+    
+    // Αποσυνδέεται από τη βάση δεδομένων όταν καταστρέφεται το αντικείμενο
+    public function __destruct() {
+        $this->conn->close();
+    }
+}
+
+// Χρήση του Singleton
+$db = Database::getInstance("localhost", "username", "password", "database_name");
+$result = $db->query("SELECT * FROM users");
+
+// Προσπάθεια για δεύτερη σύνδεση επιστρέφει το ίδιο αντικείμενο
+$db2 = Database::getInstance("localhost", "username", "password", "database_name");
+// $db και $db2 είναι το ίδιο αντικείμενο</code></pre>
+    
+    <h3>Πρακτικό Παράδειγμα: Ένα Σύστημα Διαχείρισης Χρηστών</h3>
+    <p>Ας δημιουργήσουμε ένα ολοκληρωμένο παράδειγμα εφαρμόζοντας τις αρχές OOP που μάθαμε:</p>
+    
+    <pre><code>// Αρχείο: config/Database.php
+namespace App\Config;
+
+class Database {
+    private static $instance = null;
+    private $conn;
+    
+    private function __construct() {
+        $host = 'localhost';
+        $username = 'root';
+        $password = '';
+        $database = 'user_management';
+        
+        $this->conn = new \mysqli($host, $username, $password, $database);
+        
+        if ($this->conn->connect_error) {
+            die("Σφάλμα σύνδεσης: " . $this->conn->connect_error);
+        }
+    }
+    
+    public static function getInstance() {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+    
+    public function getConnection() {
+        return $this->conn;
+    }
+}
+
+// Αρχείο: models/User.php
+namespace App\Models;
+
+use App\Config\Database;
+
+class User {
+    private $conn;
+    private $table = 'users';
+    
+    // Ιδιότητες χρήστη
+    private $id;
+    private $username;
+    private $email;
+    private $password;
+    private $created_at;
+    
+    public function __construct() {
+        $this->conn = Database::getInstance()->getConnection();
+    }
+    
+    // Getters και Setters
+    public function getId() {
+        return $this->id;
+    }
+    
+    public function getUsername() {
+        return $this->username;
+    }
+    
+    public function setUsername($username) {
+        $this->username = $username;
+    }
+    
+    public function getEmail() {
+        return $this->email;
+    }
+    
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+    
+    public function setPassword($password) {
+        // Κρυπτογράφηση του κωδικού
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
+    }
+    
+    public function getCreatedAt() {
+        return $this->created_at;
+    }
+    
+    // Μέθοδοι CRUD
+    public function create() {
+        $query = "INSERT INTO " . $this->table . " (username, email, password) VALUES (?, ?, ?)";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("sss", $this->username, $this->email, $this->password);
+        
+        if ($stmt->execute()) {
+            $this->id = $this->conn->insert_id;
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public function read($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE id = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            
+            $this->id = $row['id'];
+            $this->username = $row['username'];
+            $this->email = $row['email'];
+            $this->password = $row['password'];
+            $this->created_at = $row['created_at'];
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public function update() {
+        $query = "UPDATE " . $this->table . " SET username = ?, email = ? WHERE id = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ssi", $this->username, $this->email, $this->id);
+        
+        return $stmt->execute();
+    }
+    
+    public function delete() {
+        $query = "DELETE FROM " . $this->table . " WHERE id = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $this->id);
+        
+        return $stmt->execute();
+    }
+    
+    public function findByUsername($username) {
+        $query = "SELECT * FROM " . $this->table . " WHERE username = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            
+            $this->id = $row['id'];
+            $this->username = $row['username'];
+            $this->email = $row['email'];
+            $this->password = $row['password'];
+            $this->created_at = $row['created_at'];
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public function verifyPassword($password) {
+        return password_verify($password, $this->password);
+    }
+}</code></pre>
+    
+    <p>Παράδειγμα χρήσης της κλάσης User:</p>
+    
+    <pre><code>// Αρχείο: register.php
+require_once 'vendor/autoload.php';
+
+use App\Models\User;
+
+// Επεξεργασία φόρμας εγγραφής
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user = new User();
+    $user->setUsername($_POST['username']);
+    $user->setEmail($_POST['email']);
+    $user->setPassword($_POST['password']);
+    
+    if ($user->create()) {
+        echo "Ο χρήστης δημιουργήθηκε επιτυχώς!";
+    } else {
+        echo "Σφάλμα κατά τη δημιουργία του χρήστη.";
+    }
+}
+
+// Αρχείο: login.php
+require_once 'vendor/autoload.php';
+
+use App\Models\User;
+
+// Επεξεργασία φόρμας σύνδεσης
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user = new User();
+    
+    // Αναζήτηση χρήστη με το όνομα χρήστη
+    if ($user->findByUsername($_POST['username'])) {
+        // Έλεγχος κωδικού πρόσβασης
+        if ($user->verifyPassword($_POST['password'])) {
+            // Επιτυχής σύνδεση, αποθήκευση στη συνεδρία
+            session_start();
+            $_SESSION['user_id'] = $user->getId();
+            $_SESSION['username'] = $user->getUsername();
+            
+            echo "Επιτυχής σύνδεση!";
+        } else {
+            echo "Λανθασμένος κωδικός πρόσβασης.";
+        }
+    } else {
+        echo "Ο χρήστης δεν βρέθηκε.";
+    }
+}</code></pre>
+    
+    <h3>Πλεονεκτήματα του OOP στην PHP</h3>
+    <ul>
+        <li><strong>Οργάνωση:</strong> Ο κώδικας οργανώνεται σε λογικά μέρη που είναι ευκολότερο να κατανοηθούν και να συντηρηθούν.</li>
+        <li><strong>Επαναχρησιμοποίηση κώδικα:</strong> Οι κλάσεις και τα αντικείμενα μπορούν να επαναχρησιμοποιηθούν σε διαφορετικά μέρη του έργου.</li>
+        <li><strong>Ασφάλεια:</strong> Η ενθυλάκωση επιτρέπει τον έλεγχο της πρόσβασης στα δεδομένα, αποτρέποντας ακούσιες τροποποιήσεις.</li>
+        <li><strong>Συντηρησιμότητα:</strong> Οι αλλαγές μπορούν να γίνουν σε συγκεκριμένες κλάσεις χωρίς να επηρεάζουν τον υπόλοιπο κώδικα.</li>
+        <li><strong>Επεκτασιμότητα:</strong> Νέες λειτουργίες μπορούν να προστεθούν εύκολα επεκτείνοντας υπάρχουσες κλάσεις.</li>
+    </ul>
+    
+    <h3>Συμπέρασμα</h3>
+    <p>Ο αντικειμενοστρεφής προγραμματισμός στην PHP παρέχει ισχυρά εργαλεία για τη δημιουργία καλά οργανωμένων, ασφαλών και επεκτάσιμων εφαρμογών. Με την κατανόηση των βασικών εννοιών όπως οι κλάσεις, τα αντικείμενα, η κληρονομικότητα, ο πολυμορφισμός και η ενθυλάκωση, μπορείτε να σχεδιάσετε εφαρμογές που είναι ευκολότερο να αναπτύξετε και να συντηρήσετε.</p>
+    
+    <p>Στην πράξη, συνιστάται να ακολουθείτε καθιερωμένα πρότυπα κώδικα όπως το PSR (PHP Standard Recommendations) και να χρησιμοποιείτε εργαλεία όπως το Composer για τη διαχείριση εξαρτήσεων και το autoloading. Επίσης, η εξοικείωση με τα συχνά χρησιμοποιούμενα σχεδιαστικά πρότυπα μπορεί να σας βοηθήσει να αντιμετωπίσετε κοινά προβλήματα σχεδιασμού με δοκιμασμένες λύσεις.</p>
+</section>
+
+<section id="error-exception-handling">
+    <h2>3. Διαχείριση Λαθών & Εξαιρέσεων</h2>
+    
+    <p>Η διαχείριση λαθών και εξαιρέσεων είναι βασικό κομμάτι της ανάπτυξης αξιόπιστων εφαρμογών PHP. Επιτρέπει την ομαλή αντιμετώπιση σφαλμάτων και απρόβλεπτων καταστάσεων χωρίς να καταρρέει η εφαρμογή.</p>
+    
+    <h3>Κατηγορίες Σφαλμάτων στην PHP</h3>
+    
+    <p>Η PHP διαθέτει διάφορους τύπους σφαλμάτων:</p>
+    
+    <ul>
+        <li><strong>Συντακτικά Σφάλματα (Parse Errors):</strong> Λάθη στη σύνταξη του κώδικα που εμποδίζουν την εκτέλεσή του</li>
+        <li><strong>Προειδοποιήσεις (Warnings):</strong> Σοβαρά σφάλματα που δεν διακόπτουν την εκτέλεση</li>
+        <li><strong>Ειδοποιήσεις (Notices):</strong> Λιγότερο σημαντικά σφάλματα (π.χ. προσπέλαση μεταβλητής που δεν έχει οριστεί)</li>
+        <li><strong>Μοιραία Σφάλματα (Fatal Errors):</strong> Σφάλματα που τερματίζουν την εκτέλεση του script</li>
+    </ul>
+    
+    <h3>Βασικές Μέθοδοι Χειρισμού Σφαλμάτων</h3>
+    
+    <h4>1. Συνάρτηση die()</h4>
+    <p>Η απλούστερη μέθοδος χειρισμού σφαλμάτων είναι η χρήση της συνάρτησης <code>die()</code> ή <code>exit()</code>:</p>
+    
+    <pre><code>$file = fopen("αρχείο_που_δεν_υπάρχει.txt", "r") or die("Δεν ήταν δυνατό το άνοιγμα του αρχείου");</code></pre>
+    
+    <h4>2. Ρυθμίσεις Εμφάνισης Σφαλμάτων</h4>
+    <p>Μπορείτε να ελέγξετε πώς εμφανίζονται τα σφάλματα:</p>
+    
+    <pre><code>// Εμφάνιση όλων των σφαλμάτων (για ανάπτυξη)
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Απόκρυψη σφαλμάτων (για περιβάλλον παραγωγής)
+ini_set('display_errors', 0);
+error_reporting(0);</code></pre>
+    
+    <h4>3. Συνάρτηση error_log()</h4>
+    <p>Καταγραφή σφαλμάτων σε αρχείο καταγραφής:</p>
+    
+    <pre><code>// Καταγραφή μηνύματος σφάλματος
+error_log("Παρουσιάστηκε σφάλμα βάσης δεδομένων", 0);</code></pre>
+    
+    <h3>Προσαρμοσμένος Χειρισμός Σφαλμάτων</h3>
+    
+    <p>Μπορείτε να ορίσετε τον δικό σας χειριστή σφαλμάτων με τη συνάρτηση <code>set_error_handler()</code>:</p>
+    
+    <pre><code>// Ορισμός προσαρμοσμένου χειριστή σφαλμάτων
+function myErrorHandler($errno, $errstr, $errfile, $errline) {
+    echo "&lt;b&gt;Σφάλμα:&lt;/b&gt; [$errno] $errstr&lt;br&gt;";
+    echo "Γραμμή $errline στο αρχείο $errfile&lt;br&gt;";
+    
+    // Καταγραφή σφάλματος σε αρχείο
+    error_log("Σφάλμα [$errno]: $errstr στο $errfile:$errline");
+    
+    // Μην εκτελέσεις τον εσωτερικό χειριστή σφαλμάτων της PHP
+    return true;
+}
+
+// Ορισμός του χειριστή σφαλμάτων
+set_error_handler("myErrorHandler");
+
+// Παράδειγμα σφάλματος
+echo $μη_οριμένη_μεταβλητή; // Αυτό θα ενεργοποιήσει τον χειριστή σφαλμάτων</code></pre>
+    
+    <h3>Διαχείριση Εξαιρέσεων (Exceptions)</h3>
+    
+    <p>Οι εξαιρέσεις παρέχουν έναν πιο δομημένο και αντικειμενοστρεφή τρόπο χειρισμού σφαλμάτων:</p>
+    
+    <pre><code>// Βασική διαχείριση εξαιρέσεων
+try {
+    // Κώδικας που μπορεί να προκαλέσει εξαίρεση
+    $number = 10;
+    $divisor = 0;
+    
+    if ($divisor == 0) {
+        throw new Exception("Διαίρεση με μηδέν δεν επιτρέπεται");
+    }
+    
+    $result = $number / $divisor;
+    echo "Αποτέλεσμα: $result";
+}
+catch (Exception $e) {
+    // Χειρισμός εξαίρεσης
+    echo "Σφάλμα: " . $e->getMessage();
+}
+finally {
+    // Κώδικας που θα εκτελεστεί ανεξάρτητα από το αν προέκυψε εξαίρεση
+    echo "<br>Η λειτουργία ολοκληρώθηκε.";
+}</code></pre>
+    
+    <h3>Προσαρμοσμένες Εξαιρέσεις</h3>
+    
+    <p>Μπορείτε να δημιουργήσετε τις δικές σας κλάσεις εξαιρέσεων για καλύτερη οργάνωση:</p>
+    
+    <pre><code>// Ορισμός προσαρμοσμένων εξαιρέσεων
+class DatabaseException extends Exception {
+    public function __construct($message, $code = 0, Exception $previous = null) {
+        parent::__construct($message, $code, $previous);
+    }
+    
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
+}
+
+class FileException extends Exception {
+    // Προσαρμοσμένες μέθοδοι για εξαιρέσεις σχετικές με αρχεία
+}
+
+// Χρήση των προσαρμοσμένων εξαιρέσεων
+try {
+    // Προσπάθεια σύνδεσης στη βάση δεδομένων
+    if (!$connection) {
+        throw new DatabaseException("Αδυναμία σύνδεσης στη βάση δεδομένων");
+    }
+    
+    // Προσπάθεια ανάγνωσης αρχείου
+    if (!file_exists("config.php")) {
+        throw new FileException("Το αρχείο ρυθμίσεων δεν βρέθηκε");
+    }
+}
+catch (DatabaseException $e) {
+    echo "Σφάλμα βάσης δεδομένων: " . $e->getMessage();
+    // Ειδικός χειρισμός για σφάλματα βάσης δεδομένων
+}
+catch (FileException $e) {
+    echo "Σφάλμα αρχείου: " . $e->getMessage();
+    // Ειδικός χειρισμός για σφάλματα αρχείων
+}
+catch (Exception $e) {
+    echo "Γενικό σφάλμα: " . $e->getMessage();
+    // Χειρισμός άλλων εξαιρέσεων
+}</code></pre>
+    
+    <h3>Μετατροπή Σφαλμάτων σε Εξαιρέσεις</h3>
+    
+    <p>Μπορείτε να μετατρέψετε όλα τα σφάλματα της PHP σε εξαιρέσεις:</p>
+    
+    <pre><code>// Μετατροπή σφαλμάτων σε εξαιρέσεις
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    // Μετατροπή του σφάλματος σε εξαίρεση
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+});
+
+try {
+    // Αυτό θα προκαλέσει σφάλμα που θα μετατραπεί σε εξαίρεση
+    echo $undefined_variable;
+}
+catch (ErrorException $e) {
+    echo "Πιάστηκε σφάλμα: " . $e->getMessage();
+}</code></pre>
+    
+    <h3>Πρακτικό Παράδειγμα: Φόρμα Επικοινωνίας με Διαχείριση Σφαλμάτων</h3>
+    
+    <pre><code>&lt;?php
+// Αρχικοποίηση μεταβλητών
+$name = $email = $message = "";
+$errors = [];
+
+// Έλεγχος αν η φόρμα υποβλήθηκε
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    try {
+        // Επικύρωση ονόματος
+        if (empty($_POST["name"])) {
+            throw new Exception("Το όνομα είναι υποχρεωτικό");
+        } else {
+            $name = test_input($_POST["name"]);
+            // Έλεγχος αν το όνομα περιέχει μόνο γράμματα και κενά
+            if (!preg_match("/^[α-ωΑ-Ωa-zA-Z ]*$/u", $name)) {
+                throw new Exception("Το όνομα πρέπει να περιέχει μόνο γράμματα");
+            }
+        }
+        
+        // Επικύρωση email
+        if (empty($_POST["email"])) {
+            throw new Exception("Το email είναι υποχρεωτικό");
+        } else {
+            $email = test_input($_POST["email"]);
+            // Έλεγχος εγκυρότητας email
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                throw new Exception("Μη έγκυρη μορφή email");
+            }
+        }
+        
+        // Επικύρωση μηνύματος
+        if (empty($_POST["message"])) {
+            throw new Exception("Το μήνυμα είναι υποχρεωτικό");
+        } else {
+            $message = test_input($_POST["message"]);
+        }
+        
+        // Αν φτάσουμε εδώ, η επικύρωση πέτυχε
+        // Αποστολή email (σε πραγματική εφαρμογή)
+        // mail("admin@example.com", "Φόρμα Επικοινωνίας", $message, "From: $email");
+        
+        // Εμφάνιση μηνύματος επιτυχίας
+        echo "&lt;div class='success'&gt;Ευχαριστούμε για το μήνυμά σας!&lt;/div&gt;";
+        
+        // Καθαρισμός μεταβλητών φόρμας
+        $name = $email = $message = "";
+    }
+    catch (Exception $e) {
+        // Προσθήκη του μηνύματος λάθους στον πίνακα σφαλμάτων
+        $errors[] = $e->getMessage();
+    }
+}
+
+// Συνάρτηση για καθαρισμό δεδομένων εισόδου
+function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+?&gt;
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Φόρμα Επικοινωνίας&lt;/title&gt;
+    &lt;style&gt;
+        .error { color: red; }
+        .success { color: green; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h2&gt;Φόρμα Επικοινωνίας&lt;/h2&gt;
+    
+    &lt;!-- Εμφάνιση σφαλμάτων --&gt;
+    &lt;?php if (!empty($errors)): ?&gt;
+        &lt;div class="error"&gt;
+            &lt;ul&gt;
+                &lt;?php foreach ($errors as $error): ?&gt;
+                    &lt;li&gt;&lt;?php echo $error; ?&gt;&lt;/li&gt;
+                &lt;?php endforeach; ?&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;?php endif; ?&gt;
+    
+    &lt;form method="post" action="&lt;?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?&gt;"&gt;
+        &lt;div&gt;
+            &lt;label for="name"&gt;Όνομα:&lt;/label&gt;
+            &lt;input type="text" id="name" name="name" value="&lt;?php echo $name; ?&gt;"&gt;
+        &lt;/div&gt;
+        
+        &lt;div&gt;
+            &lt;label for="email"&gt;Email:&lt;/label&gt;
+            &lt;input type="text" id="email" name="email" value="&lt;?php echo $email; ?&gt;"&gt;
+        &lt;/div&gt;
+        
+        &lt;div&gt;
+            &lt;label for="message"&gt;Μήνυμα:&lt;/label&gt;
+            &lt;textarea id="message" name="message" rows="5" cols="40"&gt;&lt;?php echo $message; ?&gt;&lt;/textarea&gt;
+        &lt;/div&gt;
+        
+        &lt;div&gt;
+            &lt;input type="submit" name="submit" value="Αποστολή"&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    
+    <h3>Βέλτιστες Πρακτικές</h3>
+    
+    <ul>
+        <li><strong>Περιβάλλον Ανάπτυξης:</strong> Εμφανίστε όλα τα σφάλματα για εύκολο εντοπισμό προβλημάτων</li>
+        <li><strong>Περιβάλλον Παραγωγής:</strong> Απενεργοποιήστε την εμφάνιση σφαλμάτων και καταγράψτε τα σε αρχεία</li>
+        <li><strong>Ιεραρχία Εξαιρέσεων:</strong> Δημιουργήστε λογική ιεραρχία εξαιρέσεων για διαφορετικές κατηγορίες σφαλμάτων</li>
+        <li><strong>Ενημερωτικά Μηνύματα:</strong> Παρέχετε χρήσιμα μηνύματα σφαλμάτων που βοηθούν στην επίλυση των προβλημάτων</li>
+        <li><strong>Μην Αποκαλύπτετε Ευαίσθητα Δεδομένα:</strong> Στα μηνύματα λάθους προς τους χρήστες, αποφύγετε την αποκάλυψη λεπτομερειών υλοποίησης</li>
+    </ul>
+    
+    <h3>Συμπέρασμα</h3>
+    
+    <p>Η αποτελεσματική διαχείριση λαθών και εξαιρέσεων είναι απαραίτητη για τη δημιουργία αξιόπιστων εφαρμογών PHP. Χρησιμοποιώντας ένα συνδυασμό των μηχανισμών ενσωματωμένου χειρισμού σφαλμάτων και εξαιρέσεων, μπορείτε να διασφαλίσετε ότι η εφαρμογή σας αντιμετωπίζει ομαλά τα σφάλματα και παρέχει χρήσιμες πληροφορίες για την επίλυση των προβλημάτων.</p>
+</section>
+
+<section id="file-handling">
+    <h2>4. Διαχείριση Αρχείων</h2>
+    
+    <p>Η PHP προσφέρει ένα ολοκληρωμένο σύνολο λειτουργιών για τη διαχείριση αρχείων στον διακομιστή. Αυτές οι λειτουργίες επιτρέπουν την ανάγνωση, εγγραφή, τροποποίηση και διαγραφή αρχείων, καθώς και τη διαχείριση καταλόγων.</p>
+    
+    <h3>Ανάγνωση Αρχείων</h3>
+    
+    <h4>1. Ανάγνωση Ολόκληρου Αρχείου</h4>
+    <p>Για να διαβάσετε ολόκληρο το περιεχόμενο ενός αρχείου σε μια μεταβλητή:</p>
+    
+    <pre><code>// Ανάγνωση ολόκληρου αρχείου
+$content = file_get_contents('αρχείο.txt');
+echo $content;</code></pre>
+    
+    <h4>2. Ανάγνωση Αρχείου Γραμμή-Γραμμή</h4>
+    
+    <pre><code>// Ανάγνωση αρχείου γραμμή-γραμμή
+$file = fopen('αρχείο.txt', 'r');
+
+if ($file) {
+    while (($line = fgets($file)) !== false) {
+        echo $line . '<br>';
+    }
+    
+    fclose($file);
+} else {
+    echo "Αδυναμία ανοίγματος του αρχείου";
+}</code></pre>
+    
+    <h4>3. Ανάγνωση Αρχείου σε Πίνακα</h4>
+    
+    <pre><code>// Ανάγνωση αρχείου σε πίνακα (κάθε γραμμή = στοιχείο πίνακα)
+$lines = file('αρχείο.txt');
+
+foreach ($lines as $lineNumber => $line) {
+    echo "Γραμμή #" . ($lineNumber + 1) . ": " . $line . '<br>';
+}</code></pre>
+    
+    <h3>Εγγραφή σε Αρχεία</h3>
+    
+    <h4>1. Εγγραφή σε Νέο Αρχείο ή Αντικατάσταση Υπάρχοντος</h4>
+    
+    <pre><code>// Εγγραφή περιεχομένου σε αρχείο
+$content = "Αυτό είναι το περιεχόμενο που θα αποθηκευτεί στο αρχείο.\n";
+file_put_contents('νέο_αρχείο.txt', $content);
+
+// Έλεγχος επιτυχίας
+if (file_exists('νέο_αρχείο.txt')) {
+    echo "Το αρχείο δημιουργήθηκε επιτυχώς";
+}</code></pre>
+    
+    <h4>2. Προσάρτηση Περιεχομένου σε Υπάρχον Αρχείο</h4>
+    
+    <pre><code>// Προσάρτηση περιεχομένου
+$new_content = "Αυτή είναι μια νέα γραμμή στο αρχείο.\n";
+file_put_contents('αρχείο.txt', $new_content, FILE_APPEND);</code></pre>
+    
+    <h4>3. Εγγραφή με χρήση fopen/fwrite</h4>
+    
+    <pre><code>// Άνοιγμα αρχείου για εγγραφή
+$file = fopen('αρχείο.txt', 'w');
+
+if ($file) {
+    fwrite($file, "Πρώτη γραμμή του αρχείου.\n");
+    fwrite($file, "Δεύτερη γραμμή του αρχείου.\n");
+    
+    fclose($file);
+    echo "Εγγραφή ολοκληρώθηκε";
+} else {
+    echo "Αδυναμία ανοίγματος του αρχείου για εγγραφή";
+}</code></pre>
+    
+    <div class="callout">
+        <p><strong>Σημείωση:</strong> Οι λειτουργίες <code>w</code> (εγγραφή) και <code>w+</code> (ανάγνωση και εγγραφή) διαγράφουν το περιεχόμενο του αρχείου αν αυτό υπάρχει ήδη. Χρησιμοποιήστε <code>a</code> (προσάρτηση) ή <code>a+</code> (ανάγνωση και προσάρτηση) για να προσθέσετε περιεχόμενο χωρίς να διαγράψετε το υπάρχον.</p>
+    </div>
+    
+    <h3>Τρόποι Ανοίγματος Αρχείων με την fopen()</h3>
+    
+    <table>
+        <tr>
+            <th>Τρόπος</th>
+            <th>Περιγραφή</th>
+        </tr>
+        <tr>
+            <td><code>r</code></td>
+            <td>Άνοιγμα για ανάγνωση. Ο δείκτης αρχείου τοποθετείται στην αρχή του αρχείου.</td>
+        </tr>
+        <tr>
+            <td><code>r+</code></td>
+            <td>Άνοιγμα για ανάγνωση και εγγραφή. Ο δείκτης αρχείου τοποθετείται στην αρχή του αρχείου.</td>
+        </tr>
+        <tr>
+            <td><code>w</code></td>
+            <td>Άνοιγμα για εγγραφή. Διαγράφει το περιεχόμενο του αρχείου ή δημιουργεί νέο αρχείο αν δεν υπάρχει.</td>
+        </tr>
+        <tr>
+            <td><code>w+</code></td>
+            <td>Άνοιγμα για ανάγνωση και εγγραφή. Διαγράφει το περιεχόμενο του αρχείου ή δημιουργεί νέο αρχείο.</td>
+        </tr>
+        <tr>
+            <td><code>a</code></td>
+            <td>Άνοιγμα για προσάρτηση. Ο δείκτης αρχείου τοποθετείται στο τέλος του αρχείου.</td>
+        </tr>
+        <tr>
+            <td><code>a+</code></td>
+            <td>Άνοιγμα για ανάγνωση και προσάρτηση. Ο δείκτης τοποθετείται στο τέλος του αρχείου.</td>
+        </tr>
+        <tr>
+            <td><code>x</code></td>
+            <td>Δημιουργία και άνοιγμα για εγγραφή. Επιστρέφει FALSE αν το αρχείο υπάρχει ήδη.</td>
+        </tr>
+        <tr>
+            <td><code>x+</code></td>
+            <td>Δημιουργία και άνοιγμα για ανάγνωση και εγγραφή. Επιστρέφει FALSE αν το αρχείο υπάρχει ήδη.</td>
+        </tr>
+    </table>
+    
+    <h3>Έλεγχος Αρχείων</h3>
+    
+    <pre><code>// Έλεγχος αν το αρχείο υπάρχει
+if (file_exists('αρχείο.txt')) {
+    echo "Το αρχείο υπάρχει";
+}
+
+// Έλεγχος αν είναι δυνατή η ανάγνωση
+if (is_readable('αρχείο.txt')) {
+    echo "Το αρχείο είναι αναγνώσιμο";
+}
+
+// Έλεγχος αν είναι δυνατή η εγγραφή
+if (is_writable('αρχείο.txt')) {
+    echo "Το αρχείο είναι εγγράψιμο";
+}
+
+// Λήψη μεγέθους αρχείου
+$size = filesize('αρχείο.txt');
+echo "Μέγεθος αρχείου: $size bytes";
+
+// Λήψη τελευταίας τροποποίησης
+$lastModified = filemtime('αρχείο.txt');
+echo "Τελευταία τροποποίηση: " . date("Y-m-d H:i:s", $lastModified);</code></pre>
+    
+    <h3>Διαχείριση Καταλόγων</h3>
+    
+    <h4>1. Δημιουργία και Διαγραφή Καταλόγων</h4>
+    
+    <pre><code>// Δημιουργία καταλόγου
+if (!file_exists('νέος_κατάλογος')) {
+    mkdir('νέος_κατάλογος', 0755);
+    echo "Ο κατάλογος δημιουργήθηκε";
+}
+
+// Διαγραφή κενού καταλόγου
+if (file_exists('παλιός_κατάλογος')) {
+    rmdir('παλιός_κατάλογος');
+    echo "Ο κατάλογος διαγράφηκε";
+}</code></pre>
+    
+    <h4>2. Ανάγνωση Περιεχομένων Καταλόγου</h4>
+    
+    <pre><code>// Ανάγνωση περιεχομένων καταλόγου
+$dir = 'uploads';
+if (is_dir($dir)) {
+    $files = scandir($dir);
+    
+    echo "Περιεχόμενα του καταλόγου $dir:<br>";
+    foreach ($files as $file) {
+        if ($file != "." && $file != "..") {
+            echo $file . "<br>";
+        }
+    }
+}</code></pre>
+    
+    <h4>3. Αναδρομική Ανάγνωση Καταλόγου</h4>
+    
+    <pre><code>// Συνάρτηση για αναδρομική εμφάνιση περιεχομένων καταλόγου
+function listDirectory($dir, $indent = 0) {
+    $files = scandir($dir);
+    
+    foreach ($files as $file) {
+        if ($file != "." && $file != "..") {
+            $path = $dir . '/' . $file;
+            
+            // Δημιουργία εσοχών για καλύτερη εμφάνιση
+            $indentation = str_repeat("&nbsp;&nbsp;", $indent);
+            
+            if (is_dir($path)) {
+                echo $indentation . "📁 " . $file . "<br>";
+                // Αναδρομική κλήση για υποκαταλόγους
+                listDirectory($path, $indent + 1);
+            } else {
+                echo $indentation . "📄 " . $file . "<br>";
+            }
+        }
+    }
+}
+
+// Κλήση της συνάρτησης
+listDirectory('project_folder');</code></pre>
+    
+    <h3>Μεταφόρτωση Αρχείων</h3>
+    
+    <p>Η PHP επιτρέπει την εύκολη διαχείριση αρχείων που μεταφορτώνονται από τους χρήστες:</p>
+    
+    <h4>1. Φόρμα HTML για Μεταφόρτωση</h4>
+    
+    <pre><code>&lt;!-- Φόρμα μεταφόρτωσης αρχείου -->
+&lt;form action="upload.php" method="post" enctype="multipart/form-data">
+    &lt;label for="fileToUpload">Επιλέξτε αρχείο:&lt;/label>
+    &lt;input type="file" name="fileToUpload" id="fileToUpload">
+    &lt;input type="submit" value="Μεταφόρτωση" name="submit">
+&lt;/form></code></pre>
+    
+    <h4>2. Επεξεργασία Μεταφορτωμένου Αρχείου</h4>
+    
+    <pre><code>// Κώδικας PHP στο upload.php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["fileToUpload"])) {
+    $targetDir = "uploads/";
+    $targetFile = $targetDir . basename($_FILES["fileToUpload"]["name"]);
+    $uploadOk = 1;
+    $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+    
+    // Έλεγχος αν το αρχείο υπάρχει ήδη
+    if (file_exists($targetFile)) {
+        echo "Το αρχείο υπάρχει ήδη.";
+        $uploadOk = 0;
+    }
+    
+    // Έλεγχος μεγέθους αρχείου (π.χ. μέγιστο 500KB)
+    if ($_FILES["fileToUpload"]["size"] > 500000) {
+        echo "Το αρχείο είναι πολύ μεγάλο.";
+        $uploadOk = 0;
+    }
+    
+    // Περιορισμός τύπων αρχείων
+    if($fileType != "jpg" && $fileType != "png" && $fileType != "jpeg" && $fileType != "gif" ) {
+        echo "Επιτρέπονται μόνο αρχεία JPG, JPEG, PNG & GIF.";
+        $uploadOk = 0;
+    }
+    
+    // Έλεγχος αν $uploadOk έχει οριστεί σε 0 από κάποιο σφάλμα
+    if ($uploadOk == 0) {
+        echo "Το αρχείο δεν μεταφορτώθηκε.";
+    } else {
+        // Προσπάθεια μεταφόρτωσης του αρχείου
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile)) {
+            echo "Το αρχείο ". htmlspecialchars(basename($_FILES["fileToUpload"]["name"])). " μεταφορτώθηκε με επιτυχία.";
+        } else {
+            echo "Παρουσιάστηκε σφάλμα κατά τη μεταφόρτωση του αρχείου.";
+        }
+    }
+}</code></pre>
+    
+    <div class="callout warning">
+        <p><strong>Προσοχή:</strong> Πάντα να επικυρώνετε και να φιλτράρετε τα αρχεία που μεταφορτώνουν οι χρήστες. Μη επικυρωμένα αρχεία μπορεί να οδηγήσουν σε σοβαρά προβλήματα ασφαλείας.</p>
+    </div>
+    
+    <h3>Διαχείριση CSV Αρχείων</h3>
+    
+    <h4>1. Ανάγνωση CSV Αρχείου</h4>
+    
+    <pre><code>// Ανάγνωση CSV αρχείου
+$csv_file = fopen('data.csv', 'r');
+
+if ($csv_file) {
+    echo "&lt;table border='1'>";
+    
+    // Διάβασμα της πρώτης γραμμής ως κεφαλίδες
+    $headers = fgetcsv($csv_file);
+    echo "&lt;tr>";
+    foreach ($headers as $header) {
+        echo "&lt;th>" . htmlspecialchars($header) . "&lt;/th>";
+    }
+    echo "&lt;/tr>";
+    
+    // Διάβασμα των υπόλοιπων γραμμών
+    while (($row = fgetcsv($csv_file)) !== false) {
+        echo "&lt;tr>";
+        foreach ($row as $cell) {
+            echo "&lt;td>" . htmlspecialchars($cell) . "&lt;/td>";
+        }
+        echo "&lt;/tr>";
+    }
+    
+    echo "&lt;/table>";
+    fclose($csv_file);
+}</code></pre>
+    
+    <h4>2. Εγγραφή σε CSV Αρχείο</h4>
+    
+    <pre><code>// Εγγραφή σε CSV αρχείο
+$data = [
+    ['Όνομα', 'Επώνυμο', 'Email'],
+    ['Γιώργος', 'Παπαδόπουλος', 'g.papadopoulos@example.com'],
+    ['Μαρία', 'Κωνσταντίνου', 'm.konstantinou@example.com'],
+    ['Νίκος', 'Αντωνίου', 'n.antoniou@example.com']
+];
+
+$csv_file = fopen('users.csv', 'w');
+
+if ($csv_file) {
+    foreach ($data as $row) {
+        fputcsv($csv_file, $row);
+    }
+    
+    fclose($csv_file);
+    echo "Το CSV αρχείο δημιουργήθηκε επιτυχώς";
+}</code></pre>
+    
+    <h3>Διαχείριση Εικόνων</h3>
+    
+    <p>Η PHP μπορεί να χρησιμοποιηθεί για δημιουργία και επεξεργασία εικόνων με τη βιβλιοθήκη GD:</p>
+    
+    <pre><code>// Έλεγχος αν η GD είναι διαθέσιμη
+if (extension_loaded('gd') && function_exists('imagecreatetruecolor')) {
+    // Δημιουργία εικόνας
+    $image = imagecreatetruecolor(300, 200);
+    
+    // Ορισμός χρωμάτων
+    $white = imagecolorallocate($image, 255, 255, 255);
+    $blue = imagecolorallocate($image, 0, 0, 255);
+    $red = imagecolorallocate($image, 255, 0, 0);
+    
+    // Γέμισμα φόντου
+    imagefill($image, 0, 0, $white);
+    
+    // Σχεδίαση σχημάτων
+    imagerectangle($image, 50, 50, 250, 150, $blue);
+    imageline($image, 50, 50, 250, 150, $red);
+    
+    // Προσθήκη κειμένου
+    imagestring($image, 5, 100, 80, "Δοκιμαστική Εικόνα", $blue);
+    
+    // Αποθήκευση εικόνας
+    imagepng($image, 'test_image.png');
+    
+    // Απελευθέρωση μνήμης
+    imagedestroy($image);
+    
+    echo "Η εικόνα δημιουργήθηκε επιτυχώς";
+} else {
+    echo "Η βιβλιοθήκη GD δεν είναι διαθέσιμη";
+}</code></pre>
+    
+    <h3>Βέλτιστες Πρακτικές</h3>
+    
+    <ul>
+        <li><strong>Πάντα να κλείνετε τα αρχεία:</strong> Χρησιμοποιήστε <code>fclose()</code> για να αποδεσμεύετε πόρους</li>
+        <li><strong>Ελέγχετε τις επιστρεφόμενες τιμές:</strong> Οι συναρτήσεις αρχείων μπορεί να αποτύχουν, πάντα να ελέγχετε τα αποτελέσματα</li>
+        <li><strong>Διαχειριστείτε τα δικαιώματα:</strong> Βεβαιωθείτε ότι οι φάκελοι έχουν τα κατάλληλα δικαιώματα (permissions)</li>
+        <li><strong>Φιλτράρετε τα δεδομένα χρήστη:</strong> Μην επιτρέπετε στους χρήστες να ορίζουν απευθείας ονόματα αρχείων</li>
+        <li><strong>Περιορίστε τους τύπους αρχείων:</strong> Επιτρέπετε μόνο συγκεκριμένους τύπους αρχείων για μεταφόρτωση</li>
+        <li><strong>Προσοχή στην απόδοση:</strong> Για μεγάλα αρχεία, χρησιμοποιήστε τεχνικές τμηματικής ανάγνωσης/εγγραφής</li>
+    </ul>
+    
+    <h3>Συμπέρασμα</h3>
+    
+    <p>Η διαχείριση αρχείων είναι μια σημαντική πτυχή της ανάπτυξης εφαρμογών PHP. Οι λειτουργίες που παρέχει η PHP επιτρέπουν την εύκολη εργασία με αρχεία και καταλόγους για διάφορες εφαρμογές, από την απλή αποθήκευση δεδομένων μέχρι την επεξεργασία εικόνων και τη διαχείριση αρχείων χρηστών. Με την κατάλληλη διαχείριση σφαλμάτων και την τήρηση βέλτιστων πρακτικών, μπορείτε να εφαρμόσετε αποτελεσματικές και ασφαλείς λύσεις διαχείρισης αρχείων στις εφαρμογές σας.</p>
+</section>
+
+<section id="security">
+    <h2>5. Ασφάλεια στην PHP</h2>
+    
+    <p>Η ασφάλεια είναι κρίσιμη πτυχή στην ανάπτυξη διαδικτυακών εφαρμογών με PHP. Κακόβουλες επιθέσεις μπορούν να οδηγήσουν σε παραβίαση δεδομένων, καταστροφή ιστότοπων ή μη εξουσιοδοτημένη πρόσβαση. Αυτή η ενότητα καλύπτει τις βασικές αρχές ασφαλείας και τις συνήθεις τεχνικές προστασίας των εφαρμογών PHP.</p>
+    
+    <h3>Συνήθεις Απειλές Ασφαλείας</h3>
+    
+    <h4>1. SQL Injection</h4>
+    <p>Η SQL Injection είναι μια τεχνική όπου ο επιτιθέμενος εισάγει κακόβουλο SQL κώδικα σε ερωτήματα που εκτελούνται στη βάση δεδομένων.</p>
+    
+    <pre><code>// Μη ασφαλής κώδικας (ευάλωτος σε SQL Injection)
+$username = $_POST['username'];
+$query = "SELECT * FROM users WHERE username = '$username'";
+$result = $mysqli->query($query);
+
+// Ασφαλής κώδικας (χρήση προετοιμασμένων δηλώσεων)
+$username = $_POST['username'];
+$stmt = $mysqli->prepare("SELECT * FROM users WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();</code></pre>
+    
+    <h4>2. Cross-Site Scripting (XSS)</h4>
+    <p>Το XSS επιτρέπει στους επιτιθέμενους να εισάγουν κακόβουλο κώδικα JavaScript σε ιστοσελίδες που προβάλλονται σε άλλους χρήστες.</p>
+    
+    <pre><code>// Μη ασφαλής κώδικας (ευάλωτος σε XSS)
+echo "Καλώς ήρθες, " . $_GET['name'];
+
+// Ασφαλής κώδικας (διαφυγή HTML χαρακτήρων)
+echo "Καλώς ήρθες, " . htmlspecialchars($_GET['name'], ENT_QUOTES, 'UTF-8');</code></pre>
+    
+    <h4>3. Cross-Site Request Forgery (CSRF)</h4>
+    <p>Το CSRF εξαναγκάζει τους χρήστες να εκτελέσουν ανεπιθύμητες ενέργειες σε εφαρμογές όπου είναι ήδη πιστοποιημένοι.</p>
+    
+    <pre><code>// Προστασία από CSRF - Δημιουργία και αποθήκευση token
+session_start();
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
+// Στη φόρμα HTML
+&lt;form method="post" action="process.php">
+    &lt;input type="hidden" name="csrf_token" value="&lt;?php echo $_SESSION['csrf_token']; ?>">
+    &lt;!-- Άλλα πεδία φόρμας -->
+    &lt;button type="submit">Υποβολή&lt;/button>
+&lt;/form>
+
+// Στη σελίδα επεξεργασίας της φόρμας
+session_start();
+if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    die('Επίθεση CSRF ανιχνεύθηκε');
+}
+// Συνέχιση με την επεξεργασία της φόρμας</code></pre>
+    
+    <h4>4. Αδύναμη Πιστοποίηση</h4>
+    <p>Οι αδύναμες μέθοδοι πιστοποίησης μπορούν να επιτρέψουν την πρόσβαση σε μη εξουσιοδοτημένους χρήστες.</p>
+    
+    <pre><code>// Μη ασφαλής αποθήκευση κωδικών
+$password = $_POST['password'];
+$query = "INSERT INTO users (username, password) VALUES ('$username', '$password')";
+
+// Ασφαλής αποθήκευση κωδικών με hashing
+$password = $_POST['password'];
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+$query = "INSERT INTO users (username, password) VALUES (?, ?)";
+$stmt = $mysqli->prepare($query);
+$stmt->bind_param("ss", $username, $hashed_password);</code></pre>
+    
+    <h3>Βασικές Πρακτικές Ασφάλειας</h3>
+    
+    <h4>1. Επικύρωση Δεδομένων Εισόδου</h4>
+    <p>Πάντα να επικυρώνετε τα δεδομένα που υποβάλλει ο χρήστης, τόσο στην πλευρά του πελάτη όσο και στον διακομιστή.</p>
+    
+    <pre><code>// Επικύρωση email
+$email = $_POST['email'];
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    die("Μη έγκυρη διεύθυνση email");
+}
+
+// Επικύρωση αριθμητικής τιμής
+$age = $_POST['age'];
+if (!filter_var($age, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 120]])) {
+    die("Μη έγκυρη ηλικία");
+}</code></pre>
+    
+    <h4>2. Διαφυγή (Escaping) Δεδομένων Εξόδου</h4>
+    <p>Διαφύγετε τα δεδομένα πριν τα εμφανίσετε για να αποτρέψετε επιθέσεις XSS.</p>
+    
+    <pre><code>// Διαφυγή δεδομένων για HTML
+$user_input = "<script>alert('XSS');</script>";
+$safe_output = htmlspecialchars($user_input, ENT_QUOTES, 'UTF-8');
+echo $safe_output; // Εμφανίζει: &lt;script&gt;alert('XSS');&lt;/script&gt;
+
+// Διαφυγή για χρήση σε JavaScript
+$data_for_js = "User's input with 'quotes'";
+$safe_js = json_encode($data_for_js);
+echo "<script>let userInput = $safe_js;</script>";</code></pre>
+    
+    <h4>3. Χρήση Προετοιμασμένων Δηλώσεων</h4>
+    <p>Χρησιμοποιείτε πάντα προετοιμασμένες δηλώσεις για ερωτήματα βάσης δεδομένων.</p>
+    
+    <pre><code>// Προετοιμασμένη δήλωση με MySQLi
+$stmt = $mysqli->prepare("INSERT INTO users (name, email) VALUES (?, ?)");
+$stmt->bind_param("ss", $name, $email);
+$stmt->execute();
+
+// Προετοιμασμένη δήλωση με PDO
+$stmt = $pdo->prepare("INSERT INTO users (name, email) VALUES (?, ?)");
+$stmt->execute([$name, $email]);</code></pre>
+    
+    <h4>4. Ασφαλής Διαχείριση Συνεδριών</h4>
+    <p>Προστατέψτε τις συνεδρίες από επιθέσεις όπως το ψάρεμα συνεδριών (session hijacking).</p>
+    
+    <pre><code>// Ρυθμίσεις ασφαλείας συνεδριών
+ini_set('session.cookie_httponly', 1); // Προστασία από JavaScript πρόσβαση
+ini_set('session.use_only_cookies', 1); // Χρήση μόνο cookies για το session ID
+ini_set('session.cookie_secure', 1);    // Μόνο HTTPS (σε παραγωγή)
+
+// Ανανέωση ID συνεδρίας μετά την πιστοποίηση
+session_start();
+if ($user_authenticated) {
+    session_regenerate_id(true);
+    $_SESSION['user_id'] = $user_id;
+}</code></pre>
+    
+    <h4>5. Προστασία Ευαίσθητων Αρχείων</h4>
+    <p>Αποτρέψτε την άμεση πρόσβαση σε ευαίσθητα αρχεία μέσω του web server.</p>
+    
+    <div class="callout">
+        <p><strong>Παράδειγμα .htaccess για Apache:</strong></p>
+        <pre><code># Αποτροπή πρόσβασης σε .htaccess
+&lt;Files .htaccess>
+    Order allow,deny
+    Deny from all
+&lt;/Files>
+
+# Αποτροπή πρόσβασης σε αρχεία PHP
+&lt;Files ~ "^\.php">
+    Order allow,deny
+    Deny from all
+&lt;/Files>
+
+# Προστασία καταλόγου αρχείων ρυθμίσεων
+&lt;Directory "config">
+    Order allow,deny
+    Deny from all
+&lt;/Directory></code></pre>
+    </div>
+    
+    <h4>6. Ασφαλείς Κωδικοί Πρόσβασης</h4>
+    <p>Χρησιμοποιείτε σύγχρονες μεθόδους hashing για τους κωδικούς πρόσβασης.</p>
+    
+    <pre><code>// Δημιουργία hash κωδικού
+$password = $_POST['password'];
+$hash = password_hash($password, PASSWORD_DEFAULT);
+
+// Επαλήθευση κωδικού
+$submitted_password = $_POST['password'];
+if (password_verify($submitted_password, $hash_from_database)) {
+    // Επιτυχής σύνδεση
+    
+    // Προαιρετικά: Έλεγχος αν χρειάζεται αναβάθμιση του hash
+    if (password_needs_rehash($hash_from_database, PASSWORD_DEFAULT)) {
+        $new_hash = password_hash($submitted_password, PASSWORD_DEFAULT);
+        // Ενημέρωση του hash στη βάση δεδομένων
+    }
+} else {
+    // Αποτυχία σύνδεσης
+}</code></pre>
+    
+    <h3>Προστασία από Συνήθεις Επιθέσεις</h3>
+    
+    <h4>1. Προστασία από Mass Assignment</h4>
+    <p>Επιθέσεις mass assignment συμβαίνουν όταν ένας επιτιθέμενος μπορεί να τροποποιήσει μη αναμενόμενες μεταβλητές.</p>
+    
+    <pre><code>// Μη ασφαλής προσέγγιση
+$user = [];
+foreach ($_POST as $key => $value) {
+    $user[$key] = $value;
+}
+// Ο επιτιθέμενος μπορεί να προσθέσει πεδία όπως is_admin=1
+
+// Ασφαλής προσέγγιση - ρητή απαρίθμηση επιτρεπόμενων πεδίων
+$allowed_fields = ['username', 'email', 'first_name', 'last_name'];
+$user = [];
+foreach ($allowed_fields as $field) {
+    if (isset($_POST[$field])) {
+        $user[$field] = $_POST[$field];
+    }
+}</code></pre>
+    
+    <h4>2. Προστασία από επιθέσεις Directory Traversal</h4>
+    <p>Αποτρέψτε την πρόσβαση σε αρχεία εκτός της επιτρεπόμενης περιοχής.</p>
+    
+    <pre><code>// Μη ασφαλής κώδικας
+$file = $_GET['file'];
+include($file); // Επιτιθέμενος μπορεί να εισάγει "../config/secrets.php"
+
+// Ασφαλής κώδικας
+$file = $_GET['file'];
+$allowed_files = ['profile', 'settings', 'dashboard'];
+
+if (in_array($file, $allowed_files)) {
+    include($file . '.php');
+} else {
+    die("Μη επιτρεπτό αρχείο");
+}</code></pre>
+    
+    <h4>3. Προστασία από επιθέσεις XML (XXE)</h4>
+    <p>Απενεργοποιήστε τις εξωτερικές οντότητες κατά την ανάλυση XML.</p>
+    
+    <pre><code>// Ασφαλής ανάλυση XML
+$xml_string = $_POST['xml_data'];
+
+// Δημιουργία ασφαλούς XML parser
+$loader = libxml_disable_entity_loader(true); // Απενεργοποίηση εξωτερικών οντοτήτων
+libxml_use_internal_errors(true);
+
+$doc = new DOMDocument();
+$doc->loadXML($xml_string);
+
+// Επαναφορά προηγούμενης ρύθμισης
+libxml_disable_entity_loader($loader);</code></pre>
+    
+    <h3>Ασφάλεια Ρυθμίσεων PHP</h3>
+    
+    <p>Η κατάλληλη διαμόρφωση του PHP μέσω του αρχείου php.ini είναι επίσης σημαντική για την ασφάλεια:</p>
+    
+    <pre><code>; Απόκρυψη της έκδοσης PHP
+expose_php = Off
+
+; Απενεργοποίηση επικίνδυνων συναρτήσεων
+disable_functions = exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source
+
+; Περιορισμός πρόσβασης σε αρχεία
+open_basedir = /var/www/html/:/tmp/
+
+; Απενεργοποίηση του register_globals (σε παλαιότερες εκδόσεις PHP)
+register_globals = Off
+
+; Απενεργοποίηση εμφάνισης σφαλμάτων στο περιβάλλον παραγωγής
+display_errors = Off
+display_startup_errors = Off
+
+; Καταγραφή σφαλμάτων σε αρχείο
+log_errors = On
+error_log = /var/log/php_errors.log</code></pre>
+    
+    <h3>Έλεγχος Ασφαλείας (Security Testing)</h3>
+    
+    <p>Ο τακτικός έλεγχος ασφαλείας βοηθά στον εντοπισμό ευπαθειών:</p>
+    
+    <ul>
+        <li><strong>Στατική Ανάλυση Κώδικα:</strong> Χρήση εργαλείων όπως το PHP_CodeSniffer ή το PHPMD.</li>
+        <li><strong>Δυναμικός Έλεγχος:</strong> Χρήση εργαλείων όπως το OWASP ZAP για αυτοματοποιημένους ελέγχους ασφαλείας.</li>
+        <li><strong>Έλεγχος Διείσδυσης:</strong> Προσλάβετε ειδικούς για εντοπισμό ευπαθειών που δεν εντοπίζονται εύκολα με αυτοματοποιημένα εργαλεία.</li>
+        <li><strong>Κώδικας Επιθεώρησης:</strong> Εφαρμόστε πρακτικές επιθεώρησης κώδικα για τον εντοπισμό προβλημάτων ασφαλείας πριν την ανάπτυξη.</li>
+    </ul>
+    
+    <h3>Λίστα Ελέγχου Ασφαλείας PHP</h3>
+    
+    <ul>
+        <li>Χρησιμοποιείτε πάντα προετοιμασμένες δηλώσεις για ερωτήματα βάσης δεδομένων</li>
+        <li>Επικυρώνετε και φιλτράρετε όλα τα δεδομένα εισόδου</li>
+        <li>Διαφεύγετε τα δεδομένα εξόδου με τον κατάλληλο τρόπο</li>
+        <li>Χρησιμοποιείτε ασφαλείς μεθόδους για αποθήκευση κωδικών πρόσβασης</li>
+        <li>Εφαρμόζετε προστασία από CSRF σε φόρμες</li>
+        <li>Εφαρμόζετε ασφαλείς ρυθμίσεις συνεδριών</li>
+        <li>Περιορίζετε τα δικαιώματα πρόσβασης σε αρχεία και καταλόγους</li>
+        <li>Διατηρείτε ενημερωμένο το PHP και τις βιβλιοθήκες</li>
+        <li>Χρησιμοποιείτε HTTPS για όλη την επικοινωνία</li>
+        <li>Εφαρμόζετε ορθή διαχείριση σφαλμάτων (χωρίς έκθεση ευαίσθητων πληροφοριών)</li>
+        <li>Χρησιμοποιείτε κεφαλίδες ασφαλείας HTTP όπως Content-Security-Policy</li>
+    </ul>
+    
+    <h3>Παράδειγμα: Ασφαλής Φόρμα Εισόδου</h3>
+    
+    <pre><code>&lt;?php
+session_start();
+
+// Δημιουργία CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+$errors = [];
+
+// Έλεγχος υποβολής φόρμας
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Έλεγχος CSRF token
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die('CSRF επίθεση ανιχνεύθηκε');
+    }
+    
+    // Επικύρωση username
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    if (empty($username)) {
+        $errors[] = 'Το όνομα χρήστη είναι υποχρεωτικό';
+    }
+    
+    // Επικύρωση password
+    $password = $_POST['password'] ?? '';
+    if (empty($password)) {
+        $errors[] = 'Ο κωδικός πρόσβασης είναι υποχρεωτικός';
+    }
+    
+    // Αν δεν υπάρχουν σφάλματα, προχωρούμε σε έλεγχο από τη βάση δεδομένων
+    if (empty($errors)) {
+        // Σύνδεση βάσης δεδομένων
+        $pdo = new PDO('mysql:host=localhost;dbname=myapp', 'user', 'password');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+        // Αναζήτηση χρήστη
+        $stmt = $pdo->prepare('SELECT id, username, password FROM users WHERE username = ?');
+        $stmt->execute([$username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Έλεγχος κωδικού
+        if ($user && password_verify($password, $user['password'])) {
+            // Επιτυχής είσοδος - Ανανέωση session ID για ασφάλεια
+            session_regenerate_id(true);
+            
+            // Αποθήκευση πληροφοριών χρήστη
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['logged_in'] = true;
+            
+            // Ανακατεύθυνση σε ασφαλή σελίδα
+            header('Location: dashboard.php');
+            exit;
+        } else {
+            $errors[] = 'Λάθος όνομα χρήστη ή κωδικός πρόσβασης';
+        }
+    }
+}
+?&gt;
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Είσοδος&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h2&gt;Είσοδος&lt;/h2&gt;
+    
+    &lt;?php if (!empty($errors)): ?&gt;
+        &lt;div class="errors"&gt;
+            &lt;ul&gt;
+                &lt;?php foreach ($errors as $error): ?&gt;
+                    &lt;li&gt;&lt;?php echo htmlspecialchars($error); ?&gt;&lt;/li&gt;
+                &lt;?php endforeach; ?&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;?php endif; ?&gt;
+    
+    &lt;form method="post" action=""&gt;
+        &lt;input type="hidden" name="csrf_token" value="&lt;?php echo $_SESSION['csrf_token']; ?&gt;"&gt;
+        
+        &lt;div&gt;
+            &lt;label for="username"&gt;Όνομα Χρήστη:&lt;/label&gt;
+            &lt;input type="text" id="username" name="username" value="&lt;?php echo isset($username) ? htmlspecialchars($username) : ''; ?&gt;"&gt;
+        &lt;/div&gt;
+        
+        &lt;div&gt;
+            &lt;label for="password"&gt;Κωδικός Πρόσβασης:&lt;/label&gt;
+            &lt;input type="password" id="password" name="password"&gt;
+        &lt;/div&gt;
+        
+        &lt;div&gt;
+            &lt;button type="submit"&gt;Είσοδος&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    
+    <h3>Συμπέρασμα</h3>
+    
+    <p>Η ασφάλεια είναι μια συνεχής διαδικασία, όχι ένα προϊόν που εγκαθίσταται και ξεχνιέται. Η εφαρμογή των βέλτιστων πρακτικών ασφαλείας στις εφαρμογές PHP είναι ουσιώδης για την προστασία των δεδομένων και τη διατήρηση της εμπιστοσύνης των χρηστών. Με τη συνεχή εκπαίδευση, την παρακολούθηση των τελευταίων τάσεων ασφαλείας και την εφαρμογή των αρχών που καλύφθηκαν σε αυτή την ενότητα, μπορείτε να αναπτύξετε εφαρμογές PHP που είναι πιο ανθεκτικές στις απειλές ασφαλείας.</p>
+</section>
+</div>
+<button id="back-to-top" title="Back to top">↑</button>
+</body>
+</html>
